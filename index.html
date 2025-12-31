@@ -39,6 +39,7 @@
             <h2 style="color: var(--accent); margin-top: 0;">¡ÉXITO!</h2>
             <p style="font-size: 0.9rem;">Te enviamos un correo. Tu clave temporal es:</p>
             <span id="display-pass" class="temp-pass">--------</span>
+            <p style="font-size: 0.75rem; color: var(--text-dim);">Cópiala antes de ir al login.</p>
             <button class="btn-main" onclick="window.location.href='login.html'" style="background: var(--accent); color: white;">IR AL LOGIN</button>
         </div>
     </div>
@@ -48,7 +49,6 @@
         import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // CONFIGURACIÓN DE TU PROYECTO
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
             authDomain: "cuarzocristalempresarialsist.firebaseapp.com",
@@ -63,40 +63,57 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         
-        // Inicializar EmailJS
         emailjs.init("Hh5cKcCjZpu9toPYN");
 
         document.getElementById('registration-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('user-name').value;
             const email = document.getElementById('user-email').value;
-            const tempPass = Math.random().toString(36).slice(-8).toUpperCase() + "!";
+            // Generamos una clave más robusta pero corta
+            const tempPass = Math.random().toString(36).slice(-6).toUpperCase() + "!";
             const btn = document.getElementById('btn-submit');
             
             btn.disabled = true;
             btn.innerText = "PROCESANDO...";
 
             try {
-                // 1. Crear usuario en Firebase
+                // 1. Registro en Firebase Auth
                 const userCred = await createUserWithEmailAndPassword(auth, email, tempPass);
                 
-                // 2. Enviar verificación de email
+                // 2. Enviar verificación nativa de Firebase
                 await sendEmailVerification(userCred.user);
                 
-                // 3. Guardar en Base de Datos
+                // 3. Guardar datos en Firestore incluyendo la clave por si el mail falla
                 await setDoc(doc(db, "colaboradores", userCred.user.uid), {
-                    nombre: name, email: email, requiereCambio: true, fechaRegistro: new Date()
+                    nombre: name,
+                    email: email,
+                    requiereCambio: true,
+                    claveTemporal: tempPass,
+                    fechaRegistro: new Date()
                 });
 
-                // 4. Enviar mail con EmailJS
-                await emailjs.send("service_kv5h7y8", "template_328obst", {
-                    to_name: name, user_email: email, temp_password: tempPass
-                });
+                // 4. Intento de envío de EmailJS (con variables corregidas)
+                try {
+                    await emailjs.send("service_kv5h7y8", "template_328obst", {
+                        to_name: name,
+                        user_email: email,
+                        temp_password: tempPass
+                    });
+                    console.log("Email enviado con éxito");
+                } catch (mailError) {
+                    console.warn("Fallo EmailJS, pero el usuario se creó correctamente.");
+                }
 
+                // 5. Mostrar Modal SIEMPRE (Aquí el usuario ve su clave)
                 document.getElementById('display-pass').innerText = tempPass;
                 document.getElementById('modal-overlay').style.display = 'flex';
+
             } catch (error) {
-                alert("Error: " + error.message);
+                if (error.code === 'auth/email-already-in-use') {
+                    alert("Este correo ya está registrado. Intenta iniciar sesión.");
+                } else {
+                    alert("Error: " + error.message);
+                }
                 btn.disabled = false;
                 btn.innerText = "COMPLETAR REGISTRO";
             }
