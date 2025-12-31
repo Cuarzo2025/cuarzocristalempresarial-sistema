@@ -103,7 +103,6 @@
             transform: translateY(-2px); 
         }
 
-        /* Estilo para la bienvenida una vez dentro */
         #welcome-section {
             max-width: 600px;
         }
@@ -124,7 +123,7 @@
         <div class="badge">Portal Activo</div>
         <h1>CUARZO CRISTAL</h1>
         <p>Bienvenido al panel de colaboradores. Aquí verás tus mentorías y material exclusivo próximamente.</p>
-        <button onclick="logout()" class="btn-main" style="background:none; border: 1px solid var(--border); color:white; font-size: 0.8rem; padding: 10px;">Cerrar Sesión</button>
+        <button id="btn-logout" class="btn-main" style="background:none; border: 1px solid var(--border); color:white; font-size: 0.8rem; padding: 10px;">Cerrar Sesión</button>
     </div>
 
     <script type="module">
@@ -145,6 +144,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // Control de Sesión
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const docRef = doc(db, "colaboradores", user.uid);
@@ -162,13 +162,18 @@
             }
         });
 
+        // Lógica de cambio de contraseña
         document.getElementById('btn-change').addEventListener('click', async () => {
             const newPass = document.getElementById('new-password').value;
+            const btn = document.getElementById('btn-change');
             
             if(newPass.length < 6) {
                 alert("La contraseña debe tener al menos 6 caracteres.");
                 return;
             }
+
+            btn.innerText = "PROCESANDO...";
+            btn.disabled = true;
 
             try {
                 await updatePassword(auth.currentUser, newPass);
@@ -176,16 +181,19 @@
                 alert("¡Contraseña actualizada correctamente!");
                 location.reload();
             } catch (error) {
-                alert("Hubo un error al actualizar. Intenta re-iniciando sesión.");
+                console.error(error);
+                alert("Para cambiar la contraseña por seguridad, debes haber iniciado sesión recientemente. Por favor, cierra sesión e ingresa de nuevo.");
+                btn.innerText = "GUARDAR Y ENTRAR";
+                btn.disabled = false;
             }
         });
 
-        // Función para cerrar sesión
-        window.logout = () => {
+        // Función Cerrar Sesión (Manejador de evento corregido para módulos)
+        document.getElementById('btn-logout').addEventListener('click', () => {
             signOut(auth).then(() => {
                 window.location.href = "login.html";
             });
-        };
+        });
     </script>
 </body>
 </html>

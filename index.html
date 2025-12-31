@@ -55,21 +55,20 @@
             projectId: "cuarzocristalempresarialsist",
             storageBucket: "cuarzocristalempresarialsist.firebasestorage.app",
             messagingSenderId: "1031610061736",
-            appId: "1:1031610061736:web:d05d431b433eb5b55ec39d",
-            measurementId: "G-VQEG377VB0"
+            appId: "1:1031610061736:web:d05d431b433eb5b55ec39d"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         
+        // TU PUBLIC KEY
         emailjs.init("Hh5cKcCjZpu9toPYN");
 
         document.getElementById('registration-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('user-name').value;
             const email = document.getElementById('user-email').value;
-            // Generamos una clave más robusta pero corta
             const tempPass = Math.random().toString(36).slice(-6).toUpperCase() + "!";
             const btn = document.getElementById('btn-submit');
             
@@ -77,13 +76,9 @@
             btn.innerText = "PROCESANDO...";
 
             try {
-                // 1. Registro en Firebase Auth
                 const userCred = await createUserWithEmailAndPassword(auth, email, tempPass);
-                
-                // 2. Enviar verificación nativa de Firebase
                 await sendEmailVerification(userCred.user);
                 
-                // 3. Guardar datos en Firestore incluyendo la clave por si el mail falla
                 await setDoc(doc(db, "colaboradores", userCred.user.uid), {
                     nombre: name,
                     email: email,
@@ -92,28 +87,22 @@
                     fechaRegistro: new Date()
                 });
 
-                // 4. Intento de envío de EmailJS (con variables corregidas)
+                // USANDO TU SERVICE ID ACTUALIZADO
                 try {
-                    await emailjs.send("service_kv5h7y8", "template_328obst", {
+                    await emailjs.send("service_u1a6rwt", "template_328obst", {
                         to_name: name,
                         user_email: email,
                         temp_password: tempPass
                     });
-                    console.log("Email enviado con éxito");
                 } catch (mailError) {
-                    console.warn("Fallo EmailJS, pero el usuario se creó correctamente.");
+                    console.warn("EmailJS falló, pero el usuario se creó correctamente.");
                 }
 
-                // 5. Mostrar Modal SIEMPRE (Aquí el usuario ve su clave)
                 document.getElementById('display-pass').innerText = tempPass;
                 document.getElementById('modal-overlay').style.display = 'flex';
 
             } catch (error) {
-                if (error.code === 'auth/email-already-in-use') {
-                    alert("Este correo ya está registrado. Intenta iniciar sesión.");
-                } else {
-                    alert("Error: " + error.message);
-                }
+                alert("Error: " + error.message);
                 btn.disabled = false;
                 btn.innerText = "COMPLETAR REGISTRO";
             }

@@ -86,6 +86,19 @@
             transform: translateY(-2px); 
         }
 
+        .loader {
+            display: none;
+            margin: 10px auto;
+            border: 3px solid #333;
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         a { 
             color: var(--accent); 
             text-decoration: none; 
@@ -103,8 +116,9 @@
         
         <form id="login-form">
             <input type="email" id="login-email" placeholder="Correo electrónico" required>
-            <input type="password" id="login-pass" placeholder="Contraseña Temporal" required>
-            <button type="submit" class="btn-main">Entrar</button>
+            <input type="password" id="login-pass" placeholder="Contraseña" required>
+            <div id="loader" class="loader"></div>
+            <button type="submit" id="btn-text" class="btn-main">Entrar</button>
         </form>
 
         <a href="index.html">¿No tienes cuenta? Regístrate aquí</a>
@@ -114,7 +128,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Configuración con tus claves reales
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
             authDomain: "cuarzocristalempresarialsist.firebaseapp.com",
@@ -131,19 +144,41 @@
             e.preventDefault();
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-pass').value;
+            const btn = document.getElementById('btn-text');
+            const loader = document.getElementById('loader');
             
+            // UI State
+            btn.style.display = 'none';
+            loader.style.display = 'block';
+
             try {
                 const userCred = await signInWithEmailAndPassword(auth, email, pass);
                 
-                // Verificamos si el usuario confirmó su correo
-                if (userCred.user.emailVerified) {
-                    window.location.href = "dashboard.html";
-                } else {
-                    alert("Por seguridad, debes verificar tu correo antes de ingresar. Revisa tu bandeja de entrada o spam.");
+                // NOTA: Si quieres obligar a verificar el email antes de entrar, 
+                // descomenta las siguientes líneas. Si no, entrará directo con la clave temporal.
+                
+                /*
+                if (!userCred.user.emailVerified) {
+                    alert("Por favor, verifica tu correo electrónico antes de ingresar.");
+                    btn.style.display = 'block';
+                    loader.style.display = 'none';
+                    return;
                 }
+                */
+
+                // Si llegamos aquí, login exitoso
+                window.location.href = "dashboard.html";
+
             } catch (error) { 
-                console.error(error);
-                alert("Credenciales incorrectas. Verifica tu email y contraseña."); 
+                console.error(error.code);
+                let mensaje = "Error al ingresar. Verifica tus datos.";
+                
+                if(error.code === 'auth/invalid-credential') mensaje = "Correo o contraseña incorrectos.";
+                if(error.code === 'auth/user-not-found') mensaje = "El usuario no existe.";
+                
+                alert(mensaje);
+                btn.style.display = 'block';
+                loader.style.display = 'none';
             }
         });
     </script>
