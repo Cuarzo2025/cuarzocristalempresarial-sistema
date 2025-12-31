@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel | Cuarzo Cristal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --primary: #FFFFFF; 
+            --bg: #0A0A0A; 
+            --card: #141414; 
+            --text-dim: #A0A0A0; 
+            --accent: #4CAF50; 
+            --border: #333; 
+        }
+
+        body { 
+            background: var(--bg); 
+            color: var(--primary); 
+            font-family: 'Montserrat', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+
+        .container { 
+            background: var(--card); 
+            padding: 40px; 
+            border-radius: 16px; 
+            width: 100%; 
+            max-width: 400px; 
+            border: 1px solid var(--border); 
+            text-align: center; 
+            box-sizing: border-box;
+        }
+
+        h1, h2 { 
+            font-weight: 800; 
+            margin: 0; 
+            letter-spacing: -1px; 
+            text-transform: uppercase;
+        }
+
+        p { 
+            color: var(--text-dim); 
+            font-size: 0.9rem; 
+            line-height: 1.5;
+            margin: 15px 0 25px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--accent);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            margin-bottom: 20px; 
+            background: #1e1e1e; 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            color: white; 
+            box-sizing: border-box; 
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn-main { 
+            width: 100%; 
+            padding: 16px; 
+            background: var(--primary); 
+            color: black; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            transition: 0.3s;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-main:hover { 
+            opacity: 0.8; 
+            transform: translateY(-2px); 
+        }
+
+        /* Estilo para la bienvenida una vez dentro */
+        #welcome-section {
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="change-pass-section" class="container" style="display:none;">
+        <div class="badge">Seguridad</div>
+        <h2>Actualiza tu acceso</h2>
+        <p>Por seguridad, debes crear una contraseña nueva y personal para tu cuenta.</p>
+        
+        <input type="password" id="new-password" placeholder="Nueva Contraseña (mín. 6 caracteres)">
+        <button id="btn-change" class="btn-main btn-accent">Guardar y Entrar</button>
+    </div>
+
+    <div id="welcome-section" class="container" style="display:none; border-color: var(--accent);">
+        <div class="badge">Portal Activo</div>
+        <h1>CUARZO CRISTAL</h1>
+        <p>Bienvenido al panel de colaboradores. Aquí verás tus mentorías y material exclusivo próximamente.</p>
+        <button onclick="logout()" class="btn-main" style="background:none; border: 1px solid var(--border); color:white; font-size: 0.8rem; padding: 10px;">Cerrar Sesión</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, updatePassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
+            authDomain: "cuarzocristalempresarialsist.firebaseapp.com",
+            projectId: "cuarzocristalempresarialsist",
+            storageBucket: "cuarzocristalempresarialsist.firebasestorage.app",
+            messagingSenderId: "1031610061736",
+            appId: "1:1031610061736:web:d05d431b433eb5b55ec39d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const docRef = doc(db, "colaboradores", user.uid);
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists() && docSnap.data().requiereCambio) {
+                    document.getElementById('change-pass-section').style.display = 'block';
+                    document.getElementById('welcome-section').style.display = 'none';
+                } else {
+                    document.getElementById('welcome-section').style.display = 'block';
+                    document.getElementById('change-pass-section').style.display = 'none';
+                }
+            } else { 
+                window.location.href = "login.html"; 
+            }
+        });
+
+        document.getElementById('btn-change').addEventListener('click', async () => {
+            const newPass = document.getElementById('new-password').value;
+            
+            if(newPass.length < 6) {
+                alert("La contraseña debe tener al menos 6 caracteres.");
+                return;
+            }
+
+            try {
+                await updatePassword(auth.currentUser, newPass);
+                await updateDoc(doc(db, "colaboradores", auth.currentUser.uid), { requiereCambio: false });
+                alert("¡Contraseña actualizada correctamente!");
+                location.reload();
+            } catch (error) {
+                alert("Hubo un error al actualizar. Intenta re-iniciando sesión.");
+            }
+        });
+
+        // Función para cerrar sesión
+        window.logout = () => {
+            signOut(auth).then(() => {
+                window.location.href = "login.html";
+            });
+        };
+    </script>
+</body>
+</html>
