@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos Personales - Cuarzo Empresarial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos Base del Dashboard */
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 30px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background-color: #0d0d0d; 
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333333;
+            padding-bottom: 15px;
+        }
+        .header h1 {
+            font-size: 2em;
+            margin: 0;
+        }
+        
+        /* Estilos del Formulario */
+        .card {
+            background-color: #1a1a1a; 
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+            border-bottom: 1px solid #333333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #cccccc;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background-color: #2a2a2a;
+            color: #FFFFFF;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .date-age-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr; 
+            gap: 10px;
+        }
+        .doc-group {
+            display: grid;
+            grid-template-columns: 1fr 2fr; /* Columna de tipo vs número */
+            gap: 10px;
+        }
+        .form-button {
+            padding: 12px 25px;
+            background-color: #FFFFFF; 
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        .form-button:hover {
+            background-color: #cccccc;
+        }
+        .back-link {
+            text-decoration: none;
+            color: #CCCCCC;
+            transition: color 0.3s;
+        }
+        .back-link:hover {
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-user-circle"></i> Datos Personales del Profesional</h1>
+            <a href="dashboard.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Volver al Panel
+            </a>
+        </div>
+
+        <form onsubmit="alert('Datos Personales Actualizados Exitosamente!'); return false;">
+            
+            <div class="card">
+                <h2>Información General</h2>
+                <div class="form-grid">
+                    
+                    <div class="input-group">
+                        <label for="nombre">Nombre Completo</label>
+                        <input type="text" id="nombre" value="[Nombre del Profesional]" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Fecha de Nacimiento y Edad</label>
+                        <div class="date-age-group">
+                            <input type="date" id="fechaNacimiento" onchange="calcularEdad()" required>
+                            <input type="text" id="edad" placeholder="Edad" readonly style="background-color: #333333;">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="nacionalidad">Nacionalidad</label>
+                        <select id="nacionalidad" required>
+                            <option value="">-- Seleccione su Nacionalidad --</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="estadoCivil">Estado Civil</label>
+                        <select id="estadoCivil">
+                            <option value="soltero">Soltero/a</option>
+                            <option value="casado">Casado/a</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Identificación y Documentación</h2>
+                <div class="form-grid">
+                    
+                    <div class="input-group" style="grid-column: 1 / -1;">
+                        <label for="tipoDocumento">Documento de Identidad</label>
+                        <div class="doc-group">
+                            <select id="tipoDocumento" required>
+                                <option value="">Tipo de Documento</option>
+                                <option value="DNI">DNI (Documento Nacional de Identidad)</option>
+                                <option value="CEDULA">Cédula de Identidad</option>
+                                <option value="PASAPORTE">Pasaporte</option>
+                                <option value="MIGRATORIO">Certificado Migratorio</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                            <input type="text" id="numeroDocumento" placeholder="Número del Documento" required>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="fechaEmision">Fecha de Emisión</label>
+                        <input type="date" id="fechaEmision">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="fechaVencimiento">Fecha de Vencimiento (Si aplica)</label>
+                        <input type="date" id="fechaVencimiento">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Datos Tributarios</h2>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="cuit">CUIT / CUIL / Número Fiscal</label>
+                        <input type="text" id="cuit" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="condicionTributaria">Condición Tributaria</label>
+                        <select id="condicionTributaria">
+                            <option value="responsable_inscripto">Responsable Inscripto</option>
+                            <option value="monotributo">Monotributo</option>
+                            <option value="consumidor_final">Consumidor Final</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="form-button">
+                <i class="fas fa-save"></i> Guardar Cambios
+            </button>
+
+        </form>
+    </div>
+
+    <script>
+        // Array de Nacionalidades (simplificado para el ejemplo)
+        const nacionalidades = [
+            "Afgana", "Albanesa", "Alemana", "Americana", "Andorrana", "Angoleña", "Argentina", "Australiana", 
+            "Austriaca", "Belga", "Boliviana", "Brasileña", "Canadiense", "Chilena", "China", "Colombiana", 
+            "Coreana", "Costarricense", "Cubana", "Danesa", "Ecuatoriana", "Egipcia", "Española", "Finlandesa", 
+            "Francesa", "Griega", "Guatemalteca", "Hondureña", "Húngara", "India", "Indonesa", "Iraní", 
+            "Irlandesa", "Israelí", "Italiana", "Japonesa", "Malaya", "Marroquí", "Mexicana", "Neozelandesa", 
+            "Nigeriana", "Noruega", "Pakistani", "Panameña", "Paraguaya", "Peruana", "Polaca", "Portuguesa", 
+            "Rusa", "Salvadoñera", "Sueca", "Suiza", "Tailandesa", "Turca", "Ucraniana", "Uruguaya", 
+            "Venezolana", "Vietnamita", "Zambiana"
+        ];
+        
+        // --- FUNCIONES ---
+
+        // Función para llenar el desplegable de Nacionalidad
+        function llenarNacionalidades() {
+            const selectNacionalidad = document.getElementById('nacionalidad');
+            
+            nacionalidades.sort().forEach(nacionalidad => {
+                const option = document.createElement('option');
+                option.value = nacionalidad;
+                option.textContent = nacionalidad;
+                selectNacionalidad.appendChild(option);
+            });
+        }
+        
+        // Función para calcular la edad automáticamente
+        function calcularEdad() {
+            const inputFechaNacimiento = document.getElementById('fechaNacimiento');
+            const inputEdad = document.getElementById('edad');
+            
+            const fechaNacimiento = new Date(inputFechaNacimiento.value);
+            const hoy = new Date();
+
+            if (isNaN(fechaNacimiento)) {
+                inputEdad.value = '';
+                return;
+            }
+
+            let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+            const mes = hoy.getMonth() - fechaNacimiento.getMonth();
+
+            // Ajuste si aún no ha cumplido años en este mes
+            if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+                edad--;
+            }
+
+            inputEdad.value = `${edad} años`;
+        }
+
+        // Ejecutar al cargar la página
+        window.onload = function() {
+            llenarNacionalidades();
+        };
+    </script>
+</body>
+</html>

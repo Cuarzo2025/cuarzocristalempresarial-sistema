@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrato Legal - Cuarzo Empresarial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos Base del Dashboard */
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 30px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background-color: #0d0d0d; 
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333333;
+            padding-bottom: 15px;
+        }
+        .header h1 {
+            font-size: 2em;
+            margin: 0;
+        }
+        .back-link {
+            text-decoration: none;
+            color: #CCCCCC;
+            transition: color 0.3s;
+        }
+        .back-link:hover {
+            color: #FFFFFF;
+        }
+        
+        /* Contenido Legal */
+        .contract-section {
+            background-color: #1a1a1a;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .contract-section h2 {
+            font-size: 1.6em;
+            color: #FFFFFF;
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333333;
+            margin-bottom: 15px;
+        }
+        .contract-section h3 {
+            font-size: 1.2em;
+            color: #CCCCCC;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .contract-section p, .contract-section ul {
+            font-size: 1em;
+            line-height: 1.6;
+            color: #E0E0E0;
+        }
+        .contract-section ul {
+            list-style-type: square;
+            margin-left: 20px;
+            padding-left: 0;
+        }
+        .info-box {
+            background-color: #0d0d0d;
+            border: 1px solid #333333;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        /* Estilo del botón PDF */
+        .pdf-button {
+            padding: 15px 25px;
+            background-color: #A93226; 
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 30px;
+            width: 100%;
+            text-align: center;
+            text-decoration: none; 
+            display: block;
+        }
+        .pdf-button:hover {
+            background-color: #C0392B;
+        }
+
+        /* Estilo para el botón de Aceptación */
+        #aceptarContratoBtn {
+            background-color: #27AE60 !important; /* Verde de Aceptación */
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        #aceptarContratoBtn:hover {
+            background-color: #2ECC71 !important;
+        }
+        #aceptarContratoBtn[disabled] {
+            background-color: #555555 !important;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-gavel"></i> Contrato de Colaboración Freelance</h1>
+            <a href="dashboard.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Volver a Legal
+            </a>
+        </div>
+
+        <div class="contract-section">
+            <h2>Acuerdo de Prestación de Servicios (Freelance)</h2>
+            <p>Este documento establece los términos y condiciones bajo los cuales el **Colaborador Freelance** (<span id="empleado-nombre">[Nombre del Empleado]</span>) prestará sus servicios a **Cuarzo Empresarial** (en adelante, la Empresa).</p>
+
+            <div class="info-box">
+                <p><strong>Importante:</strong> Este es un contrato de Prestación de Servicios. No establece una relación de dependencia laboral. **Haga clic abajo para ver el PDF completo y aceptar los términos.**</p>
+            </div>
+            
+            <h3>1. Objeto del Contrato y Alcance (Resumen)</h3>
+            <p>El Colaborador realizará las tareas y entregará los productos definidos en cada **Orden de Trabajo (OT)**, prestando sus servicios con autonomía, siguiendo los estándares de calidad. *Consulte el PDF para el detalle completo del alcance.*</p>
+
+            <h3>2. Compensación y Propiedad Intelectual (Resumen)</h3>
+            <p>La compensación se acordará por proyecto/tarifa horaria (pago a 30 días). Toda obra o material desarrollado será propiedad exclusiva de Cuarzo Empresarial o sus clientes al momento de finalizar el pago.</p>
+
+            <a href="contrato-legal.pdf" target="_blank" class="pdf-button">
+                <i class="fas fa-file-pdf"></i> **Ver Contrato PDF** y Aceptar Términos
+            </a>
+        </div>
+
+        <div class="contract-section">
+            <h2>Simulación de Aceptación Digital</h2>
+            <p>Al hacer clic en el botón PDF de arriba y revisar el documento, confirme su aceptación de los términos y condiciones marcando la siguiente casilla.</p>
+
+            <div style="padding: 15px; border: 1px dashed #444; border-radius: 5px;">
+                <label>
+                    <input type="checkbox" id="aceptacionTerminos" required style="margin-right: 10px; accent-color: #FFFFFF;">
+                    **Acepto y reconozco** los términos y condiciones estipulados en el Contrato de Colaboración Freelance.
+                </label>
+            </div>
+
+            <button id="aceptarContratoBtn" class="pdf-button" onclick="firmarYEnviarContrato()">
+                <i class="fas fa-check-circle"></i> **Finalizar Proceso de Aceptación**
+            </button>
+            
+            <p id="mensaje-estado" style="text-align: center; margin-top: 15px; font-weight: 600; color: #777777;"></p>
+        </div>
+        
+    </div>
+
+    <script>
+        // --- SIMULACIÓN DE DATOS DEL EMPLEADO (Estos datos se obtendrían de una Base de Datos real) ---
+        // ESTOS DATOS DEBEN COINCIDIR CON LOS CARGADOS PREVIAMENTE POR EL EMPLEADO EN 'datos-personales.html'
+        const empleadoData = {
+            nombreCompleto: "Juan David Pérez Landa", 
+            dni: "38.123.456",
+            emailPersonal: "juan.david.perez@example.com", // Email del empleado
+            fechaActual: new Date().toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' }),
+            emailEmpresa: "cuarzocristalempresarial@gmail.com" // Email de la empresa (Copia)
+        };
+
+        // Muestra el nombre del empleado en el resumen del contrato
+        document.getElementById('empleado-nombre').textContent = empleadoData.nombreCompleto;
+        
+        // Función principal que simula el proceso completo de firma y envío
+        function firmarYEnviarContrato() {
+            const checkbox = document.getElementById('aceptacionTerminos');
+            const mensajeEstado = document.getElementById('mensaje-estado');
+            const boton = document.getElementById('aceptarContratoBtn');
+
+            if (!checkbox.checked) {
+                alert('Debe marcar la casilla de Aceptación para finalizar el proceso de firma.');
+                return;
+            }
+
+            // 1. Desactivar botón y notificar
+            boton.disabled = true;
+            mensajeEstado.style.color = 'yellow';
+            mensajeEstado.innerHTML = `<i class="fas fa-spinner fa-spin"></i> **Procesando...** Generando firma digital del contrato y simulando envío de correos.`;
+
+            // 2. Simulación de la Firma Digital
+            const firmaDigital = `${empleadoData.nombreCompleto}\nDNI/Cédula: ${empleadoData.dni}\nFecha de Aceptación: ${empleadoData.fechaActual}`;
+            
+            // Console log para simular la generación de la firma en el backend
+            console.log("--- SIMULACIÓN DE FIRMA GENERADA ---");
+            console.log(firmaDigital);
+            console.log("----------------------------------");
+            
+            // 3. Simulación del Retraso y el Proceso de Envío (2.5 segundos)
+            setTimeout(() => {
+                
+                // 4. Mostrar confirmación de envío y datos de la firma
+                mensajeEstado.style.color = '#25D366'; // Verde
+                mensajeEstado.innerHTML = `<i class="fas fa-check-double"></i> **¡Aceptación y Firma registradas con éxito!**`;
+                
+                // Mostrar simulación de correos enviados
+                const detallesEnvio = `
+                    <p style="text-align: left; margin-top: 10px; color: #ccc;">
+                        **El Contrato PDF firmado se ha enviado a:**
+                        <ul style="margin-top: 5px;">
+                            <li><i class="fas fa-user-check"></i> ${empleadoData.emailPersonal} (Tu Copia Personal)</li>
+                            <li><i class="fas fa-briefcase"></i> ${empleadoData.emailEmpresa} (Copia Empresarial)</li>
+                        </ul>
+                        <p style="text-align: left; color: #888; font-size: 0.9em;">(En un sistema real con servidor, el PDF modificado con su firma se adjunta automáticamente a estos correos.)</p>
+                    </p>`;
+
+                // Actualizar la sección de aceptación para mostrar la firma y los detalles del envío
+                document.querySelector('.contract-section:last-child h2').textContent = "Proceso Finalizado";
+                document.querySelector('.contract-section:last-child p:first-of-type').innerHTML = `
+                    Su aceptación ha sido registrada con éxito. La firma digital ha sido generada con los siguientes datos:
+                    <div style="background-color: #000; padding: 10px; border-radius: 5px; margin-top: 10px; font-family: monospace; color: #00FFFF; font-weight: bold;">
+                        ${firmaDigital.replace(/\n/g, '<br>')}
+                    </div>
+                `;
+
+                // Ocultar elementos de entrada y reemplazar por el detalle del envío
+                document.querySelector('.contract-section:last-child > div').innerHTML = detallesEnvio;
+                document.getElementById('aceptarContratoBtn').style.display = 'none';
+                
+            }, 2500); 
+        }
+
+    </script>
+</body>
+</html>

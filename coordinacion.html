@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coordinación Interna - Cuarzo Empresarial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Base: Fondo Negro, Letras Blancas */
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: #000000; 
+            color: #FFFFFF; 
+        }
+        /* Contenedor Principal: Gris Oscuro */
+        .main-card {
+            background-color: #1a1a1a;
+            border: 1px solid #333333;
+        }
+        /* Cuadros Secundarios: Gris Claro (Interactivo) */
+        .sub-card {
+            background-color: #333333; 
+            border: none;
+        }
+        
+        /* Estilos de Enlace de Tarjeta para efecto hover */
+        .card-link {
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+            display: block; /* Asegura que toda la tarjeta sea cliqueable */
+            border: 1px solid transparent; /* Base para el borde */
+        }
+        .card-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(224, 224, 224, 0.1); /* Sombra sutil y brillante */
+            background-color: #4a4a4a; /* Un poco más oscuro al pasar el ratón */
+            border-color: #777777; /* Borde al hacer hover */
+        }
+        
+        .btn-back { 
+            background-color: #4a4a4a; 
+            color: #FFFFFF; 
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .btn-back:hover { 
+            background-color: #5c5c5c; 
+            transform: scale(1.02); 
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8 flex justify-center items-start min-h-screen">
+    <div class="w-full max-w-5xl main-card p-6 sm:p-10 rounded-xl shadow-2xl">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#E0E0E0] mb-6 flex items-center">
+            <i class="fas fa-users-cog mr-3 text-2xl text-yellow-400"></i> Coordinación y Comunicación Interna
+        </h1>
+        <p class="text-lg text-gray-400 mb-8">
+            Herramientas esenciales para la colaboración en tiempo real con tu equipo de proyecto y otros departamentos.
+        </p>
+
+        <!-- Contenedor de Tarjetas de Coordinación -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            
+            <!-- Tarjeta 1: Sala del Proyecto Alfa -->
+            <a href="#" class="card-link sub-card p-6 rounded-xl">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-project-diagram text-2xl text-blue-400 mr-3"></i>
+                    <h2 class="text-xl font-bold text-white">Sala del Proyecto Alfa</h2>
+                </div>
+                <p class="text-gray-200 mb-4">Accede al canal de comunicación principal de tu proyecto actual para discusiones técnicas, actualizaciones y daily meetings.</p>
+                <span class="text-sm font-semibold text-blue-300">Ir a la Sala <i class="fas fa-arrow-right ml-1"></i></span>
+            </a>
+
+            <!-- Tarjeta 2: Portal de Videoconferencias (¡Ahora apunta directamente a la sala WebRTC!) -->
+            <a href="real-time-webrtc-chat-roomdefinitiva.html" class="card-link sub-card p-6 rounded-xl">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-video text-2xl text-purple-400 mr-3"></i>
+                    <h2 class="text-xl font-bold text-white">Portal de Videoconferencias</h2>
+                </div>
+                <p class="text-gray-200 mb-4">Genera enlaces rápidos o únete a reuniones de equipo programadas sin necesidad de software externo.</p>
+                <span class="text-sm font-semibold text-purple-300">Generar Reunión <i class="fas fa-arrow-right ml-1"></i></span>
+            </a>
+
+            <!-- Tarjeta 3: Directorio de Contactos -->
+            <a href="#" class="card-link sub-card p-6 rounded-xl">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-address-book text-2xl text-yellow-400 mr-3"></i>
+                    <h2 class="text-xl font-bold text-white">Directorio de Contactos</h2>
+                </div>
+                <p class="text-gray-200 mb-4">Busca y contacta rápidamente a cualquier colega o gerente de otro departamento (Ventas, RRHH, Finanzas).</p>
+                <span class="text-sm font-semibold text-yellow-300">Buscar Contacto <i class="fas fa-search ml-1"></i></span>
+            </a>
+            
+            <!-- Tarjeta 4: Mis Solicitudes Pendientes -->
+            <a href="#" class="card-link sub-card p-6 rounded-xl">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-bell text-2xl text-red-400 mr-3"></i>
+                    <h2 class="text-xl font-bold text-white">Mis Solicitudes Pendientes</h2>
+                </div>
+                <p class="text-gray-200 mb-4">Revisa las solicitudes de reunión que tus compañeros de equipo te han enviado y confírmalas.</p>
+                <span class="text-sm font-semibold text-red-300">Revisar Bandeja (2) <i class="fas fa-envelope ml-1"></i></span>
+            </a>
+        </div>
+
+        <!-- Botón de Retorno -->
+        <div class="mt-8 text-center">
+            <a href="tareas-activas.html" class="btn-back inline-flex items-center justify-center">
+                <i class="fas fa-arrow-left mr-2"></i> Volver a Tareas Activas
+            </a>
+        </div>
+    </div>
+</body>
+</html>
