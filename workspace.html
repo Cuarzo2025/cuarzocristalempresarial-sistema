@@ -15,24 +15,21 @@
             display: flex; min-height: 100vh; overflow-x: hidden;
         }
 
-        /* --- SIDEBAR ADAPTADA --- */
+        /* --- SIDEBAR INTELIGENTE (Hover en PC, Click en Móvil) --- */
         .sidebar {
             width: 260px; background-color: var(--card); padding: 20px;
             box-shadow: 5px 0 15px rgba(0, 0, 0, 0.7);
             display: flex; flex-direction: column; position: fixed;
             height: 100%; z-index: 1000; left: 0;
-            transform: translateX(-250px); /* Escondido en PC */
+            transform: translateX(-250px);
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border-right: 2px solid var(--accent);
         }
 
-        /* Hover solo para pantallas grandes */
         @media (min-width: 1025px) {
             .sidebar:hover { transform: translateX(0); }
-            .mobile-toggle { display: none !important; } /* Esconder botón en PC */
         }
 
-        /* Clase para abrir en móviles mediante JS */
         .sidebar.open { transform: translateX(0); }
 
         .sidebar-header { text-align: center; margin-bottom: 40px; }
@@ -41,51 +38,63 @@
         .sidebar nav a {
             display: block; color: #CCCCCC; text-decoration: none;
             padding: 15px 10px; margin-bottom: 10px; border-radius: 8px;
-            transition: 0.3s; font-weight: 600; white-space: nowrap;
+            transition: 0.3s; font-weight: 600;
         }
         .sidebar nav a:hover { background-color: #1a1a1a; color: var(--accent); }
         .sidebar nav a i { margin-right: 15px; width: 20px; text-align: center; }
 
-        /* --- CONTENIDO PRINCIPAL --- */
-        .main-content { 
-            flex-grow: 1; padding: 20px; 
-            width: 100%; box-sizing: border-box; 
-        }
+        /* --- HEADER Y BIENVENIDA CENTRAL --- */
+        .main-content { flex-grow: 1; width: 100%; box-sizing: border-box; }
 
-        .header-menu {
+        .top-bar {
             display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 15px;
+            padding: 20px 40px; background: rgba(0,0,0,0.8);
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 500;
         }
 
-        /* BOTÓN MÓVIL */
+        .welcome-container {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            text-align: center; width: auto;
+        }
+
+        .welcome-text {
+            color: #FFFFFF; font-weight: 800; font-size: 1.4em;
+            letter-spacing: 1px; margin: 0; text-transform: uppercase;
+        }
+
         .mobile-toggle {
             background: var(--card); color: var(--accent); border: 1px solid var(--accent);
-            padding: 10px; border-radius: 8px; cursor: pointer; font-size: 1.2rem;
+            padding: 8px 12px; border-radius: 5px; cursor: pointer; display: none;
         }
 
-        .user-profile-badge {
-            background: #111; padding: 8px 15px; border-radius: 50px;
-            border: 1px solid var(--accent); display: flex; align-items: center; gap: 8px;
+        /* --- CUERPO DEL DASHBOARD --- */
+        .content-body { padding: 40px; max-width: 1200px; margin: 0 auto; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .stat-card { background-color: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--border); text-align: center; }
+        .stat-card p { font-size: 2.2em; font-weight: 800; margin: 10px 0 0; color: var(--accent); }
+
+        .whatsapp-section {
+            background: #080808; padding: 40px; border-radius: 20px;
+            text-align: center; margin-top: 40px; border: 1px dashed var(--border);
+        }
+        .whatsapp-button {
+            display: inline-block; background-color: #25D366; color: #fff;
+            text-decoration: none; padding: 15px 40px; border-radius: 50px;
+            font-weight: 800; margin-top: 20px; transition: 0.3s;
         }
 
-        /* --- RESPONSIVE ADJUSTMENTS --- */
-        @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); width: 80%; } /* Oculto total en móvil */
-            .main-content { padding: 15px; }
-            .stats-grid { grid-template-columns: 1fr; } /* Una columna en móvil */
-            .stat-card p { font-size: 1.8em; }
-            #desktop-hint { display: none; } /* Quitar texto de "pasa el mouse" */
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .mobile-toggle { display: block; }
+            .welcome-text { font-size: 1.1em; }
+            .top-bar { padding: 15px 20px; }
         }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
-        .stat-card { background-color: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
-        .stat-card h3 { font-size: 0.8rem; color: #888; text-transform: uppercase; margin: 0; }
-        .stat-card p { font-size: 2rem; font-weight: 800; margin-top: 10px; }
-
-        /* Overlay para cerrar el menú al tocar fuera en móvil */
         .overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: 999;
+            background: rgba(0,0,0,0.8); z-index: 999;
         }
         .overlay.active { display: block; }
     </style>
@@ -101,39 +110,50 @@
         </div>
         <nav>
             <a href="workspace.html" class="active"><i class="fas fa-home"></i> Inicio</a>
-            <a href="tareas-activas.html"><i class="fas fa-tasks"></i> Tareas</a>
+            <a href="tareas-activas.html"><i class="fas fa-tasks"></i> Tareas Activas</a>
             <a href="reportes.html"><i class="fas fa-chart-line"></i> Reportes</a>
-            <a href="nuevos-clientes.html"><i class="fas fa-handshake"></i> Clientes</a>
-            <a href="datos-personales.html"><i class="fas fa-cog"></i> Ajustes</a>
-            <a href="contrato-legal.html"><i class="fas fa-gavel"></i> Legal</a>
-            <a href="#" onclick="logout()" style="margin-top: 30px; color: #ff4444;"><i class="fas fa-sign-out-alt"></i> Salir</a>
+            <a href="nuevos-clientes.html"><i class="fas fa-handshake"></i> Nuevos Clientes</a>
+            <a href="datos-personales.html"><i class="fas fa-cog"></i> Configuración</a>
+            <a href="contrato-legal.html"><i class="fas fa-gavel"></i> Documentación Legal</a>
+            <a href="#" onclick="logout()" style="margin-top: 40px; color: #ff4444;"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
         </nav>
     </div>
 
     <div class="main-content">
-        <div class="header-menu">
+        <header class="top-bar">
             <button class="mobile-toggle" onclick="toggleMobileMenu()">
                 <i class="fas fa-bars"></i>
             </button>
-            <div id="desktop-hint" style="color: var(--accent); font-size: 0.7rem; font-weight: 800;">
-                ← MENÚ (HOVER)
+            
+            <div class="welcome-container">
+                <h1 class="welcome-text" id="welcome-msg">BIENVENIDO, CARGANDO...</h1>
             </div>
-            <div class="user-profile-badge">
-                <i class="fas fa-user-circle" style="color: var(--accent);"></i>
-                <span id="display-name" style="font-weight: 600; font-size: 0.8em;">...</span>
+
+            <div style="width: 40px;"></div> </header>
+
+        <div class="content-body">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Proyectos en Curso</h3>
+                    <p>3</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Horas Totales</h3>
+                    <p>128.5</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Estado del Perfil</h3>
+                    <p style="color: #FFFFFF;">ACTIVO</p>
+                </div>
             </div>
-        </div>
 
-        <div class="stats-grid">
-            <div class="stat-card"><h3>Proyectos</h3><p>3</p></div>
-            <div class="stat-card"><h3>Horas</h3><p>128.5</p></div>
-            <div class="stat-card"><h3>Estado</h3><p style="color: var(--accent); font-size: 1.2rem;">ACTIVO</p></div>
-        </div>
-
-        <div style="margin-top: 30px; background: #080808; padding: 25px; border-radius: 15px; border: 1px solid #222;">
-            <h2 style="font-size: 1.2rem;"><i class="fab fa-whatsapp"></i> Soporte</h2>
-            <p style="font-size: 0.9rem; color: #888;">Chat directo con administración.</p>
-            <a href="https://wa.me/5491100001234" class="whatsapp-button" style="text-decoration: none; color: #25D366; font-weight: 800;">HABLAR AHORA</a>
+            <div class="whatsapp-section">
+                <h2>Soporte Directo 24/7</h2>
+                <p>¿Necesitas ayuda técnica o administrativa? Contáctanos de inmediato.</p>
+                <a href="https://wa.me/5491100001234" target="_blank" class="whatsapp-button">
+                    <i class="fab fa-whatsapp"></i> INICIAR CHAT DE SOPORTE
+                </a>
+            </div>
         </div>
     </div>
 
@@ -155,21 +175,27 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Responsive Menu Logic
+        // Control de Sesión y Bienvenida
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const docRef = doc(db, "colaboradores", user.uid);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        const nombre = docSnap.data().nombre;
+                        document.getElementById('welcome-msg').innerText = `BIENVENIDO, ${nombre.toUpperCase()}`;
+                    }
+                } catch (e) { console.error("Error al cargar datos", e); }
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        // Funciones para móviles
         window.toggleMobileMenu = () => {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('active');
         };
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const docRef = doc(db, "colaboradores", user.uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    document.getElementById('display-name').innerText = docSnap.data().nombre.toUpperCase();
-                }
-            } else { window.location.href = "login.html"; }
-        });
 
         window.logout = () => signOut(auth).then(() => window.location.href = "login.html");
     </script>
