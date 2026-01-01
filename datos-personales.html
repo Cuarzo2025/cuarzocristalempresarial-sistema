@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Estilos Base del Dashboard */
+        /* Estilos Base del Dashboard - PRESERVADOS */
         body {
             background-color: #000000;
             color: #FFFFFF;
@@ -36,12 +36,13 @@
             margin: 0;
         }
         
-        /* Estilos del Formulario */
+        /* Estilos del Formulario - PRESERVADOS */
         .card {
             background-color: #1a1a1a; 
             padding: 25px;
             border-radius: 8px;
             margin-bottom: 20px;
+            border: 1px solid #222;
         }
         .card h2 {
             margin-top: 0;
@@ -81,11 +82,11 @@
         }
         .doc-group {
             display: grid;
-            grid-template-columns: 1fr 2fr; /* Columna de tipo vs número */
+            grid-template-columns: 1fr 2fr; 
             gap: 10px;
         }
         .form-button {
-            padding: 12px 25px;
+            padding: 15px 30px;
             background-color: #FFFFFF; 
             color: #000000;
             border: none;
@@ -94,6 +95,8 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-top: 20px;
+            width: 100%;
+            text-transform: uppercase;
         }
         .form-button:hover {
             background-color: #cccccc;
@@ -106,27 +109,29 @@
         .back-link:hover {
             color: #FFFFFF;
         }
+        .highlight-card {
+            border: 1px solid #4CAF50 !important;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-user-circle"></i> Datos Personales del Profesional</h1>
-            <a href="dashboard.html" class="back-link">
+            <h1><i class="fas fa-user-circle"></i> Datos Personales</h1>
+            <a href="workspace.html" class="back-link">
                 <i class="fas fa-arrow-left"></i> Volver al Panel
             </a>
         </div>
 
-        <form onsubmit="alert('Datos Personales Actualizados Exitosamente!'); return false;">
+        <form id="profile-form">
             
             <div class="card">
                 <h2>Información General</h2>
                 <div class="form-grid">
-                    
                     <div class="input-group">
                         <label for="nombre">Nombre Completo</label>
-                        <input type="text" id="nombre" value="[Nombre del Profesional]" required>
+                        <input type="text" id="nombre" required>
                     </div>
 
                     <div class="input-group">
@@ -158,7 +163,6 @@
             <div class="card">
                 <h2>Identificación y Documentación</h2>
                 <div class="form-grid">
-                    
                     <div class="input-group" style="grid-column: 1 / -1;">
                         <label for="tipoDocumento">Documento de Identidad</label>
                         <div class="doc-group">
@@ -173,12 +177,10 @@
                             <input type="text" id="numeroDocumento" placeholder="Número del Documento" required>
                         </div>
                     </div>
-                    
                     <div class="input-group">
                         <label for="fechaEmision">Fecha de Emisión</label>
                         <input type="date" id="fechaEmision">
                     </div>
-
                     <div class="input-group">
                         <label for="fechaVencimiento">Fecha de Vencimiento (Si aplica)</label>
                         <input type="date" id="fechaVencimiento">
@@ -204,15 +206,56 @@
                 </div>
             </div>
 
-            <button type="submit" class="form-button">
-                <i class="fas fa-save"></i> Guardar Cambios
+            <div class="card highlight-card">
+                <h2 style="color: #4CAF50;"><i class="fas fa-wallet"></i> Información de Cobro</h2>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="metodoPago">Medio de Pago</label>
+                        <select id="metodoPago" onchange="actualizarPlaceholderPago()" required>
+                            <option value="">-- Seleccionar Medio --</option>
+                            <option value="PayPal">PayPal</option>
+                            <option value="Mercado Pago">Mercado Pago</option>
+                            <option value="Banco Argentina">Banco (Argentina)</option>
+                            <option value="Banco Uruguay">Banco (Uruguay)</option>
+                            <option value="Banco Brasil">Banco (Brasil)</option>
+                            <option value="Prex Argentina">Prex Argentina</option>
+                            <option value="Prex Uruguay">Prex Uruguay</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label id="labelDatoPago">Alias, CBU, CVU o Email</label>
+                        <input type="text" id="datoPago" placeholder="Ingrese el dato aquí..." required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="form-button" id="btn-submit">
+                <i class="fas fa-save"></i> Guardar y Notificar a Administración
             </button>
 
         </form>
     </div>
 
-    <script>
-        // Array de Nacionalidades (simplificado para el ejemplo)
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
+            authDomain: "cuarzocristalempresarialsist.firebaseapp.com",
+            projectId: "cuarzocristalempresarialsist",
+            storageBucket: "cuarzocristalempresarialsist.firebasestorage.app",
+            messagingSenderId: "1031610061736",
+            appId: "1:1031610061736:web:d05d431b433eb5b55ec39d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        let userId;
+
+        // Nacionalidades (Lista Original Completa)
         const nacionalidades = [
             "Afgana", "Albanesa", "Alemana", "Americana", "Andorrana", "Angoleña", "Argentina", "Australiana", 
             "Austriaca", "Belga", "Boliviana", "Brasileña", "Canadiense", "Chilena", "China", "Colombiana", 
@@ -223,49 +266,108 @@
             "Rusa", "Salvadoñera", "Sueca", "Suiza", "Tailandesa", "Turca", "Ucraniana", "Uruguaya", 
             "Venezolana", "Vietnamita", "Zambiana"
         ];
-        
-        // --- FUNCIONES ---
 
-        // Función para llenar el desplegable de Nacionalidad
-        function llenarNacionalidades() {
+        window.onload = () => {
             const selectNacionalidad = document.getElementById('nacionalidad');
-            
-            nacionalidades.sort().forEach(nacionalidad => {
-                const option = document.createElement('option');
-                option.value = nacionalidad;
-                option.textContent = nacionalidad;
-                selectNacionalidad.appendChild(option);
+            nacionalidades.sort().forEach(n => {
+                const opt = document.createElement('option');
+                opt.value = n; opt.textContent = n;
+                selectNacionalidad.appendChild(opt);
             });
-        }
-        
-        // Función para calcular la edad automáticamente
-        function calcularEdad() {
-            const inputFechaNacimiento = document.getElementById('fechaNacimiento');
-            const inputEdad = document.getElementById('edad');
-            
-            const fechaNacimiento = new Date(inputFechaNacimiento.value);
-            const hoy = new Date();
-
-            if (isNaN(fechaNacimiento)) {
-                inputEdad.value = '';
-                return;
-            }
-
-            let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
-            const mes = hoy.getMonth() - fechaNacimiento.getMonth();
-
-            // Ajuste si aún no ha cumplido años en este mes
-            if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
-                edad--;
-            }
-
-            inputEdad.value = `${edad} años`;
-        }
-
-        // Ejecutar al cargar la página
-        window.onload = function() {
-            llenarNacionalidades();
         };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                userId = user.uid;
+                const docSnap = await getDoc(doc(db, "colaboradores", userId));
+                if (docSnap.exists()) {
+                    const d = docSnap.data();
+                    document.getElementById('nombre').value = d.nombre || "";
+                    document.getElementById('fechaNacimiento').value = d.fechaNacimiento || "";
+                    document.getElementById('nacionalidad').value = d.nacionalidad || "";
+                    document.getElementById('estadoCivil').value = d.estadoCivil || "soltero";
+                    document.getElementById('tipoDocumento').value = d.tipoDocumento || "";
+                    document.getElementById('numeroDocumento').value = d.numeroDocumento || "";
+                    document.getElementById('fechaEmision').value = d.fechaEmision || "";
+                    document.getElementById('fechaVencimiento').value = d.fechaVencimiento || "";
+                    document.getElementById('cuit').value = d.cuit || "";
+                    document.getElementById('condicionTributaria').value = d.condicionTributaria || "monotributo";
+                    document.getElementById('metodoPago').value = d.metodoPago || "";
+                    document.getElementById('datoPago').value = d.datoPago || "";
+                    calcularEdad();
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        window.actualizarPlaceholderPago = () => {
+            const m = document.getElementById('metodoPago').value;
+            const l = document.getElementById('labelDatoPago');
+            if(m === "PayPal") l.innerText = "Email de PayPal";
+            else if(m.includes("Banco") || m === "Mercado Pago") l.innerText = "CBU/CVU o Alias";
+            else if(m.includes("Prex")) l.innerText = "Nº Cuenta Prex o CI/DNI";
+            else l.innerText = "Dato de cobro";
+        };
+
+        window.calcularEdad = () => {
+            const f = document.getElementById('fechaNacimiento').value;
+            const output = document.getElementById('edad');
+            if (!f) return;
+            const hoy = new Date();
+            const nac = new Date(f);
+            let edad = hoy.getFullYear() - nac.getFullYear();
+            if (hoy.getMonth() < nac.getMonth() || (hoy.getMonth() === nac.getMonth() && hoy.getDate() < nac.getDate())) edad--;
+            output.value = edad + " años";
+        };
+
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit');
+            btn.disabled = true;
+            btn.innerText = "GUARDANDO...";
+
+            const datos = {
+                nombre: document.getElementById('nombre').value,
+                fechaNacimiento: document.getElementById('fechaNacimiento').value,
+                nacionalidad: document.getElementById('nacionalidad').value,
+                estadoCivil: document.getElementById('estadoCivil').value,
+                tipoDocumento: document.getElementById('tipoDocumento').value,
+                numeroDocumento: document.getElementById('numeroDocumento').value,
+                fechaEmision: document.getElementById('fechaEmision').value,
+                fechaVencimiento: document.getElementById('fechaVencimiento').value,
+                cuit: document.getElementById('cuit').value,
+                condicionTributaria: document.getElementById('condicionTributaria').value,
+                metodoPago: document.getElementById('metodoPago').value,
+                datoPago: document.getElementById('datoPago').value,
+                ultimaActualizacion: new Date()
+            };
+
+            try {
+                // 1. Guardar en perfil del colaborador
+                await updateDoc(doc(db, "colaboradores", userId), datos);
+
+                // 2. Crear Notificación para Natalia y Hector
+                await addDoc(collection(db, "notificaciones_admin"), {
+                    titulo: "Actualización Administrativa",
+                    mensaje: `El colaborador ${datos.nombre} actualizó su perfil y método de pago.`,
+                    detalles: {
+                        metodo: datos.metodoPago,
+                        dato: datos.datoPago
+                    },
+                    destinatarios: ["Natalia Soba Laguarda", "Hector Mauricio Raposso"],
+                    fecha: new Date(),
+                    visto: false
+                });
+
+                alert("¡Datos guardados! La administración ha sido notificada.");
+                window.location.href = "workspace.html";
+            } catch (err) {
+                alert("Error: " + err.message);
+                btn.disabled = false;
+                btn.innerText = "Guardar Cambios";
+            }
+        });
     </script>
 </body>
 </html>
