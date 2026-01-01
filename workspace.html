@@ -57,36 +57,38 @@
         .welcome-center {
             position: absolute; left: 50%; transform: translateX(-50%);
             text-align: center; pointer-events: none;
-            width: 40%; /* Limita el ancho para que no choque con los lados */
+            width: 35%; 
         }
         .welcome-text {
             color: #FFFFFF; font-weight: 800; font-size: 1.1em;
             letter-spacing: 1px; margin: 0; text-transform: uppercase;
         }
 
-        /* Badge de Usuario (Derecha) */
+        /* Badge de Usuario (Derecha) CORREGIDO */
         .user-badge {
             display: flex; align-items: center; gap: 12px;
-            background: #111; padding: 6px 16px; border-radius: 50px;
+            background: #111; padding: 8px 18px; border-radius: 50px;
             border: 1px solid var(--accent); flex-shrink: 0;
-            max-width: 250px; /* Permite que crezca un poco más para el nombre completo */
+            max-width: 320px; /* Aumentado para nombre y apellido */
         }
         .user-badge i {
-            width: 30px; height: 30px; border-radius: 50%;
+            width: 35px; height: 35px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            background: #222; color: var(--accent); font-size: 1.1rem;
+            background: #222; color: var(--accent); font-size: 1.2rem;
+            flex-shrink: 0;
         }
         .user-name-small {
-            font-size: 0.8rem; font-weight: 700; color: #FFF;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            font-size: 0.85rem; font-weight: 700; color: #FFF;
+            /* Se eliminó nowrap para permitir que el nombre fluya si es necesario */
+            text-align: right;
         }
 
         /* --- CONTENIDO --- */
         .main-content { flex-grow: 1; width: 100%; }
         .content-body { padding: 30px; max-width: 1200px; margin: 0 auto; }
 
-        @media (max-width: 900px) {
-            .welcome-center { display: none; } /* Ocultar centro en tablets/celulares para priorizar el nombre */
+        @media (max-width: 950px) {
+            .welcome-center { display: none; } /* Espacio para el nombre completo en móviles */
         }
 
         .overlay {
@@ -135,7 +137,7 @@
         <div class="content-body">
             <div id="dashboard-info">
                  <h2 style="color:var(--accent)">Dashboard de Colaborador</h2>
-                 <p>Selecciona una opción del menú lateral para comenzar.</p>
+                 <p>Sesión activa para el perfil completo.</p>
             </div>
         </div>
     </div>
@@ -165,12 +167,10 @@
                     const docSnap = await getDoc(docRef);
                     if (docSnap.exists()) {
                         const data = docSnap.data();
-                        const nombreCompleto = data.nombre || "Usuario";
+                        // Importante: No aplicamos ninguna función .split() para que tome el nombre completo
+                        const nombreCompleto = data.nombre || "Usuario no encontrado";
                         
-                        // Nombre completo en el mensaje central
                         document.getElementById('welcome-msg').innerText = `BIENVENIDO, ${nombreCompleto.toUpperCase()}`;
-                        
-                        // Nombre completo en el badge lateral derecho
                         document.getElementById('badge-name').innerText = nombreCompleto.toUpperCase();
                     }
                 } catch (e) { console.error(e); }
