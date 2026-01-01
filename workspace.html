@@ -15,7 +15,7 @@
             display: flex; min-height: 100vh; overflow-x: hidden;
         }
 
-        /* --- SIDEBAR INTELIGENTE (Hover en PC, Click en Móvil) --- */
+        /* --- SIDEBAR --- */
         .sidebar {
             width: 260px; background-color: var(--card); padding: 20px;
             box-shadow: 5px 0 15px rgba(0, 0, 0, 0.7);
@@ -32,64 +32,58 @@
 
         .sidebar.open { transform: translateX(0); }
 
-        .sidebar-header { text-align: center; margin-bottom: 40px; }
-        .sidebar-header h2 { font-size: 1.3em; font-weight: 800; color: var(--accent); }
-
         .sidebar nav a {
             display: block; color: #CCCCCC; text-decoration: none;
             padding: 15px 10px; margin-bottom: 10px; border-radius: 8px;
             transition: 0.3s; font-weight: 600;
         }
         .sidebar nav a:hover { background-color: #1a1a1a; color: var(--accent); }
-        .sidebar nav a i { margin-right: 15px; width: 20px; text-align: center; }
 
-        /* --- HEADER Y BIENVENIDA CENTRAL --- */
-        .main-content { flex-grow: 1; width: 100%; box-sizing: border-box; }
-
+        /* --- TOP BAR CORREGIDA --- */
         .top-bar {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 20px 40px; background: rgba(0,0,0,0.8);
+            padding: 20px; background: #000;
             border-bottom: 1px solid var(--border);
             position: sticky; top: 0; z-index: 500;
+            height: 70px; /* Altura fija para ayudar al centrado */
         }
 
+        /* Contenedor de bienvenida corregido */
         .welcome-container {
-            position: absolute; left: 50%; transform: translateX(-50%);
-            text-align: center; width: auto;
+            flex-grow: 1;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .welcome-text {
-            color: #FFFFFF; font-weight: 800; font-size: 1.4em;
-            letter-spacing: 1px; margin: 0; text-transform: uppercase;
+            color: #FFFFFF; 
+            font-weight: 800; 
+            font-size: 1.2em;
+            letter-spacing: 1px; 
+            margin: 0; 
+            text-transform: uppercase;
+            display: block; /* Asegura que se comporte como bloque */
         }
 
         .mobile-toggle {
             background: var(--card); color: var(--accent); border: 1px solid var(--accent);
-            padding: 8px 12px; border-radius: 5px; cursor: pointer; display: none;
+            padding: 8px 12px; border-radius: 5px; cursor: pointer;
+            z-index: 600;
         }
 
-        /* --- CUERPO DEL DASHBOARD --- */
+        /* --- CUERPO --- */
+        .main-content { flex-grow: 1; width: 100%; }
         .content-body { padding: 40px; max-width: 1200px; margin: 0 auto; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .stat-card { background-color: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--border); text-align: center; }
         .stat-card p { font-size: 2.2em; font-weight: 800; margin: 10px 0 0; color: var(--accent); }
 
-        .whatsapp-section {
-            background: #080808; padding: 40px; border-radius: 20px;
-            text-align: center; margin-top: 40px; border: 1px dashed var(--border);
-        }
-        .whatsapp-button {
-            display: inline-block; background-color: #25D366; color: #fff;
-            text-decoration: none; padding: 15px 40px; border-radius: 50px;
-            font-weight: 800; margin-top: 20px; transition: 0.3s;
-        }
-
         /* RESPONSIVE */
         @media (max-width: 1024px) {
-            .mobile-toggle { display: block; }
-            .welcome-text { font-size: 1.1em; }
-            .top-bar { padding: 15px 20px; }
+            .welcome-text { font-size: 0.9em; }
         }
 
         .overlay {
@@ -104,9 +98,9 @@
     <div class="overlay" id="overlay" onclick="toggleMobileMenu()"></div>
 
     <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
+        <div class="sidebar-header" style="text-align:center; margin-bottom:30px;">
             <i class="fas fa-gem" style="font-size: 2.5em; color: var(--accent);"></i>
-            <h2>CUARZO</h2>
+            <h2 style="color:var(--accent)">CUARZO</h2>
         </div>
         <nav>
             <a href="workspace.html" class="active"><i class="fas fa-home"></i> Inicio</a>
@@ -126,10 +120,11 @@
             </button>
             
             <div class="welcome-container">
-                <h1 class="welcome-text" id="welcome-msg">BIENVENIDO, CARGANDO...</h1>
+                <h1 class="welcome-text" id="welcome-msg">BIENVENIDO</h1>
             </div>
 
-            <div style="width: 40px;"></div> </header>
+            <div style="width: 45px;"></div> 
+        </header>
 
         <div class="content-body">
             <div class="stats-grid">
@@ -147,11 +142,10 @@
                 </div>
             </div>
 
-            <div class="whatsapp-section">
+            <div style="background: #1a1a1a; padding: 40px; border-radius: 20px; text-align: center; margin-top: 40px;">
                 <h2>Soporte Directo 24/7</h2>
-                <p>¿Necesitas ayuda técnica o administrativa? Contáctanos de inmediato.</p>
-                <a href="https://wa.me/5491100001234" target="_blank" class="whatsapp-button">
-                    <i class="fab fa-whatsapp"></i> INICIAR CHAT DE SOPORTE
+                <a href="https://wa.me/5491100001234" target="_blank" style="display:inline-block; background:#25D366; color:white; padding:15px 30px; border-radius:50px; text-decoration:none; font-weight:800; margin-top:20px;">
+                    <i class="fab fa-whatsapp"></i> WHATSAPP SOPORTE
                 </a>
             </div>
         </div>
@@ -175,23 +169,27 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Control de Sesión y Bienvenida
         onAuthStateChanged(auth, async (user) => {
+            const welcomeMsg = document.getElementById('welcome-msg');
             if (user) {
                 try {
                     const docRef = doc(db, "colaboradores", user.uid);
                     const docSnap = await getDoc(docRef);
                     if (docSnap.exists()) {
-                        const nombre = docSnap.data().nombre;
-                        document.getElementById('welcome-msg').innerText = `BIENVENIDO, ${nombre.toUpperCase()}`;
+                        const nombre = docSnap.data().nombre || "Usuario";
+                        welcomeMsg.innerText = `BIENVENIDO, ${nombre.toUpperCase()}`;
+                    } else {
+                        welcomeMsg.innerText = "BIENVENIDO, COLABORADOR";
                     }
-                } catch (e) { console.error("Error al cargar datos", e); }
+                } catch (e) {
+                    console.error(e);
+                    welcomeMsg.innerText = "BIENVENIDO";
+                }
             } else {
                 window.location.href = "login.html";
             }
         });
 
-        // Funciones para móviles
         window.toggleMobileMenu = () => {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('active');
