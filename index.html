@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro | Cuarzo Cristal</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         :root { --primary: #FFFFFF; --bg: #0A0A0A; --card: #141414; --text-dim: #A0A0A0; --accent: #4CAF50; --border: #333; }
         body { background: var(--bg); color: var(--primary); font-family: 'Montserrat', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
@@ -37,7 +36,7 @@
     <div id="modal-overlay">
         <div class="modal">
             <h2 style="color: var(--accent); margin-top: 0;">¡ÉXITO!</h2>
-            <p style="font-size: 0.9rem;">Te enviamos un correo. Tu clave temporal es:</p>
+            <p style="font-size: 0.9rem;">Se ha enviado un correo con Resend. Tu clave temporal es:</p>
             <span id="display-pass" class="temp-pass">--------</span>
             <p style="font-size: 0.75rem; color: var(--text-dim);">Cópiala antes de ir al login.</p>
             <button class="btn-main" onclick="window.location.href='login.html'" style="background: var(--accent); color: white;">IR AL LOGIN</button>
@@ -46,7 +45,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -61,9 +60,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        
-        // TU PUBLIC KEY
-        emailjs.init("Hh5cKcCjZpu9toPYN");
 
         document.getElementById('registration-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -76,33 +72,53 @@
             btn.innerText = "PROCESANDO...";
 
             try {
+                // 1. Registro en Firebase Auth
                 const userCred = await createUserWithEmailAndPassword(auth, email, tempPass);
-                await sendEmailVerification(userCred.user);
                 
+                // 2. Guardar datos en Firestore (CAMPOS AUTOMÁTICOS AÑADIDOS AQUÍ)
                 await setDoc(doc(db, "colaboradores", userCred.user.uid), {
                     nombre: name,
                     email: email,
                     requiereCambio: true,
                     claveTemporal: tempPass,
-                    fechaRegistro: new Date()
+                    fechaRegistro: new Date(),
+                    // Nuevos campos sincronizados con Workspace
+                    proyectos_activos: 0,
+                    horas_totales: 0,
+                    estado: "ACTIVO"
                 });
 
-                // USANDO TU SERVICE ID ACTUALIZADO
+                // 3. Envío de correo mediante nuestra API de Resend
                 try {
-                    await emailjs.send("service_u1a6rwt", "template_328obst", {
-                        to_name: name,
-                        user_email: email,
-                        temp_password: tempPass
+                    const response = await fetch('/api/send', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email: email,
+                            nombre: name,
+                            clave: tempPass
+                        })
                     });
-                } catch (mailError) {
-                    console.warn("EmailJS falló, pero el usuario se creó correctamente.");
+                    
+                    if (response.ok) {
+                        console.log("Correo enviado exitosamente vía Resend");
+                    } else {
+                        console.warn("La API de Resend respondió con error.");
+                    }
+                } catch (resendError) {
+                    console.error("Error al conectar con la API de Resend:", resendError);
                 }
 
+                // 4. Mostrar Modal con la clave
                 document.getElementById('display-pass').innerText = tempPass;
                 document.getElementById('modal-overlay').style.display = 'flex';
 
             } catch (error) {
-                alert("Error: " + error.message);
+                if (error.code === 'auth/email-already-in-use') {
+                    alert("Este correo ya está registrado.");
+                } else {
+                    alert("Error: " + error.message);
+                }
                 btn.disabled = false;
                 btn.innerText = "COMPLETAR REGISTRO";
             }
