@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root { --primary: #FFFFFF; --bg: #000000; --card: #0d0d0d; --accent: #00FFFF; --border: #333; }
+        :root { --primary: #FFFFFF; --bg: #000000; --card: #0d0d0d; --accent: #00FFFF; --border: #333; --admin: #4CAF50; }
         
         body {
             background-color: var(--bg); color: var(--primary);
@@ -34,6 +34,10 @@
             transition: 0.3s; font-weight: 600;
         }
         .sidebar nav a:hover { background-color: #1a1a1a; color: var(--accent); }
+        
+        /* Estilo especial para el botón de Admin */
+        .nav-admin { border: 1px solid var(--admin); color: var(--admin) !important; display: none !important; }
+        .nav-admin:hover { background-color: var(--admin) !important; color: #000 !important; }
 
         /* --- CONTENIDO --- */
         .main-content { flex-grow: 1; width: 100%; display: flex; flex-direction: column; }
@@ -58,7 +62,7 @@
             justify-content: center; color: var(--accent); border: 1px solid var(--border);
         }
 
-        /* --- SECCIONES BAJADAS --- */
+        /* --- SECCIONES --- */
         .welcome-section { padding: 40px 40px 20px 40px; }
         .welcome-text {
             color: #FFFFFF; font-weight: 800; font-size: 1.8em;
@@ -124,6 +128,8 @@
         </div>
         <nav>
             <a href="workspace.html" class="active"><i class="fas fa-home"></i> Inicio</a>
+            <a href="admin-control.html" id="btn-admin-link" class="nav-admin"><i class="fas fa-user-shield"></i> Panel Maestro</a>
+            
             <a href="tareas-activas.html"><i class="fas fa-tasks"></i> Tareas Activas</a>
             <a href="reportes.html"><i class="fas fa-chart-line"></i> Reportes</a>
             <a href="nuevos-clientes.html"><i class="fas fa-handshake"></i> Clientes</a>
@@ -204,28 +210,40 @@
 
         let userId, startTime, timerInterval;
 
+        // --- VALIDACIÓN DE ADMIN ---
+        const SUPER_ADMINS = ["rrhhcuarzocristalempresarial@gmail.com", "hectorraposso@gmail.com"];
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 userId = user.uid;
-                loadData();
+                
+                // Verificar si es Admin para mostrar el botón
+                const userRef = doc(db, "colaboradores", userId);
+                const docSnap = await getDoc(userRef);
+                
+                if (docSnap.exists()) {
+                    const d = docSnap.data();
+                    
+                    // Lógica para mostrar botón maestro
+                    if (SUPER_ADMINS.includes(user.email) || d.rol === "admin" || d.rol === "staff") {
+                        const btnAdmin = document.getElementById('btn-admin-link');
+                        btnAdmin.style.setProperty('display', 'block', 'important');
+                    }
+
+                    // Carga de datos de bienvenida
+                    document.getElementById('welcome-msg').innerText = `BIENVENIDO, ${d.nombre.toUpperCase()}`;
+                    document.getElementById('badge-name').innerText = d.nombre.toUpperCase();
+                    document.getElementById('stat-proyectos').innerText = d.proyectos_activos || 0;
+                    document.getElementById('stat-horas').innerText = parseFloat(d.horas_totales || 0).toFixed(2);
+                    document.getElementById('stat-estado').innerText = (d.estado || "ACTIVO").toUpperCase();
+                    document.getElementById('stat-estado').style.color = (d.estado === "ACTIVO") ? "#00FFFF" : "#FF4444";
+                }
             } else {
                 window.location.href = "login.html";
             }
         });
 
-        async function loadData() {
-            const docSnap = await getDoc(doc(db, "colaboradores", userId));
-            if (docSnap.exists()) {
-                const d = docSnap.data();
-                document.getElementById('welcome-msg').innerText = `BIENVENIDO, ${d.nombre.toUpperCase()}`;
-                document.getElementById('badge-name').innerText = d.nombre.toUpperCase();
-                document.getElementById('stat-proyectos').innerText = d.proyectos_activos || 0;
-                document.getElementById('stat-horas').innerText = parseFloat(d.horas_totales || 0).toFixed(2);
-                document.getElementById('stat-estado').innerText = (d.estado || "ACTIVO").toUpperCase();
-                document.getElementById('stat-estado').style.color = (d.estado === "ACTIVO") ? "#00FFFF" : "#FF4444";
-            }
-        }
-
+        // --- LÓGICA DEL TIMER (Preservada) ---
         window.startTimer = () => {
             startTime = Date.now();
             document.getElementById('btn-start').disabled = true;

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control Administrativo - Cuarzo Empresarial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Sincronización total con la estética de Datos Personales */
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 30px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background-color: #0d0d0d; 
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333333;
+            padding-bottom: 15px;
+        }
+        .header h1 {
+            font-size: 1.8em;
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .card {
+            background-color: #1a1a1a; 
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px solid #222;
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.3em;
+            border-bottom: 1px solid #333333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #4CAF50; /* Acento verde para identificar sección admin */
+        }
+
+        /* Diseño de Tablas Administrativas */
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th {
+            padding: 12px;
+            border-bottom: 2px solid #333;
+            color: #888;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #222;
+            font-size: 0.9em;
+        }
+        tr:hover {
+            background-color: #222222;
+        }
+
+        /* Badges de Roles */
+        .badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .badge-admin { background-color: #FFFFFF; color: #000000; }
+        .badge-staff { background-color: #4CAF50; color: #FFFFFF; }
+        .badge-colab { background-color: #333333; color: #FFFFFF; }
+
+        /* Botones de Acción */
+        .btn-action {
+            padding: 8px 15px;
+            background-color: #FFFFFF;
+            color: #000000;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.75em;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-right: 5px;
+        }
+        .btn-action:hover {
+            background-color: #4CAF50;
+            color: #FFFFFF;
+        }
+        .btn-danger {
+            background-color: #333;
+            color: #ff4444;
+            border: 1px solid #444;
+        }
+        .btn-danger:hover {
+            background-color: #ff4444;
+            color: #fff;
+        }
+
+        #access-denied {
+            display: none;
+            text-align: center;
+            padding: 100px 20px;
+        }
+        #admin-content { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="access-denied">
+        <i class="fas fa-shield-virus" style="font-size: 4em; color: #ff4444; margin-bottom: 20px;"></i>
+        <h1>Acceso No Autorizado</h1>
+        <p>Este panel es exclusivo para la dirección general (Natalia Soba y Héctor Raposso).</p>
+        <br>
+        <a href="workspace.html" style="color: #fff; text-decoration: underline;">Regresar al Workspace</a>
+    </div>
+
+    <div id="admin-content" class="container">
+        <div class="header">
+            <h1><i class="fas fa-user-shield"></i> Control Central Cuarzo</h1>
+            <a href="workspace.html" style="color: #ccc; text-decoration: none; font-size: 0.9em;">
+                <i class="fas fa-times"></i> Salir del Panel
+            </a>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-money-check-alt"></i> Actualizaciones de Cobro</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Profesional</th>
+                            <th>Medio de Pago</th>
+                            <th>Dato de Cuenta / Alias</th>
+                            <th>Última Actualización</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pago-list">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-users-cog"></i> Gestión de Permisos y Roles</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Correo Electrónico</th>
+                            <th>Rol Actual</th>
+                            <th id="th-acciones">Acciones de Dirección</th>
+                        </tr>
+                    </thead>
+                    <tbody id="colaboradores-list">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
+            authDomain: "cuarzocristalempresarialsist.firebaseapp.com",
+            projectId: "cuarzocristalempresarialsist",
+            storageBucket: "cuarzocristalempresarialsist.firebasestorage.app",
+            messagingSenderId: "1031610061736",
+            appId: "1:1031610061736:web:d05d431b433eb5b55ec39d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DIRECCIÓN GENERAL (Súper Admins)
+        const DIRECCION = ["rrhhcuarzocristalempresarial@gmail.com", "hectorraposso@gmail.com"];
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userRef = doc(db, "colaboradores", user.uid);
+                const snap = await getDoc(userRef);
+                const userData = snap.data();
+
+                // Lógica de acceso: Si está en la lista DIRECCION o su rol en DB es admin/staff
+                const esDireccion = DIRECCION.includes(user.email);
+                const esAdminAutorizado = userData && (userData.rol === "admin" || userData.rol === "staff");
+
+                if (esDireccion || esAdminAutorizado) {
+                    document.getElementById('admin-content').style.display = 'block';
+                    iniciarMonitor(esDireccion);
+                } else {
+                    document.getElementById('access-denied').style.display = 'block';
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        function iniciarMonitor(esSuperAdmin) {
+            // Monitor de Pagos (Solo los que ya completaron datos)
+            const qPagos = query(collection(db, "colaboradores"), where("metodoPago", "!=", ""));
+            onSnapshot(qPagos, (snap) => {
+                const tbody = document.getElementById('pago-list');
+                tbody.innerHTML = "";
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    const fecha = d.ultimaActualizacion ? d.ultimaActualizacion.toDate().toLocaleString() : "Sin fecha";
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${d.nombre || 'Sin nombre'}</strong></td>
+                            <td><span class="badge badge-staff">${d.metodoPago}</span></td>
+                            <td style="color:#4CAF50; font-family: monospace;">${d.datoPago}</td>
+                            <td style="color:#666; font-size:0.8em">${fecha}</td>
+                        </tr>
+                    `;
+                });
+            });
+
+            // Monitor de Colaboradores (Todos)
+            onSnapshot(collection(db, "colaboradores"), (snap) => {
+                const tbody = document.getElementById('colaboradores-list');
+                tbody.innerHTML = "";
+                snap.forEach(dSnap => {
+                    const c = dSnap.data();
+                    const id = dSnap.id;
+                    const rol = c.rol || "colaborador";
+                    const badgeClass = rol === 'admin' ? 'badge-admin' : (rol === 'staff' ? 'badge-staff' : 'badge-colab');
+                    
+                    let botones = '---';
+                    if (esSuperAdmin) {
+                        botones = `
+                            <button class="btn-action" onclick="setRol('${id}', 'admin')">Admin</button>
+                            <button class="btn-action" onclick="setRol('${id}', 'staff')">Staff</button>
+                            <button class="btn-action btn-danger" onclick="setRol('${id}', 'colaborador')">Quitar</button>
+                        `;
+                    } else {
+                        document.getElementById('th-acciones').style.display = 'none';
+                    }
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${c.nombre || 'Nuevo Registro'}</td>
+                            <td>${c.email}</td>
+                            <td><span class="badge ${badgeClass}">${rol}</span></td>
+                            ${esSuperAdmin ? `<td>${botones}</td>` : ''}
+                        </tr>
+                    `;
+                });
+            });
+        }
+
+        // Función Global para cambiar roles (Exclusiva para Natalia y Héctor)
+        window.setRol = async (uid, nuevoRol) => {
+            if (confirm(`¿Deseas asignar el rol de ${nuevoRol} a este usuario?`)) {
+                await updateDoc(doc(db, "colaboradores", uid), { rol: nuevoRol });
+            }
+        };
+
+    </script>
+</body>
+</html>
