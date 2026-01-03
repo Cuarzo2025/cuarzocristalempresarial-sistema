@@ -3,118 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contrato Legal - Cuarzo Empresarial</title>
+    <title>Contrato Legal - Cuarzo Cristal</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        /* Estilos Base del Dashboard */
-        body {
-            background-color: #000000;
-            color: #FFFFFF;
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 30px;
-        }
-        .container {
-            max-width: 900px;
-            margin: auto;
-            background-color: #0d0d0d; 
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #333333;
-            padding-bottom: 15px;
-        }
-        .header h1 {
-            font-size: 2em;
-            margin: 0;
-        }
-        .back-link {
-            text-decoration: none;
-            color: #CCCCCC;
-            transition: color 0.3s;
-        }
-        .back-link:hover {
-            color: #FFFFFF;
-        }
-        
-        /* Contenido Legal */
-        .contract-section {
-            background-color: #1a1a1a;
-            padding: 25px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .contract-section h2 {
-            font-size: 1.6em;
-            color: #FFFFFF;
-            margin-top: 0;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #333333;
-            margin-bottom: 15px;
-        }
-        .contract-section h3 {
-            font-size: 1.2em;
-            color: #CCCCCC;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-        .contract-section p, .contract-section ul {
-            font-size: 1em;
-            line-height: 1.6;
-            color: #E0E0E0;
-        }
-        .contract-section ul {
-            list-style-type: square;
-            margin-left: 20px;
-            padding-left: 0;
-        }
-        .info-box {
-            background-color: #0d0d0d;
-            border: 1px solid #333333;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
-            font-style: italic;
-        }
-        /* Estilo del botón PDF */
-        .pdf-button {
-            padding: 15px 25px;
-            background-color: #A93226; 
-            color: #FFFFFF;
-            border: none;
-            border-radius: 5px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 30px;
-            width: 100%;
-            text-align: center;
-            text-decoration: none; 
-            display: block;
-        }
-        .pdf-button:hover {
-            background-color: #C0392B;
-        }
+    
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-        /* Estilo para el botón de Aceptación */
-        #aceptarContratoBtn {
-            background-color: #27AE60 !important; /* Verde de Aceptación */
-            border: none;
-            transition: background-color 0.3s ease;
-        }
-        #aceptarContratoBtn:hover {
-            background-color: #2ECC71 !important;
-        }
-        #aceptarContratoBtn[disabled] {
-            background-color: #555555 !important;
-            cursor: not-allowed;
+    <style>
+        body { background-color: #000000; color: #FFFFFF; font-family: 'Montserrat', sans-serif; margin: 0; padding: 30px; }
+        .container { max-width: 900px; margin: auto; background-color: #0d0d0d; padding: 30px; border-radius: 10px; box-shadow: 0 0 40px rgba(255, 255, 255, 0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #333333; padding-bottom: 15px; }
+        .header h1 { font-size: 1.8em; margin: 0; display: flex; align-items: center; gap: 15px; color: #FFFFFF; }
+        .contract-section { background-color: #1a1a1a; padding: 25px; border-radius: 8px; margin-bottom: 20px; }
+        
+        .pdf-button { padding: 15px 25px; background-color: #A93226; color: #FFFFFF; border: none; border-radius: 5px; font-weight: 800; cursor: pointer; transition: 0.3s; width: 100%; text-align: center; text-decoration: none; display: block; margin-bottom: 20px; }
+        .btn-firmar { padding: 15px 25px; background-color: #FFFFFF; color: #000000; border: none; border-radius: 5px; font-weight: 800; cursor: pointer; width: 100%; display: block; transition: 0.3s; text-transform: uppercase; }
+        .btn-firmar:disabled { background-color: #111 !important; color: #444 !important; cursor: not-allowed; opacity: 0.5; }
+
+        .recuadro-firma-datos {
+            background-color: #000; padding: 25px; border-radius: 5px; margin-top: 15px; 
+            font-family: 'Courier New', monospace; color: #FFFFFF; font-weight: bold; border: 1px dashed #FFFFFF;
+            display: none; line-height: 1.8; font-size: 0.9em;
         }
     </style>
 </head>
@@ -122,123 +32,178 @@
 
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-gavel"></i> Contrato de Colaboración Freelance</h1>
-            <a href="dashboard.html" class="back-link">
-                <i class="fas fa-arrow-left"></i> Volver a Legal
+            <h1><i class="fas fa-file-alt"></i> Gestión de Contrato</h1>
+            <a href="workspace.html" style="color:#ccc; text-decoration:none;"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+
+        <div class="contract-section">
+            <h2>1. Revisión de Documento</h2>
+            <p>Colaborador: <span id="empleado-nombre" style="color:#FFFFFF; font-weight:800; text-decoration: underline;">Cargando...</span></p>
+            <a href="contrato-legal.pdf" id="btnLeerPDF" target="_blank" class="pdf-button" onclick="paso1_HabilitarCheck()">
+                <i class="fas fa-file-pdf"></i> ABRIR Y LEER CONTRATO PDF
             </a>
         </div>
 
         <div class="contract-section">
-            <h2>Acuerdo de Prestación de Servicios (Freelance)</h2>
-            <p>Este documento establece los términos y condiciones bajo los cuales el **Colaborador Freelance** (<span id="empleado-nombre">[Nombre del Empleado]</span>) prestará sus servicios a **Cuarzo Empresarial** (en adelante, la Empresa).</p>
-
-            <div class="info-box">
-                <p><strong>Importante:</strong> Este es un contrato de Prestación de Servicios. No establece una relación de dependencia laboral. **Haga clic abajo para ver el PDF completo y aceptar los términos.**</p>
-            </div>
-            
-            <h3>1. Objeto del Contrato y Alcance (Resumen)</h3>
-            <p>El Colaborador realizará las tareas y entregará los productos definidos en cada **Orden de Trabajo (OT)**, prestando sus servicios con autonomía, siguiendo los estándares de calidad. *Consulte el PDF para el detalle completo del alcance.*</p>
-
-            <h3>2. Compensación y Propiedad Intelectual (Resumen)</h3>
-            <p>La compensación se acordará por proyecto/tarifa horaria (pago a 30 días). Toda obra o material desarrollado será propiedad exclusiva de Cuarzo Empresarial o sus clientes al momento de finalizar el pago.</p>
-
-            <a href="contrato-legal.pdf" target="_blank" class="pdf-button">
-                <i class="fas fa-file-pdf"></i> **Ver Contrato PDF** y Aceptar Términos
-            </a>
-        </div>
-
-        <div class="contract-section">
-            <h2>Simulación de Aceptación Digital</h2>
-            <p>Al hacer clic en el botón PDF de arriba y revisar el documento, confirme su aceptación de los términos y condiciones marcando la siguiente casilla.</p>
-
-            <div style="padding: 15px; border: 1px dashed #444; border-radius: 5px;">
-                <label>
-                    <input type="checkbox" id="aceptacionTerminos" required style="margin-right: 10px; accent-color: #FFFFFF;">
-                    **Acepto y reconozco** los términos y condiciones estipulados en el Contrato de Colaboración Freelance.
-                </label>
+            <h2>2. Aceptación y Firma Final</h2>
+            <div id="controles-firma">
+                <div style="padding: 15px; border: 1px dashed #333; border-radius: 5px; margin-bottom: 20px;">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" id="checkAcepto" disabled onchange="paso2_HabilitarBoton()" style="width: 22px; height: 22px; margin-right: 15px;">
+                        <span>He leído y acepto los términos del contrato (Sedes ARG/URY/MERCOSUR).</span>
+                    </label>
+                </div>
+                <button id="btnFirmarContrato" class="btn-firmar" disabled onclick="paso3_EjecutarFirmaManual()">
+                    <i class="fas fa-signature"></i> FIRMAR CONTRATO AHORA
+                </button>
             </div>
 
-            <button id="aceptarContratoBtn" class="pdf-button" onclick="firmarYEnviarContrato()">
-                <i class="fas fa-check-circle"></i> **Finalizar Proceso de Aceptación**
-            </button>
-            
-            <p id="mensaje-estado" style="text-align: center; margin-top: 15px; font-weight: 600; color: #777777;"></p>
+            <div id="area-exito" style="display:none;">
+                <div id="cuadro-informativo" class="recuadro-firma-datos"></div>
+                <p style="color: #27AE60; font-weight: 800; margin-top: 20px; text-align: center;">
+                    <i class="fas fa-check-double"></i> CONTRATO FIRMADO Y REGISTRADO
+                </p>
+            </div>
         </div>
-        
     </div>
 
-    <script>
-        // --- SIMULACIÓN DE DATOS DEL EMPLEADO (Estos datos se obtendrían de una Base de Datos real) ---
-        // ESTOS DATOS DEBEN COINCIDIR CON LOS CARGADOS PREVIAMENTE POR EL EMPLEADO EN 'datos-personales.html'
-        const empleadoData = {
-            nombreCompleto: "Juan David Pérez Landa", 
-            dni: "38.123.456",
-            emailPersonal: "juan.david.perez@example.com", // Email del empleado
-            fechaActual: new Date().toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' }),
-            emailEmpresa: "cuarzocristalempresarial@gmail.com" // Email de la empresa (Copia)
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
+            authDomain: "cuarzocristalempresarialsist.firebaseapp.com",
+            projectId: "cuarzocristalempresarialsist",
+            storageBucket: "cuarzocristalempresarialsist.firebasestorage.app",
+            messagingSenderId: "1031610061736",
+            appId: "1:1031610061736:web:d05d431b433eb5b55ec39d"
         };
 
-        // Muestra el nombre del empleado en el resumen del contrato
-        document.getElementById('empleado-nombre').textContent = empleadoData.nombreCompleto;
-        
-        // Función principal que simula el proceso completo de firma y envío
-        function firmarYEnviarContrato() {
-            const checkbox = document.getElementById('aceptacionTerminos');
-            const mensajeEstado = document.getElementById('mensaje-estado');
-            const boton = document.getElementById('aceptarContratoBtn');
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const { PDFDocument, rgb, StandardFonts } = PDFLib;
 
-            if (!checkbox.checked) {
-                alert('Debe marcar la casilla de Aceptación para finalizar el proceso de firma.');
-                return;
+        emailjs.init("Hh5cKcCjZpu9toPYN"); 
+
+        let uId, dUser;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                uId = user.uid;
+                const snap = await getDoc(doc(db, "colaboradores", uId));
+                if (snap.exists()) {
+                    dUser = snap.data();
+                    document.getElementById('empleado-nombre').textContent = (dUser.nombre || "Usuario").toUpperCase();
+                    if(dUser.contratoAceptado) mostrarResultadoFinal(dUser.fechaFirma, dUser.horaFirma);
+                }
+            } else { window.location.href = "login.html"; }
+        });
+
+        window.paso1_HabilitarCheck = () => { document.getElementById('checkAcepto').disabled = false; };
+        window.paso2_HabilitarBoton = () => { document.getElementById('btnFirmarContrato').disabled = !document.getElementById('checkAcepto').checked; };
+
+        window.paso3_EjecutarFirmaManual = async () => {
+            const btn = document.getElementById('btnFirmarContrato');
+            btn.disabled = true;
+
+            const ahora = new Date();
+            const f = ahora.toLocaleDateString('es-AR');
+            const h = ahora.toLocaleTimeString('es-AR');
+
+            try {
+                // GUARDAR EN FIREBASE USANDO LOS CAMPOS CORRECTOS
+                await updateDoc(doc(db, "colaboradores", uId), {
+                    contratoAceptado: true,
+                    fechaFirma: f,
+                    horaFirma: h,
+                    idTransaccion: uId.substring(0, 10).toUpperCase()
+                });
+
+                await modificarContratoExistente(f, h);
+                await enviarContratoPorEmail(f, h);
+                mostrarResultadoFinal(f, h);
+
+            } catch (e) {
+                console.error(e);
+                alert("Error al procesar la firma.");
+                btn.disabled = false;
             }
+        };
 
-            // 1. Desactivar botón y notificar
-            boton.disabled = true;
-            mensajeEstado.style.color = 'yellow';
-            mensajeEstado.innerHTML = `<i class="fas fa-spinner fa-spin"></i> **Procesando...** Generando firma digital del contrato y simulando envío de correos.`;
+        async function enviarContratoPorEmail(fecha, hora) {
+            // MAPEO CORRECTO CON EL FORMULARIO DE DATOS PERSONALES
+            const params = {
+                nombre_usuario: dUser.nombre ? dUser.nombre.toUpperCase() : "No registrado",
+                email_usuario: auth.currentUser.email,
+                nacionalidad: dUser.nacionalidad || "No especificada",
+                tipo_doc: (dUser.tipoDocumento || "ID").toUpperCase(),
+                nro_doc: dUser.numeroDocumento || "S/N",
+                domicilio_profesional: dUser.domicilio || "No registrado",
+                pais_profesional: dUser.pais || "No especificado",
+                cuil_tax: dUser.cuit || "Pendiente",
+                fecha: fecha,
+                hora: hora,
+                id_transaccion: uId.substring(0, 10).toUpperCase()
+            };
 
-            // 2. Simulación de la Firma Digital
-            const firmaDigital = `${empleadoData.nombreCompleto}\nDNI/Cédula: ${empleadoData.dni}\nFecha de Aceptación: ${empleadoData.fechaActual}`;
-            
-            // Console log para simular la generación de la firma en el backend
-            console.log("--- SIMULACIÓN DE FIRMA GENERADA ---");
-            console.log(firmaDigital);
-            console.log("----------------------------------");
-            
-            // 3. Simulación del Retraso y el Proceso de Envío (2.5 segundos)
-            setTimeout(() => {
-                
-                // 4. Mostrar confirmación de envío y datos de la firma
-                mensajeEstado.style.color = '#25D366'; // Verde
-                mensajeEstado.innerHTML = `<i class="fas fa-check-double"></i> **¡Aceptación y Firma registradas con éxito!**`;
-                
-                // Mostrar simulación de correos enviados
-                const detallesEnvio = `
-                    <p style="text-align: left; margin-top: 10px; color: #ccc;">
-                        **El Contrato PDF firmado se ha enviado a:**
-                        <ul style="margin-top: 5px;">
-                            <li><i class="fas fa-user-check"></i> ${empleadoData.emailPersonal} (Tu Copia Personal)</li>
-                            <li><i class="fas fa-briefcase"></i> ${empleadoData.emailEmpresa} (Copia Empresarial)</li>
-                        </ul>
-                        <p style="text-align: left; color: #888; font-size: 0.9em;">(En un sistema real con servidor, el PDF modificado con su firma se adjunta automáticamente a estos correos.)</p>
-                    </p>`;
-
-                // Actualizar la sección de aceptación para mostrar la firma y los detalles del envío
-                document.querySelector('.contract-section:last-child h2').textContent = "Proceso Finalizado";
-                document.querySelector('.contract-section:last-child p:first-of-type').innerHTML = `
-                    Su aceptación ha sido registrada con éxito. La firma digital ha sido generada con los siguientes datos:
-                    <div style="background-color: #000; padding: 10px; border-radius: 5px; margin-top: 10px; font-family: monospace; color: #00FFFF; font-weight: bold;">
-                        ${firmaDigital.replace(/\n/g, '<br>')}
-                    </div>
-                `;
-
-                // Ocultar elementos de entrada y reemplazar por el detalle del envío
-                document.querySelector('.contract-section:last-child > div').innerHTML = detallesEnvio;
-                document.getElementById('aceptarContratoBtn').style.display = 'none';
-                
-            }, 2500); 
+            try {
+                await emailjs.send("service_xw9imdi", "template_rp33rwfo", params);
+            } catch (error) {
+                console.error("Error EmailJS:", error);
+            }
         }
 
+        async function modificarContratoExistente(fecha, hora) {
+            try {
+                const url = 'contrato-legal.pdf'; 
+                const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
+                const pdfDoc = await PDFDocument.load(existingPdfBytes);
+                const pages = pdfDoc.getPages();
+                const lastPage = pages[pages.length - 1]; 
+                
+                const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+                
+                // USANDO LAS VARIABLES CORRECTAS DEL FORMULARIO
+                const nDoc = dUser.numeroDocumento || "S/N";
+                const tDoc = (dUser.tipoDocumento || "ID").toUpperCase();
+                const pais = dUser.pais || "No especificado";
+
+                lastPage.drawText(`REPRESENTANTE LEGAL: CUARZO CRISTAL (SEDE REGIONAL)`, { x: 50, y: 100, size: 10, font });
+                lastPage.drawText(`IDENTIFICACIÓN: ${tDoc} ${nDoc}`, { x: 50, y: 85, size: 10, font });
+                lastPage.drawText(`FIRMADO POR: ${dUser.nombre.toUpperCase()}`, { x: 50, y: 70, size: 10, font });
+                lastPage.drawText(`UBICACIÓN: ${pais.toUpperCase()} - ${fecha} ${hora}`, { x: 50, y: 55, size: 10, font });
+
+                const pdfBytes = await pdfDoc.save();
+                const blob = new Blob([pdfBytes], { type: "application/pdf" });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `Contrato_Cuarzo_${dUser.nombre}.pdf`;
+                link.click();
+            } catch (err) {
+                console.error("Error PDF:", err);
+            }
+        }
+
+        function mostrarResultadoFinal(f, h) {
+            document.getElementById('controles-firma').style.display = 'none';
+            document.getElementById('btnLeerPDF').style.display = 'none';
+            document.getElementById('area-exito').style.display = 'block';
+            const cuadro = document.getElementById('cuadro-informativo');
+            cuadro.style.display = 'block';
+            
+            cuadro.innerHTML = `
+                --- CERTIFICADO DE FIRMA DIGITAL ---<br>
+                EMPRESA: CUARZO CRISTAL EMPRESARIAL<br>
+                COLABORADOR: ${dUser.nombre.toUpperCase()}<br>
+                PAÍS: ${dUser.pais || 'No especificado'}<br>
+                ID TRANSACCIÓN: ${uId.substring(0, 10).toUpperCase()}<br>
+                REGISTRO: ${f} | ${h}<br>
+                ESTADO: VÁLIDO E INALTERABLE
+            `;
+        }
     </script>
 </body>
 </html>

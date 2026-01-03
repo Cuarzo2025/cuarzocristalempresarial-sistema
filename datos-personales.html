@@ -7,111 +7,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Estilos Base del Dashboard - PRESERVADOS */
-        body {
-            background-color: #000000;
-            color: #FFFFFF;
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 30px;
-        }
-        .container {
-            max-width: 900px;
-            margin: auto;
-            background-color: #0d0d0d; 
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #333333;
-            padding-bottom: 15px;
-        }
-        .header h1 {
-            font-size: 2em;
-            margin: 0;
-        }
-        
-        /* Estilos del Formulario - PRESERVADOS */
-        .card {
-            background-color: #1a1a1a; 
-            padding: 25px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #222;
-        }
-        .card h2 {
-            margin-top: 0;
-            font-size: 1.5em;
-            border-bottom: 1px solid #333333;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .input-group {
-            margin-bottom: 10px;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #cccccc;
-        }
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #333;
-            border-radius: 4px;
-            background-color: #2a2a2a;
-            color: #FFFFFF;
-            box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
-        }
-        .date-age-group {
-            display: grid;
-            grid-template-columns: 2fr 1fr; 
-            gap: 10px;
-        }
-        .doc-group {
-            display: grid;
-            grid-template-columns: 1fr 2fr; 
-            gap: 10px;
-        }
-        .form-button {
-            padding: 15px 30px;
-            background-color: #FFFFFF; 
-            color: #000000;
-            border: none;
-            border-radius: 5px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 20px;
-            width: 100%;
-            text-transform: uppercase;
-        }
-        .form-button:hover {
-            background-color: #cccccc;
-        }
-        .back-link {
-            text-decoration: none;
-            color: #CCCCCC;
-            transition: color 0.3s;
-        }
-        .back-link:hover {
-            color: #FFFFFF;
-        }
-        .highlight-card {
-            border: 1px solid #4CAF50 !important;
-        }
+        body { background-color: #000000; color: #FFFFFF; font-family: 'Montserrat', sans-serif; margin: 0; padding: 30px; }
+        .container { max-width: 900px; margin: auto; background-color: #0d0d0d; padding: 30px; border-radius: 10px; box-shadow: 0 0 40px rgba(255, 255, 255, 0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #333333; padding-bottom: 15px; }
+        .header h1 { font-size: 2em; margin: 0; }
+        .card { background-color: #1a1a1a; padding: 25px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #222; }
+        .card h2 { margin-top: 0; font-size: 1.5em; border-bottom: 1px solid #333333; padding-bottom: 10px; margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .input-group { margin-bottom: 10px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #cccccc; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #333; border-radius: 4px; background-color: #2a2a2a; color: #FFFFFF; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        .date-age-group { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
+        .doc-group { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
+        .form-button { padding: 15px 30px; background-color: #FFFFFF; color: #000000; border: none; border-radius: 5px; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 20px; width: 100%; text-transform: uppercase; }
+        .form-button:hover { background-color: #cccccc; }
+        .back-link { text-decoration: none; color: #CCCCCC; }
     </style>
 </head>
 <body>
@@ -119,21 +29,18 @@
     <div class="container">
         <div class="header">
             <h1><i class="fas fa-user-circle"></i> Datos Personales</h1>
-            <a href="workspace.html" class="back-link">
-                <i class="fas fa-arrow-left"></i> Volver al Panel
-            </a>
+            <a href="workspace.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver al Panel</a>
         </div>
 
         <form id="profile-form">
             
             <div class="card">
-                <h2>Información General</h2>
+                <h2>Información General y Contacto</h2>
                 <div class="form-grid">
                     <div class="input-group">
                         <label for="nombre">Nombre Completo</label>
                         <input type="text" id="nombre" required>
                     </div>
-
                     <div class="input-group">
                         <label>Fecha de Nacimiento y Edad</label>
                         <div class="date-age-group">
@@ -141,105 +48,104 @@
                             <input type="text" id="edad" placeholder="Edad" readonly style="background-color: #333333;">
                         </div>
                     </div>
-
                     <div class="input-group">
                         <label for="nacionalidad">Nacionalidad</label>
                         <select id="nacionalidad" required>
-                            <option value="">-- Seleccione su Nacionalidad --</option>
+                            <option value="">-- Seleccione --</option>
                         </select>
                     </div>
-
                     <div class="input-group">
                         <label for="estadoCivil">Estado Civil</label>
                         <select id="estadoCivil">
                             <option value="soltero">Soltero/a</option>
                             <option value="casado">Casado/a</option>
-                            <option value="otro">Otro</option>
+                            <option value="divorciado">Divorciado/a</option>
+                            <option value="viudo">Viudo/a</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="emailContacto">Email de Contacto</label>
+                        <input type="email" id="emailContacto" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="telefono">Teléfono / WhatsApp</label>
+                        <input type="tel" id="telefono" required placeholder="+54 9...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Residencia y Ubicación</h2>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="pais">País de Residencia</label>
+                        <select id="pais" required>
+                            <option value="">-- Seleccione País --</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="estado">Estado / Provincia / Ciudad</label>
+                        <input type="text" id="estado" placeholder="Ciudad o Estado" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="domicilio">Domicilio Real</label>
+                        <input type="text" id="domicilio" placeholder="Calle, Número, Depto">
+                    </div>
+                    <div class="input-group">
+                        <label for="paisFiscal">País de Residencia Fiscal</label>
+                        <select id="paisFiscal" required>
+                            <option value="">-- Seleccione País Fiscal --</option>
                         </select>
                     </div>
                 </div>
             </div>
 
             <div class="card">
-                <h2>Identificación y Documentación</h2>
-                <div class="form-grid">
-                    <div class="input-group" style="grid-column: 1 / -1;">
-                        <label for="tipoDocumento">Documento de Identidad</label>
-                        <div class="doc-group">
-                            <select id="tipoDocumento" required>
-                                <option value="">Tipo de Documento</option>
-                                <option value="DNI">DNI (Documento Nacional de Identidad)</option>
-                                <option value="CEDULA">Cédula de Identidad</option>
-                                <option value="PASAPORTE">Pasaporte</option>
-                                <option value="MIGRATORIO">Certificado Migratorio</option>
-                                <option value="OTRO">Otro</option>
-                            </select>
-                            <input type="text" id="numeroDocumento" placeholder="Número del Documento" required>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="fechaEmision">Fecha de Emisión</label>
-                        <input type="date" id="fechaEmision">
-                    </div>
-                    <div class="input-group">
-                        <label for="fechaVencimiento">Fecha de Vencimiento (Si aplica)</label>
-                        <input type="date" id="fechaVencimiento">
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>Datos Tributarios</h2>
+                <h2>Identificación y Cobro</h2>
                 <div class="form-grid">
                     <div class="input-group">
-                        <label for="cuit">CUIT / CUIL / Número Fiscal</label>
+                        <label for="tipoDocumento">Tipo de Identificación</label>
+                        <select id="tipoDocumento" required>
+                            <option value="DNI">DNI</option>
+                            <option value="CI">Cédula de Identidad</option>
+                            <option value="PASAPORTE">Pasaporte</option>
+                            <option value="MIGRATORIO">Certificado Migratorio</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="numeroDocumento">Número de ID</label>
+                        <input type="text" id="numeroDocumento" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="cuit">CUIT / CUIL / Tax ID</label>
                         <input type="text" id="cuit" required>
                     </div>
                     <div class="input-group">
-                        <label for="condicionTributaria">Condición Tributaria</label>
-                        <select id="condicionTributaria">
-                            <option value="responsable_inscripto">Responsable Inscripto</option>
-                            <option value="monotributo">Monotributo</option>
-                            <option value="consumidor_final">Consumidor Final</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card highlight-card">
-                <h2 style="color: #4CAF50;"><i class="fas fa-wallet"></i> Información de Cobro</h2>
-                <div class="form-grid">
-                    <div class="input-group">
                         <label for="metodoPago">Medio de Pago</label>
-                        <select id="metodoPago" onchange="actualizarPlaceholderPago()" required>
-                            <option value="">-- Seleccionar Medio --</option>
+                        <select id="metodoPago" required>
                             <option value="PayPal">PayPal</option>
                             <option value="Mercado Pago">Mercado Pago</option>
-                            <option value="Banco Argentina">Banco (Argentina)</option>
-                            <option value="Banco Uruguay">Banco (Uruguay)</option>
-                            <option value="Banco Brasil">Banco (Brasil)</option>
-                            <option value="Prex Argentina">Prex Argentina</option>
-                            <option value="Prex Uruguay">Prex Uruguay</option>
+                            <option value="Banco">Transferencia Bancaria</option>
+                            <option value="Prex">Prex</option>
                         </select>
                     </div>
-                    <div class="input-group">
-                        <label id="labelDatoPago">Alias, CBU, CVU o Email</label>
-                        <input type="text" id="datoPago" placeholder="Ingrese el dato aquí..." required>
+                    <div class="input-group" style="grid-column: 1 / -1;">
+                        <label for="datoPago">Dato de Cobro (CBU, Alias o Email)</label>
+                        <input type="text" id="datoPago" required>
                     </div>
                 </div>
             </div>
 
             <button type="submit" class="form-button" id="btn-submit">
-                <i class="fas fa-save"></i> Guardar y Notificar a Administración
+                <i class="fas fa-save"></i> Guardar Todo en Base de Datos
             </button>
-
         </form>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
@@ -255,117 +161,89 @@
         const db = getFirestore(app);
         let userId;
 
-        // Nacionalidades (Lista Original Completa)
-        const nacionalidades = [
-            "Afgana", "Albanesa", "Alemana", "Americana", "Andorrana", "Angoleña", "Argentina", "Australiana", 
-            "Austriaca", "Belga", "Boliviana", "Brasileña", "Canadiense", "Chilena", "China", "Colombiana", 
-            "Coreana", "Costarricense", "Cubana", "Danesa", "Ecuatoriana", "Egipcia", "Española", "Finlandesa", 
-            "Francesa", "Griega", "Guatemalteca", "Hondureña", "Húngara", "India", "Indonesa", "Iraní", 
-            "Irlandesa", "Israelí", "Italiana", "Japonesa", "Malaya", "Marroquí", "Mexicana", "Neozelandesa", 
-            "Nigeriana", "Noruega", "Pakistani", "Panameña", "Paraguaya", "Peruana", "Polaca", "Portuguesa", 
-            "Rusa", "Salvadoñera", "Sueca", "Suiza", "Tailandesa", "Turca", "Ucraniana", "Uruguaya", 
-            "Venezolana", "Vietnamita", "Zambiana"
-        ];
+        const paisesMundo = ["Afganistán", "Albania", "Alemania", "Andorra", "Angola", "Antigua y Barbuda", "Arabia Saudita", "Argelia", "Argentina", "Armenia", "Australia", "Austria", "Azerbaiyán", "Bahamas", "Bangladés", "Barbados", "Baréin", "Bélgica", "Belice", "Benín", "Bielorrusia", "Bolivia", "Bosnia y Herzegovina", "Botsuana", "Brasil", "Brunéi", "Bulgaria", "Burkina Faso", "Burundi", "Bután", "Cabo Verde", "Camboya", "Camerún", "Canadá", "Catar", "Chad", "Chile", "China", "Chipre", "Colombia", "Comoras", "Corea del Norte", "Corea del Sur", "Costa de Marfil", "Costa Rica", "Croacia", "Cuba", "Dinamarca", "Dominica", "Ecuador", "Egipto", "El Salvador", "Emiratos Árabes Unidos", "Eritrea", "Eslovaquia", "Eslovenia", "España", "Estados Unidos", "Estonia", "Etiopía", "Filipinas", "Finlandia", "Fiyi", "Francia", "Gabón", "Gambia", "Georgia", "Ghana", "Granada", "Grecia", "Guatemala", "Guyana", "Guinea", "Haití", "Honduras", "Hungría", "India", "Indonesia", "Irak", "Irán", "Irlanda", "Islandia", "Islas Marshall", "Islas Salomón", "Israel", "Italia", "Jamaica", "Japón", "Jordania", "Kazajistán", "Kenia", "Kiribati", "Kuwait", "Laos", "Lesoto", "Letonia", "Líbano", "Liberia", "Libia", "Liechtenstein", "Lituania", "Luxemburgo", "Macedonia del Norte", "Madagascar", "Malasia", "Malaui", "Maldivas", "Malí", "Malta", "Marruecos", "Mauricio", "Mauritania", "México", "Micronesia", "Moldavia", "Mónaco", "Mongolia", "Montenegro", "Mozambique", "Namibia", "Nauru", "Nepal", "Nicaragua", "Níger", "Nigeria", "Noruega", "Nueva Zelanda", "Omán", "Países Bajos", "Pakistán", "Palaos", "Panamá", "Papúa Nueva Guinea", "Paraguay", "Perú", "Polonia", "Portugal", "Reino Unido", "República Centroafricana", "República Checa", "República Dominicana", "Ruanda", "Rumania", "Rusia", "Samoa", "San Marino", "Senegal", "Serbia", "Seychelles", "Sierra Leona", "Singapur", "Siria", "Somalia", "Sri Lanka", "Sudáfrica", "Sudán", "Suecia", "Suiza", "Surinam", "Tailandia", "Tanzania", "Tayikistán", "Togo", "Trinidad y Tobago", "Túnez", "Turquía", "Ucrania", "Uganda", "Uruguay", "Uzbekistán", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabue"];
+        
+        const nacionalidades = ["Afgana", "Albanesa", "Alemana", "Americana", "Andorrana", "Angoleña", "Argentina", "Australiana", "Austriaca", "Belga", "Boliviana", "Brasileña", "Canadiense", "Chilena", "China", "Colombiana", "Coreana", "Costarricense", "Cubana", "Danesa", "Ecuatoriana", "Egipcia", "Española", "Finlandesa", "Francesa", "Griega", "Guatemalteca", "Hondureña", "Húngara", "India", "Indonesa", "Iraní", "Irlandesa", "Israelí", "Italiana", "Japonesa", "Mexicana", "Noruega", "Panameña", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Rusa", "Salvadoreña", "Sueca", "Suiza", "Uruguaya", "Venezolana"];
 
         window.onload = () => {
-            const selectNacionalidad = document.getElementById('nacionalidad');
-            nacionalidades.sort().forEach(n => {
-                const opt = document.createElement('option');
-                opt.value = n; opt.textContent = n;
-                selectNacionalidad.appendChild(opt);
+            const selP = document.getElementById('pais');
+            const selF = document.getElementById('paisFiscal');
+            const selN = document.getElementById('nacionalidad');
+            
+            paisesMundo.sort().forEach(p => {
+                selP.add(new Option(p, p));
+                selF.add(new Option(p, p));
             });
+            nacionalidades.sort().forEach(n => selN.add(new Option(n, n)));
         };
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 userId = user.uid;
-                const docSnap = await getDoc(doc(db, "colaboradores", userId));
-                if (docSnap.exists()) {
-                    const d = docSnap.data();
+                const snap = await getDoc(doc(db, "colaboradores", userId));
+                if (snap.exists()) {
+                    const d = snap.data();
                     document.getElementById('nombre').value = d.nombre || "";
+                    document.getElementById('emailContacto').value = d.emailContacto || user.email;
+                    document.getElementById('telefono').value = d.telefono || "";
                     document.getElementById('fechaNacimiento').value = d.fechaNacimiento || "";
                     document.getElementById('nacionalidad').value = d.nacionalidad || "";
                     document.getElementById('estadoCivil').value = d.estadoCivil || "soltero";
+                    document.getElementById('pais').value = d.pais || "";
+                    document.getElementById('estado').value = d.estado || "";
+                    document.getElementById('domicilio').value = d.domicilio || "";
+                    document.getElementById('paisFiscal').value = d.paisFiscal || "";
                     document.getElementById('tipoDocumento').value = d.tipoDocumento || "";
                     document.getElementById('numeroDocumento').value = d.numeroDocumento || "";
-                    document.getElementById('fechaEmision').value = d.fechaEmision || "";
-                    document.getElementById('fechaVencimiento').value = d.fechaVencimiento || "";
                     document.getElementById('cuit').value = d.cuit || "";
-                    document.getElementById('condicionTributaria').value = d.condicionTributaria || "monotributo";
                     document.getElementById('metodoPago').value = d.metodoPago || "";
                     document.getElementById('datoPago').value = d.datoPago || "";
                     calcularEdad();
                 }
-            } else {
-                window.location.href = "login.html";
-            }
+            } else { window.location.href = "login.html"; }
         });
-
-        window.actualizarPlaceholderPago = () => {
-            const m = document.getElementById('metodoPago').value;
-            const l = document.getElementById('labelDatoPago');
-            if(m === "PayPal") l.innerText = "Email de PayPal";
-            else if(m.includes("Banco") || m === "Mercado Pago") l.innerText = "CBU/CVU o Alias";
-            else if(m.includes("Prex")) l.innerText = "Nº Cuenta Prex o CI/DNI";
-            else l.innerText = "Dato de cobro";
-        };
 
         window.calcularEdad = () => {
             const f = document.getElementById('fechaNacimiento').value;
-            const output = document.getElementById('edad');
             if (!f) return;
             const hoy = new Date();
             const nac = new Date(f);
             let edad = hoy.getFullYear() - nac.getFullYear();
             if (hoy.getMonth() < nac.getMonth() || (hoy.getMonth() === nac.getMonth() && hoy.getDate() < nac.getDate())) edad--;
-            output.value = edad + " años";
+            document.getElementById('edad').value = edad + " años";
         };
 
         document.getElementById('profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit');
             btn.disabled = true;
-            btn.innerText = "GUARDANDO...";
 
-            const datos = {
+            const datosParaGuardar = {
                 nombre: document.getElementById('nombre').value,
+                emailContacto: document.getElementById('emailContacto').value,
+                telefono: document.getElementById('telefono').value,
                 fechaNacimiento: document.getElementById('fechaNacimiento').value,
                 nacionalidad: document.getElementById('nacionalidad').value,
                 estadoCivil: document.getElementById('estadoCivil').value,
+                pais: document.getElementById('pais').value,
+                estado: document.getElementById('estado').value,
+                domicilio: document.getElementById('domicilio').value,
+                paisFiscal: document.getElementById('paisFiscal').value,
                 tipoDocumento: document.getElementById('tipoDocumento').value,
                 numeroDocumento: document.getElementById('numeroDocumento').value,
-                fechaEmision: document.getElementById('fechaEmision').value,
-                fechaVencimiento: document.getElementById('fechaVencimiento').value,
                 cuit: document.getElementById('cuit').value,
-                condicionTributaria: document.getElementById('condicionTributaria').value,
                 metodoPago: document.getElementById('metodoPago').value,
                 datoPago: document.getElementById('datoPago').value,
                 ultimaActualizacion: new Date()
             };
 
             try {
-                // 1. Guardar en perfil del colaborador
-                await updateDoc(doc(db, "colaboradores", userId), datos);
-
-                // 2. Crear Notificación para Natalia y Hector
-                await addDoc(collection(db, "notificaciones_admin"), {
-                    titulo: "Actualización Administrativa",
-                    mensaje: `El colaborador ${datos.nombre} actualizó su perfil y método de pago.`,
-                    detalles: {
-                        metodo: datos.metodoPago,
-                        dato: datos.datoPago
-                    },
-                    destinatarios: ["Natalia Soba Laguarda", "Hector Mauricio Raposso"],
-                    fecha: new Date(),
-                    visto: false
-                });
-
-                alert("¡Datos guardados! La administración ha sido notificada.");
+                await updateDoc(doc(db, "colaboradores", userId), datosParaGuardar);
+                alert("Base de Datos actualizada con éxito.");
                 window.location.href = "workspace.html";
             } catch (err) {
-                alert("Error: " + err.message);
+                alert("Error al guardar: " + err.message);
                 btn.disabled = false;
-                btn.innerText = "Guardar Cambios";
             }
         });
     </script>
