@@ -133,11 +133,6 @@
 
         .back-link { color: var(--gray); text-decoration: none; font-size: 0.8em; transition: 0.3s; }
         .back-link:hover { color: #FFF; }
-
-        @media (max-width: 600px) {
-            .container { padding: 20px; margin: 10px; }
-            .header h1 { font-size: 1.1em; }
-        }
     </style>
 </head>
 <body>
@@ -199,7 +194,6 @@
         const db = getFirestore(app);
         const { PDFDocument, StandardFonts } = PDFLib;
 
-        // Configuración de EmailJS
         emailjs.init("Hh5cKcCjZpu9toPYN"); 
 
         let uId, dUser;
@@ -210,7 +204,7 @@
                 const snap = await getDoc(doc(db, "colaboradores", uId));
                 if (snap.exists()) {
                     dUser = snap.data();
-                    document.getElementById('empleado-nombre').textContent = (dUser.nombre || "Usuario no identificado").toUpperCase();
+                    document.getElementById('empleado-nombre').textContent = (dUser.nombre || "Usuario").toUpperCase();
                     if(dUser.contratoAceptado) mostrarResultadoFinal(dUser.fechaFirma, dUser.horaFirma);
                 }
             } else { window.location.href = "login.html"; }
@@ -245,19 +239,24 @@
                 mostrarResultadoFinal(f, h);
 
             } catch (error) {
-                console.error("Error en la firma:", error);
-                alert("Error al procesar la firma.");
+                console.error("Error:", error);
+                alert("Error al firmar.");
                 btn.innerHTML = "Confirmar Firma Digital";
                 btn.disabled = false;
             }
         };
 
         async function enviarNotificacionEmail(fecha, hora) {
+            // DETECCIÓN CRÍTICA DEL EMAIL DEL USUARIO LOGUEADO
+            const correoDestino = auth.currentUser ? auth.currentUser.email : dUser.email;
+            
+            console.log("Enviando contrato a:", correoDestino);
+
             const params = {
+                email_usuario: correoDestino, // VARIABLE QUE VA AL "TO EMAIL" DEL TEMPLATE
                 nombre_usuario: (dUser.nombre || "Colaborador").toUpperCase(),
-                email_usuario: auth.currentUser.email,
                 nacionalidad: dUser.nacionalidad || "S/D",
-                tipo_doc: (dUser.tipoDocumento || "ID").toUpperCase(),
+                tipo_doc: (dUser.tipoDocumento || "DNI").toUpperCase(),
                 nro_doc: dUser.numeroDocumento || "S/N",
                 domicilio_profesional: dUser.domicilio || "No registrado",
                 pais_profesional: dUser.pais || "No especificado",
@@ -268,11 +267,11 @@
             };
 
             try {
-                // CORRECCIÓN: Usando tu Service ID default service_u1a6rwt
-                await emailjs.send("service_u1a6rwt", "template_rp33rwfo", params);
-                console.log("Email enviado con éxito usando service_u1a6rwt");
+                // USANDO TU SERVICE ID POR DEFECTO
+                const res = await emailjs.send("service_u1a6rwt", "template_rp33rwfo", params);
+                console.log("EmailJS respondió con éxito:", res.status, res.text);
             } catch (err) {
-                console.error("Fallo EmailJS:", err);
+                console.error("Fallo detallado de EmailJS:", err);
             }
         }
 
