@@ -15,6 +15,7 @@
         body { background-color: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; margin: 0; padding: 20px; }
         .container { max-width: 800px; margin: 40px auto; background-color: var(--card); padding: 40px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+        .header h1 { font-size: 1.5em; margin: 0; text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 15px; }
         .contract-section { background-color: #111; padding: 30px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #222; }
         h2 { font-size: 0.9em; color: var(--gray); text-transform: uppercase; margin-bottom: 20px; letter-spacing: 1px; }
         .pdf-button { padding: 18px; background-color: #f5f5f5; color: #000; border: none; border-radius: 6px; font-weight: 800; cursor: pointer; width: 100%; text-align: center; text-decoration: none; display: block; margin-bottom: 10px; text-transform: uppercase; }
@@ -29,7 +30,7 @@
 
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-shield-alt"></i> Legales</h1>
+            <h1><i class="fas fa-file-contract"></i> Legales <i class="fas fa-gavel" style="font-size: 0.7em; color: #444;"></i></h1>
             <a href="workspace.html" style="color: #888; text-decoration: none; font-size: 0.8em;"><i class="fas fa-arrow-left"></i> VOLVER</a>
         </div>
 
@@ -56,7 +57,7 @@
             <div id="area-exito" style="display:none; text-align: center;">
                 <div id="cuadro-informativo" class="recuadro-firma-datos"></div>
                 <p style="color: #FFF; font-weight: 600; margin-top: 25px;">
-                    <i class="fas fa-check-circle" style="color: #27AE60;"></i> Documento firmado y enviado.
+                    <i class="fas fa-check-circle" style="color: #27AE60;"></i> Documento firmado y enviado correctamente.
                 </p>
             </div>
         </div>
@@ -81,7 +82,6 @@
         const db = getFirestore(app);
         const { PDFDocument, StandardFonts } = PDFLib;
 
-        // INICIALIZACIÓN INMEDIATA DE EMAILJS
         emailjs.init("Hh5cKcCjZpu9toPYN");
 
         let uId, dUser;
@@ -89,12 +89,16 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 uId = user.uid;
-                const snap = await getDoc(doc(db, "colaboradores", uId));
-                if (snap.exists()) {
-                    dUser = snap.data();
-                    document.getElementById('empleado-nombre').textContent = (dUser.nombre || "Usuario").toUpperCase();
-                    if(dUser.contratoAceptado) mostrarResultadoFinal(dUser.fechaFirma, dUser.horaFirma);
-                }
+                try {
+                    const snap = await getDoc(doc(db, "colaboradores", uId));
+                    if (snap.exists()) {
+                        dUser = snap.data();
+                        document.getElementById('empleado-nombre').textContent = (dUser.nombre || "Usuario").toUpperCase();
+                        if(dUser.contratoAceptado === true) {
+                            mostrarResultadoFinal(dUser.fechaFirma, dUser.horaFirma);
+                        }
+                    }
+                } catch (e) { console.error("Error cargando perfil:", e); }
             } else { window.location.href = "login.html"; }
         });
 
@@ -103,7 +107,6 @@
 
         window.procesoFirmaCompleto = async () => {
             const btn = document.getElementById('btnFirmarContrato');
-            const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ENVIANDO...';
             btn.disabled = true;
 
@@ -113,20 +116,8 @@
             const transaccion = uId.substring(0, 10).toUpperCase();
 
             try {
-                // 1. Actualizar Firebase
-                await updateDoc(doc(db, "colaboradores", uId), {
-                    contratoAceptado: true,
-                    fechaFirma: fecha,
-                    horaFirma: hora,
-                    idTransaccion: transaccion
-                });
-
-                // 2. Generar y descargar PDF con la firma
-                await modificarPDF(fecha, hora, transaccion);
-
-                // 3. ENVIAR CORREO (Asegurando que el ID del service sea el correcto)
-                const templateParams = {
-                    email_usuario: auth.currentUser.email, // PARA: El usuario logueado
+                const params = {
+                    email_usuario: auth.currentUser.email,
                     nombre_usuario: (dUser.nombre || "Colaborador").toUpperCase(),
                     fecha: fecha,
                     hora: hora,
@@ -134,20 +125,36 @@
                     nro_doc: dUser.numeroDocumento || "S/D"
                 };
 
-                await emailjs.send("service_u1a6rwt", "template_rp33rwfo", templateParams);
-                
-                // 4. Mostrar éxito en pantalla
+                // Envío de Email
+                try {
+                    await emailjs.send("service_u1a6rwt", "template_rp33rwfo", params);
+                } catch (errMail) {
+                    throw new Error("Fallo EmailJS: " + (errMail.text || "Verifica IDs"));
+                }
+
+                // Actualizar Firebase
+                try {
+                    await updateDoc(doc(db, "colaboradores", uId), {
+                        contratoAceptado: true,
+                        fechaFirma: fecha,
+                        horaFirma: hora,
+                        idTransaccion: transaccion
+                    });
+                } catch (errDb) {
+                    throw new Error("Fallo Firebase: Revisa permisos de escritura.");
+                }
+
+                await modificarPDF(fecha, hora, transaccion);
                 mostrarResultadoFinal(fecha, hora);
 
             } catch (error) {
-                console.error("Error en el proceso:", error);
-                alert("Hubo un problema. Por favor intenta de nuevo.");
-                btn.innerHTML = originalText;
+                alert("DETALLE DEL ERROR: " + error.message);
+                btn.innerHTML = "Confirmar Firma Digital";
                 btn.disabled = false;
             }
         };
 
-        async function modificarPDF(fecha, hora, trans) {
+        async function modificarPDF(f, h, id) {
             try {
                 const url = 'contrato-legal.pdf'; 
                 const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
@@ -156,9 +163,8 @@
                 const lastPage = pages[pages.length - 1]; 
                 const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
                 
-                const yPos = 80;
-                lastPage.drawText(`FIRMADO DIGITALMENTE POR: ${dUser.nombre.toUpperCase()}`, { x: 50, y: yPos, size: 9, font });
-                lastPage.drawText(`FECHA: ${fecha} ${hora} | ID TRANSACCIÓN: ${trans}`, { x: 50, y: yPos - 15, size: 9, font });
+                lastPage.drawText(`FIRMADO DIGITALMENTE POR: ${dUser.nombre.toUpperCase()}`, { x: 50, y: 80, size: 9, font });
+                lastPage.drawText(`FECHA: ${f} ${h} | ID TRANSACCIÓN: ${id}`, { x: 50, y: 65, size: 9, font });
 
                 const pdfBytes = await pdfDoc.save();
                 const blob = new Blob([pdfBytes], { type: "application/pdf" });
@@ -166,7 +172,7 @@
                 link.href = URL.createObjectURL(blob);
                 link.download = `Contrato_Cuarzo_${dUser.nombre.replace(/\s+/g, '_')}.pdf`;
                 link.click();
-            } catch (e) { console.error("Error al editar PDF:", e); }
+            } catch (e) { console.error("Error PDF:", e); }
         }
 
         function mostrarResultadoFinal(f, h) {
@@ -178,7 +184,7 @@
             cuadro.innerHTML = `
                 --- CERTIFICADO DE SEGURIDAD ---<br>
                 CUARZO CRISTAL EMPRESARIAL SISTEMA<br><br>
-                COLABORADOR: ${(dUser.nombre || "").toUpperCase()}<br>
+                COLABORADOR: ${(dUser ? dUser.nombre : "USUARIO").toUpperCase()}<br>
                 REGISTRO: ${f} | ${h}<br>
                 ESTADO: FIRMADO Y VERIFICADO
             `;
