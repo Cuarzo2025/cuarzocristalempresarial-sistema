@@ -7,48 +7,84 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root { --bg: #000000; --card: #0a0a0a; --border: #222222; --text-dim: #777777; }
+        :root { --bg: #000000; --card: #0a0a0a; --border: #222222; --text-dim: #777777; --accent: #fff; }
         body { background-color: var(--bg); color: #FFF; font-family: 'Montserrat', sans-serif; margin: 0; padding: 20px; }
         .container { max-width: 1500px; margin: auto; display: none; }
+        
+        /* HEADER & KPIs */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }
         .kpi-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
         .kpi-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 8px; text-align: center; }
         .kpi-card span { display: block; color: var(--text-dim); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 2px; }
         .kpi-card strong { font-size: 1.5rem; font-weight: 800; margin-top: 5px; display: block; }
+
+        /* SEARCH */
         .search-box { position: relative; margin-bottom: 25px; }
-        #master-search { width: 100%; background: var(--card); border: 1px solid var(--border); padding: 15px 20px 15px 45px; border-radius: 8px; color: #fff; outline: none; }
+        #master-search { width: 100%; background: var(--card); border: 1px solid var(--border); padding: 15px 20px 15px 45px; border-radius: 8px; color: #fff; outline: none; box-sizing: border-box; }
         .search-box i { position: absolute; left: 18px; top: 18px; color: var(--text-dim); }
+
+        /* TABLE */
         .card { background-color: var(--card); padding: 20px; border-radius: 8px; border: 1px solid var(--border); overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1100px; }
         th { text-align: left; padding: 15px; color: var(--text-dim); font-size: 0.6rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
         td { padding: 15px; border-bottom: 1px solid #151515; font-size: 0.75rem; vertical-align: middle; }
+        
         .status-dot { height: 7px; width: 7px; border-radius: 50%; display: inline-block; margin-right: 8px; }
         .online { background-color: #fff; box-shadow: 0 0 8px #fff; }
         .offline { background-color: #333; }
-        .badge { padding: 4px 8px; border-radius: 2px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; border: 1px solid #444; }
-        .badge-admin { background: #fff; color: #000; border: none; }
-        .btn-group { display: flex; gap: 8px; }
-        .btn { padding: 8px 12px; border: 1px solid #333; background: transparent; color: #fff; cursor: pointer; font-size: 0.6rem; transition: 0.2s; }
+
+        /* BUTTONS */
+        .btn-group { display: flex; gap: 5px; }
+        .btn { padding: 8px 10px; border: 1px solid #333; background: transparent; color: #fff; cursor: pointer; font-size: 0.65rem; transition: 0.2s; border-radius: 3px; }
         .btn:hover { background: #fff; color: #000; }
+        .btn-admin { background: #fff; color: #000; border: none; }
+
+        /* MODALES */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px); }
+        .modal-content { background: #0f0f0f; margin: 5% auto; padding: 30px; border: 1px solid var(--border); width: 500px; border-radius: 10px; position: relative; }
+        .close-modal { position: absolute; right: 20px; top: 20px; cursor: pointer; color: var(--text-dim); }
+        .modal-h3 { border-left: 3px solid #fff; padding-left: 10px; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 20px; }
+        
+        .data-item { margin-bottom: 15px; border-bottom: 1px solid #1a1a1a; padding-bottom: 10px; }
+        .data-item label { color: var(--text-dim); font-size: 0.6rem; text-transform: uppercase; display: block; }
+        .data-item p { margin: 5px 0 0 0; font-size: 0.9rem; }
+
+        .order-status { display: flex; justify-content: space-between; padding: 10px; background: #050505; border: 1px solid #111; margin-bottom: 5px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
+    <div id="modal-ficha" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="cerrarModales()">&times;</span>
+            <h3 class="modal-h3">Ficha de Colaborador</h3>
+            <div id="ficha-body"></div>
+        </div>
+    </div>
+
+    <div id="modal-ordenes" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="cerrarModales()">&times;</span>
+            <h3 class="modal-h3">Estado de Órdenes</h3>
+            <div id="ordenes-body"></div>
+        </div>
+    </div>
+
     <div id="admin-content" class="container">
         <div class="header">
             <h1>CUARZO MASTER <span style="opacity: 0.5;">HUB</span></h1>
-            <a href="workspace.html" class="btn">Terminal de Trabajo</a>
+            <a href="workspace.html" class="btn">Terminal</a>
         </div>
 
         <div class="kpi-container">
             <div class="kpi-card"><span>En Línea</span><strong id="kpi-online">0</strong></div>
-            <div class="kpi-card"><span>Total Personal</span><strong id="kpi-total">0</strong></div>
-            <div class="kpi-card"><span>Horas Sistema</span><strong id="kpi-horas">0.0</strong></div>
+            <div class="kpi-card"><span>Registrados</span><strong id="kpi-total">0</strong></div>
+            <div class="kpi-card"><span>Total Horas</span><strong id="kpi-horas">0.0</strong></div>
         </div>
 
         <div class="search-box">
             <i class="fas fa-search"></i>
-            <input type="text" id="master-search" placeholder="Filtrar por nombre, país, CBU o ID..." onkeyup="filtrarColaboradores()">
+            <input type="text" id="master-search" placeholder="Filtrar por cualquier dato..." onkeyup="filtrarColaboradores()">
         </div>
 
         <div class="card">
@@ -56,10 +92,9 @@
                 <thead>
                     <tr>
                         <th>Colaborador</th>
-                        <th>ID Documento</th>
-                        <th>Origen (IP)</th>
                         <th>Estado</th>
-                        <th>Pago / CBU</th>
+                        <th>Origen</th>
+                        <th>Jornada</th>
                         <th>Acciones Maestro</th>
                     </tr>
                 </thead>
@@ -71,7 +106,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, onSnapshot, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
@@ -112,25 +147,22 @@
                                 <strong>${c.nombre || 'N/A'}</strong><br>
                                 <span style="color:#555; font-size:0.65rem;">${c.email}</span>
                             </td>
-                            <td style="font-family:monospace;">${c.dni || c.ci || c.pasaporte || '---'}</td>
-                            <td style="text-align:center;">
-                                <span style="font-size: 1.2rem;">${c.pais_emoji || '🚩'}</span>
-                                <span style="display:block; font-size:0.6rem; color:#888;">${c.pais_nombre || 'Desconocido'}</span>
-                            </td>
                             <td>
                                 <span class="status-dot ${esOnline ? 'online' : 'offline'}"></span>
                                 <span style="font-size:0.65rem;">${esOnline ? 'LIVE' : 'OFF'}</span>
                             </td>
-                            <td>
-                                <span style="font-size:0.6rem; color:#666;">${c.metodoPago || '---'}</span><br>
-                                <span class="badge" style="border-color:#333; color:#888;">${c.datoPago || '---'}</span>
+                            <td style="text-align:center;">
+                                <span style="font-size: 1.2rem;">${c.pais_emoji || '🚩'}</span>
                             </td>
+                            <td style="font-weight:800;">${(c.horas_totales || 0).toFixed(2)}h</td>
                             <td>
                                 <div class="btn-group">
-                                    <button class="btn ${c.rol === 'admin' ? 'badge-admin' : ''}" onclick="toggleAdmin('${uid}', '${c.rol}')">
-                                        <i class="fas fa-shield-alt"></i> ${c.rol === 'admin' ? 'ADMIN' : 'HACER ADMIN'}
+                                    <button class="btn" onclick="verFicha('${uid}')" title="Ver Datos Personales"><i class="fas fa-id-card"></i></button>
+                                    <button class="btn" onclick="verOrdenes('${uid}')" title="Órdenes de Trabajo"><i class="fas fa-tasks"></i></button>
+                                    <button class="btn ${c.rol === 'admin' ? 'btn-admin' : ''}" onclick="toggleAdmin('${uid}', '${c.rol}')" title="Permisos Admin">
+                                        <i class="fas fa-shield-alt"></i>
                                     </button>
-                                    <button class="btn" onclick="borrarUser('${uid}')"><i class="fas fa-trash-alt"></i></button>
+                                    <button class="btn" onclick="borrarUser('${uid}')" style="color:#600;"><i class="fas fa-trash-alt"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -142,6 +174,48 @@
             });
         }
 
+        // --- FUNCIONES DE MODAL ---
+        window.verFicha = (uid) => {
+            onSnapshot(doc(db, "colaboradores", uid), (d) => {
+                const c = d.data();
+                const body = document.getElementById('ficha-body');
+                body.innerHTML = `
+                    <div class="data-item"><label>Nombre Completo</label><p>${c.nombre}</p></div>
+                    <div class="data-item"><label>Correo Electrónico</label><p>${c.email}</p></div>
+                    <div class="data-item"><label>Identificación</label><p>${c.dni || c.ci || c.pasaporte || c.certificado_migratorio || 'No registrado'}</p></div>
+                    <div class="data-item"><label>Ubicación & IP</label><p>${c.pais_nombre || 'Desconocido'} (${c.ip || 'Sin IP'})</p></div>
+                    <div class="data-item"><label>Método de Pago</label><p>${c.metodoPago || 'No definido'}</p></div>
+                    <div class="data-item"><label>CBU / CVU / Datos</label><p style="font-family:monospace; background:#000; padding:10px;">${c.datoPago || 'Sin datos'}</p></div>
+                `;
+                document.getElementById('modal-ficha').style.display = 'block';
+            });
+        };
+
+        window.verOrdenes = async (uid) => {
+            // Aquí asumo que tienes una colección llamada "ordenes" con un campo "asignado_a" (el UID del usuario)
+            const q = query(collection(db, "ordenes"), where("asignado_a", "==", uid));
+            const snap = await getDocs(q);
+            
+            let stats = { asignada: 0, iniciada: 0, progreso: 0, terminada: 0 };
+            snap.forEach(d => {
+                const status = d.data().estado;
+                if(stats[status] !== undefined) stats[status]++;
+            });
+
+            const body = document.getElementById('ordenes-body');
+            body.innerHTML = `
+                <div class="order-status"><span>Asignadas</span> <strong>${stats.asignada}</strong></div>
+                <div class="order-status"><span>Iniciadas</span> <strong>${stats.iniciada}</strong></div>
+                <div class="order-status" style="border-left: 3px solid #fff;"><span>En Progreso</span> <strong>${stats.progreso}</strong></div>
+                <div class="order-status" style="background:#111;"><span>Terminadas</span> <strong>${stats.terminada}</strong></div>
+            `;
+            document.getElementById('modal-ordenes').style.display = 'block';
+        };
+
+        window.cerrarModales = () => {
+            document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+        };
+
         window.filtrarColaboradores = () => {
             const input = document.getElementById('master-search').value.toLowerCase();
             const filas = document.getElementsByClassName('user-row');
@@ -150,11 +224,11 @@
 
         window.toggleAdmin = async (uid, rolActual) => {
             const nuevoRol = rolActual === 'admin' ? 'colaborador' : 'admin';
-            if(confirm(`¿Cambiar permisos?`)) await updateDoc(doc(db, "colaboradores", uid), { rol: nuevoRol });
+            if(confirm(`¿Cambiar permisos de administración?`)) await updateDoc(doc(db, "colaboradores", uid), { rol: nuevoRol });
         };
 
         window.borrarUser = async (uid) => {
-            if(confirm("¿ELIMINAR PERMANENTEMENTE?")) await deleteDoc(doc(db, "colaboradores", uid));
+            if(confirm("¿ELIMINAR DEFINITIVAMENTE A ESTE USUARIO?")) await deleteDoc(doc(db, "colaboradores", uid));
         };
     </script>
 </body>
