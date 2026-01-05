@@ -3,175 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control Hub | Cuarzo Empresarial</title>
+    <title>Master Control | Cuarzo Empresarial</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root { 
-            --accent: #ffffff; 
-            --bg: #000000; 
-            --card: #0a0a0a; 
-            --border: #222222;
-            --text-dim: #777777;
-        }
-        
-        body { 
-            background-color: var(--bg); 
-            color: #FFF; 
-            font-family: 'Montserrat', sans-serif; 
-            margin: 0; 
-            padding: 20px; 
-        }
-
-        .container { 
-            max-width: 1300px; 
-            margin: auto; 
-            display: none; 
-        }
-        
-        /* HEADER ESTILO DASHBOARD */
-        .header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 30px; 
-            padding: 20px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-        }
-
-        .header h1 { font-weight: 800; letter-spacing: 4px; font-size: 1.2rem; margin: 0; }
-        .header .brand { display: flex; align-items: center; gap: 15px; }
-        .header .dot-active { width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 0 10px #fff; }
-
-        /* KPI CARDS (Indicadores Rápidos) */
-        .kpi-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .kpi-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .kpi-card span { display: block; color: var(--text-dim); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; }
-        .kpi-card strong { font-size: 1.8rem; font-weight: 800; margin-top: 5px; display: block; }
-
-        .card { 
-            background-color: var(--card); 
-            padding: 20px; 
-            border-radius: 8px; 
-            margin-bottom: 25px; 
-            border: 1px solid var(--border); 
-        }
-
-        .card h2 { 
-            color: #fff; 
-            font-size: 0.75rem; 
-            margin-bottom: 20px;
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        table { width: 100%; border-collapse: collapse; }
-        th { 
-            text-align: left; 
-            padding: 15px; 
-            color: var(--text-dim); 
-            font-size: 0.6rem; 
-            text-transform: uppercase; 
-            border-bottom: 1px solid var(--border); 
-        }
-        td { padding: 15px; border-bottom: 1px solid #151515; font-size: 0.75rem; }
-
+        :root { --bg: #000000; --card: #0a0a0a; --border: #222222; --text-dim: #777777; }
+        body { background-color: var(--bg); color: #FFF; font-family: 'Montserrat', sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 1500px; margin: auto; display: none; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }
+        .kpi-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .kpi-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 8px; text-align: center; }
+        .kpi-card span { display: block; color: var(--text-dim); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 2px; }
+        .kpi-card strong { font-size: 1.5rem; font-weight: 800; margin-top: 5px; display: block; }
+        .search-box { position: relative; margin-bottom: 25px; }
+        #master-search { width: 100%; background: var(--card); border: 1px solid var(--border); padding: 15px 20px 15px 45px; border-radius: 8px; color: #fff; outline: none; }
+        .search-box i { position: absolute; left: 18px; top: 18px; color: var(--text-dim); }
+        .card { background-color: var(--card); padding: 20px; border-radius: 8px; border: 1px solid var(--border); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        th { text-align: left; padding: 15px; color: var(--text-dim); font-size: 0.6rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        td { padding: 15px; border-bottom: 1px solid #151515; font-size: 0.75rem; vertical-align: middle; }
         .status-dot { height: 7px; width: 7px; border-radius: 50%; display: inline-block; margin-right: 8px; }
         .online { background-color: #fff; box-shadow: 0 0 8px #fff; }
         .offline { background-color: #333; }
-        
-        .badge { 
-            padding: 4px 8px; 
-            border-radius: 2px; 
-            font-size: 0.6rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            border: 1px solid #444;
-        }
+        .badge { padding: 4px 8px; border-radius: 2px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; border: 1px solid #444; }
         .badge-admin { background: #fff; color: #000; border: none; }
-
-        .btn-group { display: flex; gap: 5px; }
-        .btn { 
-            padding: 6px 10px; 
-            border: 1px solid #333; 
-            background: transparent; 
-            color: #fff; 
-            cursor: pointer; 
-            font-size: 0.6rem; 
-            text-transform: uppercase; 
-            transition: 0.2s;
-        }
+        .btn-group { display: flex; gap: 8px; }
+        .btn { padding: 8px 12px; border: 1px solid #333; background: transparent; color: #fff; cursor: pointer; font-size: 0.6rem; transition: 0.2s; }
         .btn:hover { background: #fff; color: #000; }
-        
-        #loading-screen { text-align: center; padding-top: 100px; color: #fff; }
     </style>
 </head>
 <body>
 
-    <div id="loading-screen">
-        <i class="fas fa-microchip fa-spin" style="font-size: 2em;"></i>
-        <p style="letter-spacing: 5px; font-size: 0.6rem; margin-top: 20px; text-transform: uppercase;">Iniciando Consola de Mando</p>
-    </div>
-
     <div id="admin-content" class="container">
         <div class="header">
-            <div class="brand">
-                <div class="dot-active"></div>
-                <h1>CUARZO <span style="font-weight: 400; opacity: 0.5;">CONTROL HUB</span></h1>
-            </div>
-            <div style="text-align: right;">
-                <a href="workspace.html" class="btn" style="text-decoration: none; border-radius: 4px;">TERMINAL</a>
-            </div>
+            <h1>CUARZO MASTER <span style="opacity: 0.5;">HUB</span></h1>
+            <a href="workspace.html" class="btn">Terminal de Trabajo</a>
         </div>
 
         <div class="kpi-container">
-            <div class="kpi-card">
-                <span>En Línea Ahora</span>
-                <strong id="kpi-online">0</strong>
-            </div>
-            <div class="kpi-card">
-                <span>Total Colaboradores</span>
-                <strong id="kpi-total">0</strong>
-            </div>
-            <div class="kpi-card">
-                <span>Horas Totales Mes</span>
-                <strong id="kpi-horas">0.0</strong>
-            </div>
+            <div class="kpi-card"><span>En Línea</span><strong id="kpi-online">0</strong></div>
+            <div class="kpi-card"><span>Total Personal</span><strong id="kpi-total">0</strong></div>
+            <div class="kpi-card"><span>Horas Sistema</span><strong id="kpi-horas">0.0</strong></div>
+        </div>
+
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="master-search" placeholder="Filtrar por nombre, país, CBU o ID..." onkeyup="filtrarColaboradores()">
         </div>
 
         <div class="card">
-            <h2><i class="fas fa-users-cog"></i> Monitor de Personal</h2>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Identidad</th>
-                            <th>ID Documento</th>
-                            <th>Estado</th>
-                            <th>Jornada</th>
-                            <th>Rango</th>
-                            <th>Comandos</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lista-colab"></tbody>
-                </table>
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Colaborador</th>
+                        <th>ID Documento</th>
+                        <th>Origen (IP)</th>
+                        <th>Estado</th>
+                        <th>Pago / CBU</th>
+                        <th>Acciones Maestro</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-colab"></tbody>
+            </table>
         </div>
     </div>
 
@@ -195,75 +88,73 @@
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                document.getElementById('loading-screen').style.display = 'none';
                 document.getElementById('admin-content').style.display = 'block';
-                iniciarSincronizacion();
-            } else {
-                window.location.href = "login.html";
-            }
+                sincronizarData();
+            } else { window.location.href = "login.html"; }
         });
 
-        function iniciarSincronizacion() {
+        function sincronizarData() {
             onSnapshot(collection(db, "colaboradores"), (snap) => {
-                const listaColab = document.getElementById('lista-colab');
-                listaColab.innerHTML = "";
-                
-                let onlineCount = 0;
-                let totalHoras = 0;
-                let totalUsers = snap.size;
+                const lista = document.getElementById('lista-colab');
+                lista.innerHTML = "";
+                let online = 0, totalH = 0;
 
                 snap.forEach(d => {
                     const c = d.data();
-                    const id = d.id;
+                    const uid = d.id;
                     const esOnline = c.online || false;
-                    const horas = c.horas_totales || 0;
-                    
-                    if(esOnline) onlineCount++;
-                    totalHoras += horas;
+                    if(esOnline) online++;
+                    totalH += (c.horas_totales || 0);
 
-                    const idDoc = c.dni || c.ci || c.pasaporte || c.certificado_migratorio || "---";
-
-                    listaColab.innerHTML += `
-                        <tr>
+                    lista.innerHTML += `
+                        <tr class="user-row">
                             <td>
                                 <strong>${c.nombre || 'N/A'}</strong><br>
-                                <span style="font-size: 0.6rem; color: #444;">${c.email}</span>
+                                <span style="color:#555; font-size:0.65rem;">${c.email}</span>
                             </td>
-                            <td style="font-family: monospace;">${idDoc}</td>
+                            <td style="font-family:monospace;">${c.dni || c.ci || c.pasaporte || '---'}</td>
+                            <td style="text-align:center;">
+                                <span style="font-size: 1.2rem;">${c.pais_emoji || '🚩'}</span>
+                                <span style="display:block; font-size:0.6rem; color:#888;">${c.pais_nombre || 'Desconocido'}</span>
+                            </td>
                             <td>
                                 <span class="status-dot ${esOnline ? 'online' : 'offline'}"></span>
-                                <span style="font-size: 0.65rem;">${esOnline ? 'LIVE' : (c.ultimaConexion || 'OFF')}</span>
+                                <span style="font-size:0.65rem;">${esOnline ? 'LIVE' : 'OFF'}</span>
                             </td>
-                            <td style="font-weight: 700;">${horas.toFixed(2)}h</td>
-                            <td><span class="badge ${c.rol === 'admin' ? 'badge-admin' : ''}">${c.rol || 'USER'}</span></td>
+                            <td>
+                                <span style="font-size:0.6rem; color:#666;">${c.metodoPago || '---'}</span><br>
+                                <span class="badge" style="border-color:#333; color:#888;">${c.datoPago || '---'}</span>
+                            </td>
                             <td>
                                 <div class="btn-group">
-                                    <button class="btn" onclick="ejecutarComando('${id}', 'rol', '${c.rol === 'admin' ? 'colaborador' : 'admin'}')"><i class="fas fa-shield-alt"></i></button>
-                                    <button class="btn" onclick="ejecutarComando('${id}', 'estado', '${c.estado === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO'}')">
-                                        <i class="fas ${c.estado === 'ACTIVO' ? 'fa-user-slash' : 'fa-user-check'}"></i>
+                                    <button class="btn ${c.rol === 'admin' ? 'badge-admin' : ''}" onclick="toggleAdmin('${uid}', '${c.rol}')">
+                                        <i class="fas fa-shield-alt"></i> ${c.rol === 'admin' ? 'ADMIN' : 'HACER ADMIN'}
                                     </button>
-                                    <button class="btn" onclick="eliminarRegistro('${id}')"><i class="fas fa-times"></i></button>
+                                    <button class="btn" onclick="borrarUser('${uid}')"><i class="fas fa-trash-alt"></i></button>
                                 </div>
                             </td>
                         </tr>
                     `;
                 });
-
-                // Actualizar KPIs superiores
-                document.getElementById('kpi-online').innerText = onlineCount;
-                document.getElementById('kpi-total').innerText = totalUsers;
-                document.getElementById('kpi-horas').innerText = totalHoras.toFixed(1);
+                document.getElementById('kpi-online').innerText = online;
+                document.getElementById('kpi-total').innerText = snap.size;
+                document.getElementById('kpi-horas').innerText = totalH.toFixed(1);
             });
         }
 
-        window.ejecutarComando = async (uid, tipo, valor) => {
-            const ref = doc(db, "colaboradores", uid);
-            if(tipo === 'rol') await updateDoc(ref, { rol: valor });
-            if(tipo === 'estado') await updateDoc(ref, { estado: valor });
+        window.filtrarColaboradores = () => {
+            const input = document.getElementById('master-search').value.toLowerCase();
+            const filas = document.getElementsByClassName('user-row');
+            Array.from(filas).forEach(f => f.style.display = f.innerText.toLowerCase().includes(input) ? "" : "none");
         };
 
-        window.eliminarRegistro = async (uid) => {
-            if(confirm("BORRAR USUARIO?")) await deleteDoc(doc(db, "colaboradores", uid));
+        window.toggleAdmin = async (uid, rolActual) => {
+            const nuevoRol = rolActual === 'admin' ? 'colaborador' : 'admin';
+            if(confirm(`¿Cambiar permisos?`)) await updateDoc(doc(db, "colaboradores", uid), { rol: nuevoRol });
+        };
+
+        window.borrarUser = async (uid) => {
+            if(confirm("¿ELIMINAR PERMANENTEMENTE?")) await deleteDoc(doc(db, "colaboradores", uid));
         };
     </script>
 </body>
