@@ -6,22 +6,56 @@
     <title>Registro | Cuarzo Cristal</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #FFFFFF; --bg: #0A0A0A; --card: #141414; --text-dim: #A0A0A0; --accent: #4CAF50; --border: #333; }
-        body { background: var(--bg); color: var(--primary); font-family: 'Montserrat', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .container { background: var(--card); padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; border: 1px solid var(--border); text-align: center; }
-        h1 { font-weight: 800; margin: 0; letter-spacing: -1px; }
+        :root { --primary: #FFFFFF; --bg: #000000; --card: rgba(20, 20, 20, 0.85); --text-dim: #A0A0A0; --accent: #FFFFFF; --border: #333; }
+        
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
+
+        /* Canvas para el efecto Matrix */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        body { font-family: 'Montserrat', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        /* Contenedor con ligero desenfoque para resaltar sobre el fondo */
+        .container { 
+            background: var(--card); 
+            padding: 40px; 
+            border-radius: 16px; 
+            width: 100%; 
+            max-width: 400px; 
+            border: 1px solid var(--border); 
+            text-align: center; 
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 { font-weight: 800; margin: 0; letter-spacing: -1px; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
         .subtitle { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 30px; }
-        input { width: 100%; padding: 14px; margin-bottom: 20px; background: #1e1e1e; border: 1px solid var(--border); border-radius: 8px; color: white; box-sizing: border-box; font-family: inherit; }
-        input:focus { outline: none; border-color: var(--accent); }
+        
+        input { width: 100%; padding: 14px; margin-bottom: 20px; background: rgba(30, 30, 30, 0.9); border: 1px solid var(--border); border-radius: 8px; color: white; box-sizing: border-box; font-family: inherit; }
+        input:focus { outline: none; border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        
         .btn-main { width: 100%; padding: 16px; background: var(--primary); color: black; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-main:hover { opacity: 0.8; transform: translateY(-2px); }
+        .btn-main:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 0 15px rgba(255,255,255,0.4); }
+        
         #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 1000; }
-        .modal { background: var(--card); padding: 40px; border-radius: 16px; text-align: center; max-width: 350px; border: 1px solid var(--accent); }
-        .temp-pass { display: block; background: #000; padding: 15px; margin: 20px 0; font-family: monospace; font-size: 1.4rem; color: var(--accent); letter-spacing: 3px; border-radius: 8px; }
-        a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+        .modal { background: var(--card); padding: 40px; border-radius: 16px; text-align: center; max-width: 350px; border: 1px solid #fff; }
+        .temp-pass { display: block; background: #000; padding: 15px; margin: 20px 0; font-family: monospace; font-size: 1.4rem; color: #fff; letter-spacing: 3px; border-radius: 8px; text-shadow: 0 0 8px #fff; }
+        a { color: #fff; text-decoration: none; font-size: 0.85rem; border-bottom: 1px solid #333; }
     </style>
 </head>
 <body>
+
+    <canvas id="matrix-canvas"></canvas>
+
     <div class="container">
         <h1>CUARZO</h1>
         <p class="subtitle">Registro de Colaboradores</p>
@@ -35,13 +69,64 @@
 
     <div id="modal-overlay">
         <div class="modal">
-            <h2 style="color: var(--accent); margin-top: 0;">¡ÉXITO!</h2>
-            <p style="font-size: 0.9rem;">Se ha enviado un correo con Resend. Tu clave temporal es:</p>
+            <h2 style="color: #fff; margin-top: 0;">¡ÉXITO!</h2>
+            <p style="font-size: 0.9rem;">Copia tu clave temporal para iniciar sesión:</p>
             <span id="display-pass" class="temp-pass">--------</span>
-            <p style="font-size: 0.75rem; color: var(--text-dim);">Cópiala antes de ir al login.</p>
-            <button class="btn-main" onclick="window.location.href='login.html'" style="background: var(--accent); color: white;">IR AL LOGIN</button>
+            <p style="font-size: 0.75rem; color: var(--text-dim);">Te la pediremos en el siguiente paso.</p>
+            <button class="btn-main" onclick="window.location.href='login.html'" style="background: #fff; color: #000;">IR AL LOGIN</button>
         </div>
     </div>
+
+    <script>
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const digits = "0123456789";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function drawMatrix() {
+            // Fondo semitransparente para crear el efecto de rastro
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = digits.charAt(Math.floor(Math.random() * digits.length));
+                
+                // Color blanco fosforescente con parpadeo aleatorio
+                const opacity = Math.random() > 0.9 ? 1 : 0.4;
+                ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                
+                // Añadimos un pequeño brillo
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = "#ffffff";
+
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -64,7 +149,7 @@
         document.getElementById('registration-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('user-name').value;
-            const email = document.getElementById('user-email').value;
+            const email = document.getElementById('user-email').value.toLowerCase().trim();
             const tempPass = Math.random().toString(36).slice(-6).toUpperCase() + "!";
             const btn = document.getElementById('btn-submit');
             
@@ -72,53 +157,29 @@
             btn.innerText = "PROCESANDO...";
 
             try {
-                // 1. Registro en Firebase Auth
                 const userCred = await createUserWithEmailAndPassword(auth, email, tempPass);
                 
-                // 2. Guardar datos en Firestore (CAMPOS AUTOMÁTICOS AÑADIDOS AQUÍ)
                 await setDoc(doc(db, "colaboradores", userCred.user.uid), {
                     nombre: name,
                     email: email,
+                    rol: "colaborador",
+                    contratoAceptado: false,
+                    metodoPago: "",
+                    datoPago: "",
                     requiereCambio: true,
                     claveTemporal: tempPass,
-                    fechaRegistro: new Date(),
-                    // Nuevos campos sincronizados con Workspace
+                    fechaRegistro: new Date().toLocaleDateString('es-AR'),
                     proyectos_activos: 0,
                     horas_totales: 0,
                     estado: "ACTIVO"
                 });
 
-                // 3. Envío de correo mediante nuestra API de Resend
-                try {
-                    const response = await fetch('/api/send', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            email: email,
-                            nombre: name,
-                            clave: tempPass
-                        })
-                    });
-                    
-                    if (response.ok) {
-                        console.log("Correo enviado exitosamente vía Resend");
-                    } else {
-                        console.warn("La API de Resend respondió con error.");
-                    }
-                } catch (resendError) {
-                    console.error("Error al conectar con la API de Resend:", resendError);
-                }
-
-                // 4. Mostrar Modal con la clave
                 document.getElementById('display-pass').innerText = tempPass;
                 document.getElementById('modal-overlay').style.display = 'flex';
 
             } catch (error) {
-                if (error.code === 'auth/email-already-in-use') {
-                    alert("Este correo ya está registrado.");
-                } else {
-                    alert("Error: " + error.message);
-                }
+                console.error("Error:", error);
+                alert("Error: " + error.message);
                 btn.disabled = false;
                 btn.innerText = "COMPLETAR REGISTRO";
             }
