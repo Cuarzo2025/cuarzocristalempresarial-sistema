@@ -3,111 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Control Administrativo - Cuarzo Empresarial</title>
+    <title>Panel Maestro | Cuarzo Empresarial</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            background-color: #000000;
-            color: #FFFFFF;
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            background-color: #0d0d0d; 
-            padding: 30px;
-            border-radius: 10px;
-            border: 1px solid #222;
-            display: none; /* Se activa por JS */
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 15px;
-        }
-        .card {
-            background-color: #1a1a1a; 
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            border: 1px solid #333;
-        }
-        .card h2 { color: #00FFFF; font-size: 1.2em; margin-top: 0; }
-
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 12px; color: #888; font-size: 0.7em; text-transform: uppercase; border-bottom: 1px solid #333; }
-        td { padding: 12px; border-bottom: 1px solid #222; font-size: 0.85em; }
-
-        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7em; font-weight: 800; }
-        .badge-admin { background: #fff; color: #000; }
-        .badge-user { background: #333; color: #fff; }
-
-        .btn-action {
-            padding: 6px 12px; background: #00FFFF; color: #000; border: none; 
-            border-radius: 4px; font-weight: 700; cursor: pointer; font-size: 0.7em;
+        :root { 
+            --accent: #ffffff; 
+            --bg: #000000; 
+            --card: #0a0a0a; 
+            --border: #222222;
+            --text-dim: #777777;
+            --danger: #444444; /* Gris oscuro para acciones de peligro, manteniendo estética */
         }
         
-        #loading-screen { text-align: center; padding-top: 100px; }
-        #error-screen { display: none; text-align: center; padding-top: 100px; color: #ff4444; }
+        body { 
+            background-color: var(--bg); 
+            color: #FFF; 
+            font-family: 'Montserrat', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+        }
+
+        .container { 
+            max-width: 1300px; 
+            margin: auto; 
+            background-color: var(--card); 
+            padding: 30px; 
+            border-radius: 8px; 
+            border: 1px solid var(--border); 
+            display: none; 
+        }
+        
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px; 
+            border-bottom: 1px solid var(--border); 
+            padding-bottom: 15px; 
+        }
+
+        .header h1 { font-weight: 800; letter-spacing: 2px; font-size: 1.5rem; }
+
+        .card { 
+            background-color: #0f0f0f; 
+            padding: 20px; 
+            border-radius: 4px; 
+            margin-bottom: 25px; 
+            border: 1px solid var(--border); 
+        }
+
+        .card h2 { 
+            color: #fff; 
+            font-size: 0.85rem; 
+            margin-top: 0; 
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+            border-left: 3px solid #fff;
+            padding-left: 10px;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { 
+            text-align: left; 
+            padding: 15px; 
+            color: var(--text-dim); 
+            font-size: 0.65rem; 
+            text-transform: uppercase; 
+            border-bottom: 1px solid var(--border); 
+        }
+        td { padding: 15px; border-bottom: 1px solid #151515; font-size: 0.8rem; }
+
+        /* Estados */
+        .status-dot { height: 7px; width: 7px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .online { background-color: #fff; box-shadow: 0 0 8px #fff; }
+        .offline { background-color: #333; }
+        
+        .badge { 
+            padding: 5px 10px; 
+            border-radius: 2px; 
+            font-size: 0.6rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            border: 1px solid #444;
+        }
+        .badge-admin { background: #fff; color: #000; border: none; }
+        .badge-colab { background: transparent; color: #fff; }
+        .badge-inactive { border-color: #600; color: #a00; }
+
+        /* Botones Estilo Minimalista */
+        .btn-group { display: flex; gap: 8px; }
+        .btn { 
+            padding: 8px 14px; 
+            border: 1px solid #444; 
+            background: transparent; 
+            color: #fff; 
+            border-radius: 2px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            font-size: 0.65rem; 
+            text-transform: uppercase; 
+            transition: 0.2s;
+        }
+        .btn-primary { background: #fff; color: #000; border: none; }
+        .btn:hover { background: #fff; color: #000; }
+        
+        #loading-screen { text-align: center; padding-top: 100px; color: #fff; }
     </style>
 </head>
 <body>
 
     <div id="loading-screen">
-        <i class="fas fa-spinner fa-spin" style="font-size: 3em; color: #00FFFF;"></i>
-        <p>Verificando credenciales de dirección...</p>
-    </div>
-
-    <div id="error-screen">
-        <i class="fas fa-exclamation-triangle" style="font-size: 3em;"></i>
-        <h1>Acceso Denegado</h1>
-        <p>Tu correo no tiene permisos de Súper Admin.</p>
-        <a href="workspace.html" style="color: #00FFFF;">Volver al Inicio</a>
+        <i class="fas fa-circle-notch fa-spin" style="font-size: 2em;"></i>
+        <p style="letter-spacing: 5px; font-size: 0.6rem; margin-top: 20px; text-transform: uppercase;">Accediendo al Sistema Cuarzo</p>
     </div>
 
     <div id="admin-content" class="container">
         <div class="header">
-            <h1><i class="fas fa-shield-alt"></i> PANEL MAESTRO</h1>
-            <a href="workspace.html" style="color: #888; text-decoration: none;">Cerrar</a>
+            <h1>CUARZO <span style="font-weight: 400; opacity: 0.5;">MAESTRO</span></h1>
+            <div style="text-align: right;">
+                <p style="margin:0; font-size: 0.6rem; letter-spacing: 1px; color: #888;">TERMINAL ADMINISTRATIVA</p>
+                <a href="workspace.html" style="color: #fff; text-decoration: none; font-size: 0.6rem; border-bottom: 1px solid #333;">DESCONECTAR</a>
+            </div>
         </div>
 
         <div class="card">
-            <h2><i class="fas fa-users"></i> Control de Colaboradores</h2>
+            <h2>Gestión de Colaboradores</h2>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Rol</th>
+                            <th>Nombre y Email</th>
+                            <th>Identificación</th>
+                            <th>Conexión</th>
+                            <th>Horas</th>
+                            <th>Rango</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="lista-colab">
-                        </tbody>
+                    <tbody id="lista-colab"></tbody>
                 </table>
             </div>
         </div>
 
         <div class="card">
-            <h2><i class="fas fa-wallet"></i> Datos de Cobro Recientes</h2>
+            <h2>Base de Pagos</h2>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
                             <th>Profesional</th>
                             <th>Método</th>
-                            <th>Dato / CBU / Alias</th>
+                            <th>Datos de Cobro</th>
                         </tr>
                     </thead>
-                    <tbody id="lista-pagos">
-                        </tbody>
+                    <tbody id="lista-pagos"></tbody>
                 </table>
             </div>
         </div>
@@ -116,7 +166,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, getDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
@@ -131,44 +181,17 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // DIRECCIÓN AUTORIZADA (Héctor Mauricio corregido)
-        const ADMINS_MAESTROS = [
-            "rrhhcuarzocristalempresarial@gmail.com", 
-            "hectormauricioraposso@gmail.com"
-        ];
-
-        onAuthStateChanged(auth, async (user) => {
-            const loading = document.getElementById('loading-screen');
-            const content = document.getElementById('admin-content');
-            const error = document.getElementById('error-screen');
-
+        onAuthStateChanged(auth, (user) => {
             if (user) {
-                const userEmail = user.email.toLowerCase();
-                
-                // Verificamos si es uno de ustedes
-                if (ADMINS_MAESTROS.includes(userEmail)) {
-                    loading.style.display = 'none';
-                    content.style.display = 'block';
-                    cargarDatos();
-                } else {
-                    // Si no es admin maestro, revisamos si tiene el rol en la DB
-                    const snap = await getDoc(doc(db, "colaboradores", user.uid));
-                    if (snap.exists() && (snap.data().rol === 'admin' || snap.data().rol === 'staff')) {
-                        loading.style.display = 'none';
-                        content.style.display = 'block';
-                        cargarDatos();
-                    } else {
-                        loading.style.display = 'none';
-                        error.style.display = 'block';
-                    }
-                }
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                cargarPanel();
             } else {
                 window.location.href = "login.html";
             }
         });
 
-        function cargarDatos() {
-            // Monitor de Colaboradores en Tiempo Real
+        function cargarPanel() {
             onSnapshot(collection(db, "colaboradores"), (snap) => {
                 const listaColab = document.getElementById('lista-colab');
                 const listaPagos = document.getElementById('lista-pagos');
@@ -178,28 +201,39 @@
                 snap.forEach(d => {
                     const c = d.data();
                     const id = d.id;
-                    const rol = c.rol || "colaborador";
+                    const estado = c.estado || "ACTIVO";
+                    const esOnline = c.online || false;
+                    const idDoc = c.dni || c.ci || c.pasaporte || "PENDIENTE";
 
-                    // Tabla de Colaboradores
                     listaColab.innerHTML += `
                         <tr>
-                            <td>${c.nombre || 'N/N'}</td>
-                            <td>${c.email}</td>
-                            <td><span class="badge ${rol === 'admin' ? 'badge-admin' : 'badge-user'}">${rol}</span></td>
                             <td>
-                                <button class="btn-action" onclick="window.cambiarRol('${id}', 'admin')">Hacer Admin</button>
-                                <button class="btn-action" style="background:#444; color:#fff;" onclick="window.cambiarRol('${id}', 'colaborador')">Quitar</button>
+                                <strong>${c.nombre || 'N/A'}</strong><br>
+                                <span style="font-size: 0.7rem; color: #555;">${c.email}</span>
+                            </td>
+                            <td><span style="font-family: monospace;">${idDoc}</span></td>
+                            <td>
+                                <span class="status-dot ${esOnline ? 'online' : 'offline'}"></span>
+                                <span style="font-size: 0.7rem;">${esOnline ? 'LIVE' : (c.ultimaConexion || '---')}</span>
+                            </td>
+                            <td>${c.horas_totales || 0}h</td>
+                            <td><span class="badge ${c.rol === 'admin' ? 'badge-admin' : 'badge-colab'}">${c.rol || 'USER'}</span></td>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-primary" onclick="gestionarRol('${id}', '${c.rol === 'admin' ? 'colaborador' : 'admin'}')">ROLES</button>
+                                    <button class="btn" onclick="cambiarEstado('${id}', '${estado === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO'}')">${estado === 'ACTIVO' ? 'SUSPENDER' : 'ACTIVAR'}</button>
+                                    <button class="btn" onclick="eliminarUser('${id}')" style="color:#666; border-color:#222;"><i class="fas fa-trash"></i></button>
+                                </div>
                             </td>
                         </tr>
                     `;
 
-                    // Tabla de Pagos (solo si tienen datos cargados)
                     if (c.metodoPago) {
                         listaPagos.innerHTML += `
                             <tr>
-                                <td><strong>${c.nombre}</strong></td>
-                                <td>${c.metodoPago}</td>
-                                <td style="color:#00FFFF; font-family:monospace;">${c.datoPago}</td>
+                                <td>${c.nombre}</td>
+                                <td><span class="badge badge-colab">${c.metodoPago}</span></td>
+                                <td style="font-family: monospace; color: #888;">${c.datoPago}</td>
                             </tr>
                         `;
                     }
@@ -207,9 +241,21 @@
             });
         }
 
-        window.cambiarRol = async (uid, nuevoRol) => {
-            if(confirm(`¿Cambiar rol a ${nuevoRol}?`)) {
+        window.gestionarRol = async (uid, nuevoRol) => {
+            if(confirm(`¿Confirmar cambio de rango?`)) {
                 await updateDoc(doc(db, "colaboradores", uid), { rol: nuevoRol });
+            }
+        };
+
+        window.cambiarEstado = async (uid, nuevoEstado) => {
+            if(confirm(`¿Cambiar estado de acceso?`)) {
+                await updateDoc(doc(db, "colaboradores", uid), { estado: nuevoEstado });
+            }
+        };
+
+        window.eliminarUser = async (uid) => {
+            if(confirm("ELIMINACIÓN PERMANENTE: ¿Desea borrar este registro de la base de datos?")) {
+                await deleteDoc(doc(db, "colaboradores", uid));
             }
         };
     </script>
