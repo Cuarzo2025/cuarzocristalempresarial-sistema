@@ -3,88 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Control | Cuarzo Empresarial</title>
+    <title>Master Hub | Cuarzo</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root { --bg: #000000; --card: #0a0a0a; --border: #222222; --text-dim: #777777; --accent: #fff; }
+        :root { --bg: #000; --card: #0a0a0a; --border: #222; --text-dim: #777; --blue: #007bff; }
         body { background-color: var(--bg); color: #FFF; font-family: 'Montserrat', sans-serif; margin: 0; padding: 20px; }
-        .container { max-width: 1500px; margin: auto; display: none; }
+        .container { max-width: 1500px; margin: auto; }
         
-        /* HEADER & KPIs */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }
-        .kpi-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .kpi-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 8px; text-align: center; }
-        .kpi-card span { display: block; color: var(--text-dim); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 2px; }
-        .kpi-card strong { font-size: 1.5rem; font-weight: 800; margin-top: 5px; display: block; }
-
-        /* SEARCH */
+        
+        /* BUSCADOR */
         .search-box { position: relative; margin-bottom: 25px; }
         #master-search { width: 100%; background: var(--card); border: 1px solid var(--border); padding: 15px 20px 15px 45px; border-radius: 8px; color: #fff; outline: none; box-sizing: border-box; }
         .search-box i { position: absolute; left: 18px; top: 18px; color: var(--text-dim); }
 
-        /* TABLE */
-        .card { background-color: var(--card); padding: 20px; border-radius: 8px; border: 1px solid var(--border); overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 1100px; }
-        th { text-align: left; padding: 15px; color: var(--text-dim); font-size: 0.6rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-        td { padding: 15px; border-bottom: 1px solid #151515; font-size: 0.75rem; vertical-align: middle; }
-        
-        .status-dot { height: 7px; width: 7px; border-radius: 50%; display: inline-block; margin-right: 8px; }
-        .online { background-color: #fff; box-shadow: 0 0 8px #fff; }
-        .offline { background-color: #333; }
+        /* TABLA */
+        .card { background-color: var(--card); padding: 20px; border-radius: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; color: var(--text-dim); font-size: 0.65rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        td { padding: 15px; border-bottom: 1px solid #151515; font-size: 0.8rem; }
 
-        /* BUTTONS */
-        .btn-group { display: flex; gap: 5px; }
-        .btn { padding: 8px 10px; border: 1px solid #333; background: transparent; color: #fff; cursor: pointer; font-size: 0.65rem; transition: 0.2s; border-radius: 3px; }
-        .btn:hover { background: #fff; color: #000; }
-        .btn-admin { background: #fff; color: #000; border: none; }
+        /* BOTONES PEDIDOS */
+        .btn-group { display: flex; gap: 10px; }
+        .btn-master { 
+            padding: 10px 15px; border-radius: 4px; border: 1px solid #333; 
+            background: transparent; color: #fff; cursor: pointer; 
+            font-size: 0.7rem; font-weight: 600; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        /* Botón Ficha Personal */
+        .btn-ficha { border-color: var(--blue); color: var(--blue); }
+        .btn-ficha:hover { background: var(--blue); color: #fff; }
+        
+        /* Botón Órdenes */
+        .btn-ordenes { border-color: #fff; color: #fff; }
+        .btn-ordenes:hover { background: #fff; color: #000; }
+
+        /* Botón Peligro/Borrar */
+        .btn-delete { border-color: #400; color: #600; }
+        .btn-delete:hover { background: #600; color: #fff; }
 
         /* MODALES */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px); }
-        .modal-content { background: #0f0f0f; margin: 5% auto; padding: 30px; border: 1px solid var(--border); width: 500px; border-radius: 10px; position: relative; }
-        .close-modal { position: absolute; right: 20px; top: 20px; cursor: pointer; color: var(--text-dim); }
-        .modal-h3 { border-left: 3px solid #fff; padding-left: 10px; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 20px; }
-        
-        .data-item { margin-bottom: 15px; border-bottom: 1px solid #1a1a1a; padding-bottom: 10px; }
-        .data-item label { color: var(--text-dim); font-size: 0.6rem; text-transform: uppercase; display: block; }
-        .data-item p { margin: 5px 0 0 0; font-size: 0.9rem; }
-
-        .order-status { display: flex; justify-content: space-between; padding: 10px; background: #050505; border: 1px solid #111; margin-bottom: 5px; border-radius: 4px; }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
+        .modal-content { background: #0f0f0f; margin: 10% auto; padding: 30px; border: 1px solid var(--border); width: 450px; border-radius: 8px; }
+        .data-row { margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 5px; }
+        .data-row label { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; }
+        .data-row p { margin: 5px 0; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
     <div id="modal-ficha" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="cerrarModales()">&times;</span>
-            <h3 class="modal-h3">Ficha de Colaborador</h3>
+            <h3 style="border-left: 3px solid var(--blue); padding-left: 10px;">FICHA DE REGISTRO</h3>
             <div id="ficha-body"></div>
+            <button class="btn-master" onclick="cerrarModales()" style="margin-top:20px; width:100%; justify-content:center;">CERRAR</button>
         </div>
     </div>
 
     <div id="modal-ordenes" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="cerrarModales()">&times;</span>
-            <h3 class="modal-h3">Estado de Órdenes</h3>
+            <h3 style="border-left: 3px solid #fff; padding-left: 10px;">ÓRDENES DE TRABAJO</h3>
             <div id="ordenes-body"></div>
+            <button class="btn-master" onclick="cerrarModales()" style="margin-top:20px; width:100%; justify-content:center;">CERRAR</button>
         </div>
     </div>
 
-    <div id="admin-content" class="container">
+    <div class="container">
         <div class="header">
-            <h1>CUARZO MASTER <span style="opacity: 0.5;">HUB</span></h1>
-            <a href="workspace.html" class="btn">Terminal</a>
-        </div>
-
-        <div class="kpi-container">
-            <div class="kpi-card"><span>En Línea</span><strong id="kpi-online">0</strong></div>
-            <div class="kpi-card"><span>Registrados</span><strong id="kpi-total">0</strong></div>
-            <div class="kpi-card"><span>Total Horas</span><strong id="kpi-horas">0.0</strong></div>
+            <h1>CUARZO MASTER CONSOLE</h1>
+            <a href="workspace.html" class="btn-master">VOLVER AL PANEL</a>
         </div>
 
         <div class="search-box">
             <i class="fas fa-search"></i>
-            <input type="text" id="master-search" placeholder="Filtrar por cualquier dato..." onkeyup="filtrarColaboradores()">
+            <input type="text" id="master-search" placeholder="Buscar por nombre, documento o email..." onkeyup="filtrar()">
         </div>
 
         <div class="card">
@@ -94,7 +88,6 @@
                         <th>Colaborador</th>
                         <th>Estado</th>
                         <th>Origen</th>
-                        <th>Jornada</th>
                         <th>Acciones Maestro</th>
                     </tr>
                 </thead>
@@ -105,7 +98,6 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, onSnapshot, updateDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -118,117 +110,87 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const db = getFirestore(app);
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById('admin-content').style.display = 'block';
-                sincronizarData();
-            } else { window.location.href = "login.html"; }
+        // Cargar lista de colaboradores
+        onSnapshot(collection(db, "colaboradores"), (snap) => {
+            const lista = document.getElementById('lista-colab');
+            lista.innerHTML = "";
+            snap.forEach(d => {
+                const c = d.data();
+                const uid = d.id;
+                lista.innerHTML += `
+                    <tr class="user-row">
+                        <td><strong>${c.nombre}</strong><br><small style="color:#555">${c.email}</small></td>
+                        <td>${c.online ? '🟢 LIVE' : '⚪ OFF'}</td>
+                        <td>${c.pais_emoji || '🚩'} ${c.pais_nombre || 'Desconocido'}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn-master btn-ficha" onclick="verFicha('${uid}')">
+                                    <i class="fas fa-id-card"></i> FICHA
+                                </button>
+                                <button class="btn-master btn-ordenes" onclick="verOrdenes('${uid}')">
+                                    <i class="fas fa-tasks"></i> ÓRDENES
+                                </button>
+                                <button class="btn-master" onclick="toggleAdmin('${uid}', '${c.rol}')">
+                                    <i class="fas fa-shield-alt"></i> ${c.rol === 'admin' ? 'QUITAR ADMIN' : 'HACER ADMIN'}
+                                </button>
+                                <button class="btn-master btn-delete" onclick="borrar('${uid}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
         });
 
-        function sincronizarData() {
-            onSnapshot(collection(db, "colaboradores"), (snap) => {
-                const lista = document.getElementById('lista-colab');
-                lista.innerHTML = "";
-                let online = 0, totalH = 0;
-
-                snap.forEach(d => {
-                    const c = d.data();
-                    const uid = d.id;
-                    const esOnline = c.online || false;
-                    if(esOnline) online++;
-                    totalH += (c.horas_totales || 0);
-
-                    lista.innerHTML += `
-                        <tr class="user-row">
-                            <td>
-                                <strong>${c.nombre || 'N/A'}</strong><br>
-                                <span style="color:#555; font-size:0.65rem;">${c.email}</span>
-                            </td>
-                            <td>
-                                <span class="status-dot ${esOnline ? 'online' : 'offline'}"></span>
-                                <span style="font-size:0.65rem;">${esOnline ? 'LIVE' : 'OFF'}</span>
-                            </td>
-                            <td style="text-align:center;">
-                                <span style="font-size: 1.2rem;">${c.pais_emoji || '🚩'}</span>
-                            </td>
-                            <td style="font-weight:800;">${(c.horas_totales || 0).toFixed(2)}h</td>
-                            <td>
-                                <div class="btn-group">
-                                    <button class="btn" onclick="verFicha('${uid}')" title="Ver Datos Personales"><i class="fas fa-id-card"></i></button>
-                                    <button class="btn" onclick="verOrdenes('${uid}')" title="Órdenes de Trabajo"><i class="fas fa-tasks"></i></button>
-                                    <button class="btn ${c.rol === 'admin' ? 'btn-admin' : ''}" onclick="toggleAdmin('${uid}', '${c.rol}')" title="Permisos Admin">
-                                        <i class="fas fa-shield-alt"></i>
-                                    </button>
-                                    <button class="btn" onclick="borrarUser('${uid}')" style="color:#600;"><i class="fas fa-trash-alt"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                });
-                document.getElementById('kpi-online').innerText = online;
-                document.getElementById('kpi-total').innerText = snap.size;
-                document.getElementById('kpi-horas').innerText = totalH.toFixed(1);
-            });
-        }
-
-        // --- FUNCIONES DE MODAL ---
+        // Lógica Ficha Personal
         window.verFicha = (uid) => {
             onSnapshot(doc(db, "colaboradores", uid), (d) => {
                 const c = d.data();
-                const body = document.getElementById('ficha-body');
-                body.innerHTML = `
-                    <div class="data-item"><label>Nombre Completo</label><p>${c.nombre}</p></div>
-                    <div class="data-item"><label>Correo Electrónico</label><p>${c.email}</p></div>
-                    <div class="data-item"><label>Identificación</label><p>${c.dni || c.ci || c.pasaporte || c.certificado_migratorio || 'No registrado'}</p></div>
-                    <div class="data-item"><label>Ubicación & IP</label><p>${c.pais_nombre || 'Desconocido'} (${c.ip || 'Sin IP'})</p></div>
-                    <div class="data-item"><label>Método de Pago</label><p>${c.metodoPago || 'No definido'}</p></div>
-                    <div class="data-item"><label>CBU / CVU / Datos</label><p style="font-family:monospace; background:#000; padding:10px;">${c.datoPago || 'Sin datos'}</p></div>
+                document.getElementById('ficha-body').innerHTML = `
+                    <div class="data-row"><label>ID (${c.tipoId || 'DOC'})</label><p>${c.dni || c.ci || c.pasaporte || c.certificado_migratorio || 'No cargado'}</p></div>
+                    <div class="data-row"><label>Email</label><p>${c.email}</p></div>
+                    <div class="data-row"><label>Ubicación</label><p>${c.pais_nombre} (IP: ${c.ip || '---'})</p></div>
+                    <div class="data-row"><label>Método de Pago</label><p>${c.metodoPago || '---'}</p></div>
+                    <div class="data-row"><label>CBU/CVU/Datos Cobro</label><p style="word-break:break-all; background:#000; padding:5px;">${c.datoPago || '---'}</p></div>
                 `;
                 document.getElementById('modal-ficha').style.display = 'block';
             });
         };
 
+        // Lógica Órdenes
         window.verOrdenes = async (uid) => {
-            // Aquí asumo que tienes una colección llamada "ordenes" con un campo "asignado_a" (el UID del usuario)
             const q = query(collection(db, "ordenes"), where("asignado_a", "==", uid));
             const snap = await getDocs(q);
+            let s = { asignadas: 0, iniciadas: 0, progreso: 0, terminadas: 0 };
+            snap.forEach(d => { const est = d.data().estado; if(s[est] !== undefined) s[est]++; });
             
-            let stats = { asignada: 0, iniciada: 0, progreso: 0, terminada: 0 };
-            snap.forEach(d => {
-                const status = d.data().estado;
-                if(stats[status] !== undefined) stats[status]++;
-            });
-
-            const body = document.getElementById('ordenes-body');
-            body.innerHTML = `
-                <div class="order-status"><span>Asignadas</span> <strong>${stats.asignada}</strong></div>
-                <div class="order-status"><span>Iniciadas</span> <strong>${stats.iniciada}</strong></div>
-                <div class="order-status" style="border-left: 3px solid #fff;"><span>En Progreso</span> <strong>${stats.progreso}</strong></div>
-                <div class="order-status" style="background:#111;"><span>Terminadas</span> <strong>${stats.terminada}</strong></div>
+            document.getElementById('ordenes-body').innerHTML = `
+                <div class="data-row"><p>Asignadas: ${s.asignadas}</p></div>
+                <div class="data-row"><p>Iniciadas: ${s.iniciadas}</p></div>
+                <div class="data-row"><p>En Progreso: ${s.progreso}</p></div>
+                <div class="data-row" style="color: #0f0;"><p>Terminadas: ${s.terminadas}</p></div>
             `;
             document.getElementById('modal-ordenes').style.display = 'block';
         };
 
-        window.cerrarModales = () => {
-            document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+        window.cerrarModales = () => { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); };
+        
+        window.filtrar = () => {
+            const val = document.getElementById('master-search').value.toLowerCase();
+            const filas = document.querySelectorAll('.user-row');
+            filas.forEach(f => f.style.display = f.innerText.toLowerCase().includes(val) ? '' : 'none');
         };
 
-        window.filtrarColaboradores = () => {
-            const input = document.getElementById('master-search').value.toLowerCase();
-            const filas = document.getElementsByClassName('user-row');
-            Array.from(filas).forEach(f => f.style.display = f.innerText.toLowerCase().includes(input) ? "" : "none");
+        window.toggleAdmin = async (uid, rol) => {
+            const nuevo = rol === 'admin' ? 'colaborador' : 'admin';
+            if(confirm("¿Cambiar rango administrativo?")) await updateDoc(doc(db, "colaboradores", uid), { rol: nuevo });
         };
 
-        window.toggleAdmin = async (uid, rolActual) => {
-            const nuevoRol = rolActual === 'admin' ? 'colaborador' : 'admin';
-            if(confirm(`¿Cambiar permisos de administración?`)) await updateDoc(doc(db, "colaboradores", uid), { rol: nuevoRol });
-        };
-
-        window.borrarUser = async (uid) => {
-            if(confirm("¿ELIMINAR DEFINITIVAMENTE A ESTE USUARIO?")) await deleteDoc(doc(db, "colaboradores", uid));
+        window.borrar = async (uid) => {
+            if(confirm("¿Eliminar usuario del sistema?")) await deleteDoc(doc(db, "colaboradores", uid));
         };
     </script>
 </body>
