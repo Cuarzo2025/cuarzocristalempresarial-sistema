@@ -11,7 +11,7 @@
             --primary: #FFFFFF; 
             --bg: #000000; 
             --card: #0d0d0d; 
-            --accent: #FFFFFF; /* Cambiado de Cian a Blanco */
+            --accent: #FFFFFF; 
             --border: #333; 
             --gray-soft: #b3b3b3;
         }
@@ -42,7 +42,6 @@
         }
         .sidebar nav a:hover { background-color: #1a1a1a; color: #FFFFFF; }
         .sidebar nav a i { margin-right: 10px; width: 20px; text-align: center; }
-        
         .sidebar nav a.active { background-color: #222; color: #FFF; border-left: 3px solid #FFF; }
 
         /* --- CONTENIDO --- */
@@ -138,19 +137,14 @@
         </div>
         <nav>
             <a href="workspace.html" class="active"><i class="fas fa-th-large"></i> Inicio</a>
-            
             <a href="admin-control.html" id="btn-admin-link" style="display: none; border: 1px solid #444; margin-bottom: 20px;">
                 <i class="fas fa-user-shield"></i> Panel Maestro
             </a>
-            
             <a href="tareas-activas.html"><i class="fas fa-list-ul"></i> Tareas</a>
             <a href="reportes.html"><i class="fas fa-file-invoice-dollar"></i> Reportes</a>
             <a href="nuevos-clientes.html"><i class="fas fa-users"></i> Clientes</a>
-            
             <a href="contrato-legal.html"><i class="fas fa-file-signature"></i> Legales</a>
-            
             <a href="datos-personales.html"><i class="fas fa-user-cog"></i> Mi Perfil</a>
-            
             <a href="#" onclick="logout()" style="margin-top: 40px; color: #888; font-size: 0.8em;">
                 <i class="fas fa-power-off"></i> Cerrar Sesión
             </a>
@@ -212,7 +206,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
@@ -234,29 +228,46 @@
             "hectormauricioraposso@gmail.com"
         ];
 
+        // FUNCIÓN PARA ACTUALIZAR ESTADO ONLINE (PARA EL PANEL MAESTRO)
+        const setOnlineStatus = async (uid, status) => {
+            const userRef = doc(db, "colaboradores", uid);
+            try {
+                await updateDoc(userRef, { 
+                    online: status,
+                    ultimaConexion: status ? "ONLINE" : new Date().toLocaleTimeString('es-AR', {hour:'2-digit', minute:'2-digit'})
+                });
+            } catch (e) { console.error("Error status:", e); }
+        };
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 userId = user.uid;
                 const userRef = doc(db, "colaboradores", userId);
-                const docSnap = await getDoc(userRef);
                 
-                if (docSnap.exists()) {
-                    const d = docSnap.data();
-                    const userEmail = user.email.toLowerCase();
-                    
-                    // Mostrar Panel Maestro si es Admin
-                    if (SUPER_ADMINS.includes(userEmail) || d.rol === "admin" || d.rol === "staff") {
-                        const btnAdmin = document.getElementById('btn-admin-link');
-                        if(btnAdmin) btnAdmin.style.display = 'block';
-                    }
+                // Marcar como Online al entrar
+                setOnlineStatus(userId, true);
 
-                    document.getElementById('welcome-msg').innerText = `BIENVENIDO, ${d.nombre ? d.nombre.toUpperCase() : 'USUARIO'}`;
-                    document.getElementById('badge-name').innerText = d.nombre ? d.nombre.toUpperCase() : 'USUARIO';
-                    document.getElementById('stat-proyectos').innerText = d.proyectos_activos || 0;
-                    document.getElementById('stat-horas').innerText = parseFloat(d.horas_totales || 0).toFixed(2);
-                    document.getElementById('stat-estado').innerText = (d.estado || "ACTIVO").toUpperCase();
-                    document.getElementById('stat-estado').style.color = (d.estado === "ACTIVO") ? "#FFFFFF" : "#FF4444";
-                }
+                // Escuchar datos en tiempo real (por si el Admin cambia algo)
+                onSnapshot(userRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const d = docSnap.data();
+                        const userEmail = user.email.toLowerCase();
+                        
+                        // Mostrar Panel Maestro si es Admin
+                        if (SUPER_ADMINS.includes(userEmail) || d.rol === "admin") {
+                            const btnAdmin = document.getElementById('btn-admin-link');
+                            if(btnAdmin) btnAdmin.style.display = 'block';
+                        }
+
+                        document.getElementById('welcome-msg').innerText = `BIENVENIDO, ${d.nombre ? d.nombre.toUpperCase() : 'USUARIO'}`;
+                        document.getElementById('badge-name').innerText = d.nombre ? d.nombre.toUpperCase() : 'USUARIO';
+                        document.getElementById('stat-proyectos').innerText = d.proyectos_activos || 0;
+                        document.getElementById('stat-horas').innerText = parseFloat(d.horas_totales || 0).toFixed(2);
+                        document.getElementById('stat-estado').innerText = (d.estado || "ACTIVO").toUpperCase();
+                        document.getElementById('stat-estado').style.color = (d.estado === "ACTIVO") ? "#FFFFFF" : "#FF4444";
+                    }
+                });
+
             } else {
                 window.location.href = "login.html";
             }
@@ -268,6 +279,7 @@
             document.getElementById('btn-start').style.opacity = "0.3";
             document.getElementById('btn-stop').disabled = false;
             document.getElementById('btn-stop').style.opacity = "1";
+            
             timerInterval = setInterval(() => {
                 const diff = Date.now() - startTime;
                 let s = Math.floor(diff / 1000);
@@ -283,17 +295,33 @@
             clearInterval(timerInterval);
             const durationHours = (Date.now() - startTime) / (1000 * 60 * 60);
             if(confirm("¿Deseas registrar este tiempo en tu historial?")) {
-                await updateDoc(doc(db, "colaboradores", userId), { horas_totales: increment(durationHours) });
-                location.reload();
-            } else { location.reload(); }
+                await updateDoc(doc(db, "colaboradores", userId), { 
+                    horas_totales: increment(durationHours) 
+                });
+                document.getElementById('timer-display').innerText = "00:00:00";
+                document.getElementById('btn-start').disabled = false;
+                document.getElementById('btn-start').style.opacity = "1";
+                document.getElementById('btn-stop').disabled = true;
+                document.getElementById('btn-stop').style.opacity = "0.3";
+            } else { 
+                location.reload(); 
+            }
         };
+
+        // Marcar Offline al cerrar pestaña
+        window.addEventListener('beforeunload', () => {
+            if (userId) setOnlineStatus(userId, false);
+        });
 
         window.toggleMobileMenu = () => {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('active');
         };
 
-        window.logout = () => signOut(auth).then(() => window.location.href = "login.html");
+        window.logout = async () => {
+            if (userId) await setOnlineStatus(userId, false);
+            signOut(auth).then(() => window.location.href = "login.html");
+        };
     </script>
 </body>
 </html>
