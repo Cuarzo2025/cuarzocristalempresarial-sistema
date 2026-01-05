@@ -7,9 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root { --bg: #000; --card: #0a0a0a; --border: #222; --text-dim: #777; --blue: #007bff; }
+        :root { --bg: #000; --card: #0a0a0a; --border: #222; --text-dim: #777; --blue: #0084ff; }
         body { background-color: var(--bg); color: #FFF; font-family: 'Montserrat', sans-serif; margin: 0; padding: 20px; }
-        .container { max-width: 1500px; margin: auto; }
+        .container { max-width: 1400px; margin: auto; }
         
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }
         
@@ -19,66 +19,64 @@
         .search-box i { position: absolute; left: 18px; top: 18px; color: var(--text-dim); }
 
         /* TABLA */
-        .card { background-color: var(--card); padding: 20px; border-radius: 8px; border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; }
+        .card { background-color: var(--card); padding: 20px; border-radius: 8px; border: 1px solid var(--border); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
         th { text-align: left; padding: 15px; color: var(--text-dim); font-size: 0.65rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-        td { padding: 15px; border-bottom: 1px solid #151515; font-size: 0.8rem; }
+        td { padding: 15px; border-bottom: 1px solid #151515; font-size: 0.8rem; vertical-align: middle; }
 
-        /* BOTONES PEDIDOS */
-        .btn-group { display: flex; gap: 10px; }
+        /* BOTONES ACCIONES */
+        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
         .btn-master { 
-            padding: 10px 15px; border-radius: 4px; border: 1px solid #333; 
+            padding: 8px 12px; border-radius: 4px; border: 1px solid #333; 
             background: transparent; color: #fff; cursor: pointer; 
-            font-size: 0.7rem; font-weight: 600; transition: 0.3s;
-            display: flex; align-items: center; gap: 8px;
+            font-size: 0.65rem; font-weight: 600; transition: 0.3s;
+            display: flex; align-items: center; gap: 6px; text-transform: uppercase;
         }
-        /* Botón Ficha Personal */
+        
         .btn-ficha { border-color: var(--blue); color: var(--blue); }
         .btn-ficha:hover { background: var(--blue); color: #fff; }
         
-        /* Botón Órdenes */
         .btn-ordenes { border-color: #fff; color: #fff; }
         .btn-ordenes:hover { background: #fff; color: #000; }
 
-        /* Botón Peligro/Borrar */
-        .btn-delete { border-color: #400; color: #600; }
-        .btn-delete:hover { background: #600; color: #fff; }
+        .btn-admin-active { background: #fff; color: #000; border: none; }
+        .btn-delete { border-color: #500; color: #f00; }
 
         /* MODALES */
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
-        .modal-content { background: #0f0f0f; margin: 10% auto; padding: 30px; border: 1px solid var(--border); width: 450px; border-radius: 8px; }
-        .data-row { margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 5px; }
-        .data-row label { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; }
-        .data-row p { margin: 5px 0; font-size: 0.9rem; }
+        .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); }
+        .modal-content { background: #0f0f0f; margin: 8% auto; padding: 30px; border: 1px solid var(--border); width: 90%; max-width: 450px; border-radius: 12px; }
+        .data-row { margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 8px; }
+        .data-row label { font-size: 0.55rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .data-row p { margin: 5px 0; font-size: 0.9rem; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <div id="modal-ficha" class="modal">
         <div class="modal-content">
-            <h3 style="border-left: 3px solid var(--blue); padding-left: 10px;">FICHA DE REGISTRO</h3>
+            <h3 style="border-left: 4px solid var(--blue); padding-left: 15px; font-size: 1rem;">EXPEDIENTE DE USUARIO</h3>
             <div id="ficha-body"></div>
-            <button class="btn-master" onclick="cerrarModales()" style="margin-top:20px; width:100%; justify-content:center;">CERRAR</button>
+            <button class="btn-master" onclick="cerrarModales()" style="margin-top:20px; width:100%; justify-content:center; padding: 12px;">CERRAR VENTANA</button>
         </div>
     </div>
 
     <div id="modal-ordenes" class="modal">
         <div class="modal-content">
-            <h3 style="border-left: 3px solid #fff; padding-left: 10px;">ÓRDENES DE TRABAJO</h3>
+            <h3 style="border-left: 4px solid #fff; padding-left: 15px; font-size: 1rem;">MONITOR DE TRABAJO</h3>
             <div id="ordenes-body"></div>
-            <button class="btn-master" onclick="cerrarModales()" style="margin-top:20px; width:100%; justify-content:center;">CERRAR</button>
+            <button class="btn-master" onclick="cerrarModales()" style="margin-top:20px; width:100%; justify-content:center; padding: 12px;">CERRAR VENTANA</button>
         </div>
     </div>
 
     <div class="container">
         <div class="header">
-            <h1>CUARZO MASTER CONSOLE</h1>
-            <a href="workspace.html" class="btn-master">VOLVER AL PANEL</a>
+            <h1 style="font-size: 1.1rem; letter-spacing: 2px;">CUARZO <span style="font-weight:400; opacity:0.5;">MASTER HUB</span></h1>
+            <button class="btn-master" onclick="location.reload()">REFRESCAR</button>
         </div>
 
         <div class="search-box">
             <i class="fas fa-search"></i>
-            <input type="text" id="master-search" placeholder="Buscar por nombre, documento o email..." onkeyup="filtrar()">
+            <input type="text" id="master-search" placeholder="Buscar por cualquier dato registrado..." onkeyup="filtrar()">
         </div>
 
         <div class="card">
@@ -91,7 +89,9 @@
                         <th>Acciones Maestro</th>
                     </tr>
                 </thead>
-                <tbody id="lista-colab"></tbody>
+                <tbody id="lista-colab">
+                    <tr><td colspan="4" style="text-align:center; padding:40px; color:#444;">Cargando base de datos...</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
@@ -112,18 +112,29 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Cargar lista de colaboradores
+        // SINCRONIZACIÓN DE TABLA
         onSnapshot(collection(db, "colaboradores"), (snap) => {
             const lista = document.getElementById('lista-colab');
             lista.innerHTML = "";
+            
+            if (snap.empty) {
+                lista.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No hay usuarios registrados.</td></tr>";
+                return;
+            }
+
             snap.forEach(d => {
                 const c = d.data();
                 const uid = d.id;
+                const esAdmin = c.rol === 'admin';
+
                 lista.innerHTML += `
                     <tr class="user-row">
-                        <td><strong>${c.nombre}</strong><br><small style="color:#555">${c.email}</small></td>
-                        <td>${c.online ? '🟢 LIVE' : '⚪ OFF'}</td>
-                        <td>${c.pais_emoji || '🚩'} ${c.pais_nombre || 'Desconocido'}</td>
+                        <td>
+                            <strong>${c.nombre || 'Sin Nombre'}</strong><br>
+                            <small style="color:#555">${c.email}</small>
+                        </td>
+                        <td>${c.online ? '<span style="color:#fff">● LIVE</span>' : '<span style="color:#333">○ OFF</span>'}</td>
+                        <td>${c.pais_emoji || '🚩'} ${c.pais_nombre || '---'}</td>
                         <td>
                             <div class="btn-group">
                                 <button class="btn-master btn-ficha" onclick="verFicha('${uid}')">
@@ -132,8 +143,8 @@
                                 <button class="btn-master btn-ordenes" onclick="verOrdenes('${uid}')">
                                     <i class="fas fa-tasks"></i> ÓRDENES
                                 </button>
-                                <button class="btn-master" onclick="toggleAdmin('${uid}', '${c.rol}')">
-                                    <i class="fas fa-shield-alt"></i> ${c.rol === 'admin' ? 'QUITAR ADMIN' : 'HACER ADMIN'}
+                                <button class="btn-master ${esAdmin ? 'btn-admin-active' : ''}" onclick="toggleAdmin('${uid}', '${c.rol}')">
+                                    <i class="fas fa-shield-alt"></i> ${esAdmin ? 'ADMIN' : 'DAR RANGO'}
                                 </button>
                                 <button class="btn-master btn-delete" onclick="borrar('${uid}')">
                                     <i class="fas fa-trash"></i>
@@ -145,39 +156,48 @@
             });
         });
 
-        // Lógica Ficha Personal
+        // VER FICHA PERSONAL
         window.verFicha = (uid) => {
             onSnapshot(doc(db, "colaboradores", uid), (d) => {
                 const c = d.data();
+                const idRegistrado = c.dni || c.ci || c.pasaporte || c.certificado_migratorio || "No especificado";
+                
                 document.getElementById('ficha-body').innerHTML = `
-                    <div class="data-row"><label>ID (${c.tipoId || 'DOC'})</label><p>${c.dni || c.ci || c.pasaporte || c.certificado_migratorio || 'No cargado'}</p></div>
-                    <div class="data-row"><label>Email</label><p>${c.email}</p></div>
-                    <div class="data-row"><label>Ubicación</label><p>${c.pais_nombre} (IP: ${c.ip || '---'})</p></div>
+                    <div class="data-row"><label>ID Documento</label><p>${idRegistrado}</p></div>
+                    <div class="data-row"><label>Email de Acceso</label><p>${c.email}</p></div>
+                    <div class="data-row"><label>IP de Conexión</label><p>${c.ip || '0.0.0.0'}</p></div>
                     <div class="data-row"><label>Método de Pago</label><p>${c.metodoPago || '---'}</p></div>
-                    <div class="data-row"><label>CBU/CVU/Datos Cobro</label><p style="word-break:break-all; background:#000; padding:5px;">${c.datoPago || '---'}</p></div>
+                    <div class="data-row"><label>CBU / CVU / Alias</label><p style="background:#000; padding:8px; font-family:monospace; font-size:0.8rem;">${c.datoPago || 'Sin datos'}</p></div>
                 `;
                 document.getElementById('modal-ficha').style.display = 'block';
             });
         };
 
-        // Lógica Órdenes
+        // VER ÓRDENES
         window.verOrdenes = async (uid) => {
             const q = query(collection(db, "ordenes"), where("asignado_a", "==", uid));
             const snap = await getDocs(q);
             let s = { asignadas: 0, iniciadas: 0, progreso: 0, terminadas: 0 };
-            snap.forEach(d => { const est = d.data().estado; if(s[est] !== undefined) s[est]++; });
+            
+            snap.forEach(d => {
+                const est = d.data().estado;
+                if(est === 'asignada') s.asignadas++;
+                if(est === 'iniciada') s.iniciadas++;
+                if(est === 'progreso') s.progreso++;
+                if(est === 'terminada') s.terminadas++;
+            });
             
             document.getElementById('ordenes-body').innerHTML = `
-                <div class="data-row"><p>Asignadas: ${s.asignadas}</p></div>
+                <div class="data-row"><p>Pendientes: ${s.asignadas}</p></div>
                 <div class="data-row"><p>Iniciadas: ${s.iniciadas}</p></div>
-                <div class="data-row"><p>En Progreso: ${s.progreso}</p></div>
-                <div class="data-row" style="color: #0f0;"><p>Terminadas: ${s.terminadas}</p></div>
+                <div class="data-row" style="color:var(--blue);"><p>En Trabajo: ${s.progreso}</p></div>
+                <div class="data-row" style="color:#0f0;"><p>Finalizadas: ${s.terminadas}</p></div>
             `;
             document.getElementById('modal-ordenes').style.display = 'block';
         };
 
         window.cerrarModales = () => { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); };
-        
+
         window.filtrar = () => {
             const val = document.getElementById('master-search').value.toLowerCase();
             const filas = document.querySelectorAll('.user-row');
@@ -185,12 +205,16 @@
         };
 
         window.toggleAdmin = async (uid, rol) => {
-            const nuevo = rol === 'admin' ? 'colaborador' : 'admin';
-            if(confirm("¿Cambiar rango administrativo?")) await updateDoc(doc(db, "colaboradores", uid), { rol: nuevo });
+            const nuevo = (rol === 'admin') ? 'colaborador' : 'admin';
+            if(confirm("¿Cambiar permisos administrativos?")) {
+                await updateDoc(doc(db, "colaboradores", uid), { rol: nuevo });
+            }
         };
 
         window.borrar = async (uid) => {
-            if(confirm("¿Eliminar usuario del sistema?")) await deleteDoc(doc(db, "colaboradores", uid));
+            if(confirm("¿Eliminar este usuario definitivamente?")) {
+                await deleteDoc(doc(db, "colaboradores", uid));
+            }
         };
     </script>
 </body>
