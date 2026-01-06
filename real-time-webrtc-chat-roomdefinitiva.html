@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Cuarzo Cristal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --primary: #FFFFFF; 
+            --bg: #0A0A0A; 
+            --card: #141414; 
+            --text-dim: #A0A0A0; 
+            --accent: #4CAF50; 
+            --border: #333; 
+            --live: #ff4444;
+        }
+
+        body { 
+            background: var(--bg); 
+            color: var(--primary); 
+            font-family: 'Montserrat', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+
+        .container { 
+            background: var(--card); 
+            padding: 40px; 
+            border-radius: 16px; 
+            width: 100%; 
+            max-width: 350px; 
+            border: 1px solid var(--border); 
+            text-align: center; 
+        }
+
+        h1 { 
+            font-weight: 800; 
+            margin: 0; 
+            letter-spacing: -1px; 
+            text-transform: uppercase;
+        }
+
+        .subtitle { 
+            color: var(--text-dim); 
+            font-size: 0.9rem; 
+            margin-bottom: 30px; 
+            margin-top: 10px;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            margin-bottom: 15px; 
+            background: #1e1e1e; 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            color: white; 
+            box-sizing: border-box; 
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn-main { 
+            width: 100%; 
+            padding: 16px; 
+            background: var(--primary); 
+            color: black; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-main:hover { 
+            opacity: 0.8; 
+            transform: translateY(-2px); 
+        }
+
+        /* --- ESTILO DE REUNIÓN EN VIVO --- */
+        .meeting-box {
+            margin-top: 25px;
+            padding: 20px;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 12px;
+            text-align: left;
+            position: relative;
+        }
+
+        .live-indicator {
+            font-size: 0.6rem;
+            color: var(--live);
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+
+        .live-indicator::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--live);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .btn-meeting {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .btn-meeting:hover {
+            background: white;
+            color: black;
+        }
+
+        /* --- LOADER --- */
+        .loader {
+            display: none;
+            margin: 10px auto;
+            border: 3px solid #333;
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        a { 
+            color: var(--text-dim); 
+            text-decoration: none; 
+            font-size: 0.85rem; 
+            display: block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>CUARZO</h1>
+        <p class="subtitle">Portal de Colaboradores</p>
+        
+        <form id="login-form">
+            <input type="email" id="login-email" placeholder="Correo electrónico" required>
+            <input type="password" id="login-pass" placeholder="Contraseña" required>
+            <div id="loader" class="loader"></div>
+            <button type="submit" id="btn-text" class="btn-main">Entrar</button>
+        </form>
+
+        <div class="meeting-box">
+            <div class="live-indicator">EN VIVO - 20:00</div>
+            <p style="margin: 0; font-size: 0.8rem; font-weight: 600;">Capacitación de Personal</p>
+            <button type="button" class="btn-meeting" onclick="window.open('https://cuarzo2026.daily.co/reunion-capacitacion', '_blank')">
+                Unirse a la Sesión
+            </button>
+        </div>
+
+        <a href="index.html">¿No tienes cuenta? Regístrate aquí</a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
+            authDomain: "cuarzocristalempresarialsist.firebaseapp.com",
+            projectId: "cuarzocristalempresarialsist",
+            storageBucket: "cuarzocristalempresarialsist.firebasestorage.app",
+            messagingSenderId: "1031610061736",
+            appId: "1:1031610061736:web:d05d431b433eb5b55ec39d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            const btn = document.getElementById('btn-text');
+            const loader = document.getElementById('loader');
+            
+            btn.style.display = 'none';
+            loader.style.display = 'block';
+
+            try {
+                const userCred = await signInWithEmailAndPassword(auth, email, pass);
+                window.location.href = "dashboard.html";
+            } catch (error) { 
+                console.error(error.code);
+                let mensaje = "Error al ingresar. Verifica tus datos.";
+                if(error.code === 'auth/invalid-credential') mensaje = "Correo o contraseña incorrectos.";
+                
+                alert(mensaje);
+                btn.style.display = 'block';
+                loader.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
