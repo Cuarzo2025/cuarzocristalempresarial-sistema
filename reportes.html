@@ -3,139 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reportes | Cuarzo Empresarial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <title>Reportes | Cuarzo Cristal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root { 
             --bg: #000000; 
-            --sidebar: #0a0a0a; 
+            --sidebar: #080808; 
             --text-main: #FFFFFF; 
-            --text-dim: #888888; 
-            --border: #222222; 
-            --hover: #151515;
+            --text-dim: #666666; 
+            --border: #1a1a1a; 
+            --hover: #0c0c0c;
         }
         
         body { 
-            background-color: var(--bg); 
-            color: var(--text-main); 
-            font-family: 'Montserrat', sans-serif; 
-            margin: 0; 
-            display: flex; 
-            min-height: 100vh; 
+            background-color: var(--bg); color: var(--text-main); 
+            font-family: 'Montserrat', sans-serif; margin: 0; display: flex; min-height: 100vh; 
         }
 
-        /* Sidebar Minimalista */
+        /* Sidebar */
         .sidebar { 
-            width: 240px; 
-            background-color: var(--sidebar); 
-            padding: 30px 20px; 
-            border-right: 1px solid var(--border);
-            display: flex; 
-            flex-direction: column; 
+            width: 250px; background-color: var(--sidebar); padding: 40px 20px; 
+            border-right: 1px solid var(--border); display: flex; flex-direction: column; 
+            position: fixed; height: 100vh; 
         }
-        .sidebar-header { text-align: left; margin-bottom: 50px; padding-left: 10px; }
-        .sidebar-header h2 { font-weight: 800; letter-spacing: 4px; font-size: 1rem; margin: 0; }
+        .sidebar-header h2 { font-weight: 800; letter-spacing: 5px; font-size: 1.1rem; margin: 0; text-align: center; }
         
+        .sidebar nav { margin-top: 50px; }
         .sidebar nav a { 
-            display: block; 
-            color: var(--text-dim); 
-            text-decoration: none; 
-            padding: 12px 15px; 
-            margin-bottom: 5px; 
-            border-radius: 2px; 
-            transition: 0.3s; 
-            font-size: 0.75rem;
-            font-weight: 400;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            display: flex; align-items: center; color: var(--text-dim); text-decoration: none; 
+            padding: 15px; border-radius: 8px; transition: 0.3s; font-size: 0.75rem; 
+            font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px;
         }
-        .sidebar nav a:hover, .sidebar nav a.active { 
-            background-color: var(--hover); 
-            color: var(--text-main); 
-        }
-        .sidebar nav a i { margin-right: 12px; width: 16px; text-align: center; }
+        .sidebar nav a:hover, .sidebar nav a.active { background-color: var(--hover); color: #fff; }
+        .sidebar nav a i { margin-right: 15px; width: 20px; text-align: center; }
 
         /* Contenido Principal */
-        .main-content { flex-grow: 1; padding: 60px; overflow-x: hidden; }
-        h1 { 
-            font-weight: 800; 
-            font-size: 1.5rem;
-            border-bottom: 1px solid var(--border); 
-            padding-bottom: 20px; 
-            margin-bottom: 40px; 
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+        .main-content { flex-grow: 1; margin-left: 290px; padding: 60px 40px; }
+        .header-section { border-bottom: 1px solid var(--border); padding-bottom: 30px; margin-bottom: 40px; }
+        h1 { font-weight: 800; font-size: 2rem; letter-spacing: -1px; margin: 0; }
+        .subtitle { color: var(--text-dim); font-size: 0.8rem; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* Tabla Ejecutiva */
-        .table-container { 
-            background: transparent; 
-            border: 1px solid var(--border); 
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        /* Tabla de Órdenes */
+        .table-wrapper { background: #050505; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
         th { 
-            text-align: left; 
-            padding: 20px; 
-            background: #050505;
-            border-bottom: 1px solid var(--border); 
-            color: var(--text-main); 
-            font-size: 0.65rem; 
-            text-transform: uppercase; 
-            letter-spacing: 2px;
+            padding: 20px; background: #0a0a0a; color: var(--text-dim); 
+            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;
         }
-        td { 
-            padding: 18px 20px; 
-            border-bottom: 1px solid var(--border); 
-            font-size: 0.8rem; 
-            color: var(--text-dim); 
-            font-weight: 300;
+        td { padding: 22px 20px; border-bottom: 1px solid var(--border); font-size: 0.85rem; vertical-align: middle; }
+        tr:hover td { background: var(--hover); }
+
+        .ot-badge { font-family: monospace; color: #fff; font-weight: 800; font-size: 0.75rem; background: #1a1a1a; padding: 4px 8px; border-radius: 4px; }
+        .client-name { font-weight: 600; font-size: 0.9rem; display: block; }
+        .price-tag { color: #fff; font-weight: 700; }
+        .status-pill { 
+            font-size: 0.65rem; font-weight: 800; padding: 6px 12px; border-radius: 4px; 
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { color: var(--text-main); background: var(--hover); }
-
-        .client-name { color: var(--text-main); font-weight: 600; font-size: 0.85rem; }
-        .registrado-por { font-size: 0.65rem; color: #444; text-transform: uppercase; }
-
+        
         /* Loader */
-        .loading { text-align: center; padding: 100px; color: var(--text-dim); font-size: 0.7rem; letter-spacing: 3px; }
+        .loading { text-align: center; padding: 80px; color: var(--text-dim); font-size: 0.7rem; letter-spacing: 4px; }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
         <div class="sidebar-header">
-            <h2 id="brand">CUARZO</h2>
-            <p style="font-size: 0.4rem; color: #444; letter-spacing: 2px; margin: 5px 0 0;">EXECUTIVE SYSTEM</p>
+            <h2>CUARZO</h2>
+            <div style="height: 1px; background: var(--border); margin: 20px auto; width: 50%;"></div>
         </div>
         <nav>
-            <a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a>
-            <a href="coordinacion.html"><i class="fas fa-video"></i> Sala de Jitsi</a>
-            <a href="nuevos-clientes.html"><i class="fas fa-user-plus"></i> Nuevos Clientes</a> 
-            <a href="reportes.html" class="active"><i class="fas fa-file-alt"></i> Reportes</a>
-            <a href="login.html" style="margin-top: 50px; border-top: 1px solid #111; padding-top: 20px;"><i class="fas fa-power-off"></i> Salir</a>
+            <a href="dashboard.html"><i class="fas fa-chart-pie"></i> DASHBOARD</a>
+            <a href="nuevos-clientes.html"><i class="fas fa-user-plus"></i> NUEVO CLIENTE</a> 
+            <a href="reportes.html" class="active"><i class="fas fa-list-ul"></i> ÓRDENES DE TRABAJO</a>
+            <a href="login.html" style="margin-top: auto; color: #ff4444;"><i class="fas fa-power-off"></i> SALIR</a>
         </nav>
     </div>
 
     <div class="main-content">
-        <h1>Reportes de Gestión</h1>
-        
-        <div class="table-container">
-            <div id="loader" class="loading">SINCRONIZANDO CON BASE DE DATOS...</div>
-            <table id="tablaClientes" style="display: none;">
+        <div class="header-section">
+            <h1>Órdenes de Trabajo</h1>
+            <p class="subtitle">Gestión de proyectos y presupuestos activos</p>
+        </div>
+
+        <div class="table-wrapper">
+            <div id="loader" class="loading">SINCRONIZANDO CON FIRESTORE...</div>
+            <table id="tablaReportes" style="display: none;">
                 <thead>
                     <tr>
-                        <th>Fecha</th>
-                        <th>Cliente / Empresa</th>
-                        <th>Contacto</th>
-                        <th>Proyecto</th>
-                        <th>Responsable</th>
+                        <th>ID / Fecha</th>
+                        <th>Cliente & Contacto</th>
+                        <th>Proyecto & Detalles</th>
+                        <th>Presupuesto</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
-                <tbody id="listaCuerpo">
-                    </tbody>
+                <tbody id="listaCuerpo"></tbody>
             </table>
         </div>
     </div>
@@ -158,42 +122,63 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
+        // Control de Acceso
         onAuthStateChanged(auth, (user) => {
             if (!user) window.location.href = "login.html";
         });
 
-        const q = query(collection(db, "clientes"), orderBy("fecha", "desc"));
+        // Escucha en tiempo real de la colección leads_clientes
+        const q = query(collection(db, "leads_clientes"), orderBy("fechaRegistro", "desc"));
 
         onSnapshot(q, (snapshot) => {
             const cuerpo = document.getElementById('listaCuerpo');
-            const tabla = document.getElementById('tablaClientes');
+            const tabla = document.getElementById('tablaReportes');
             const loader = document.getElementById('loader');
             
             cuerpo.innerHTML = "";
             
             snapshot.forEach((doc) => {
                 const data = doc.data();
-                const fecha = data.fecha ? new Date(data.fecha.seconds * 1000).toLocaleDateString('es-AR') : '--/--/--';
+                const otId = doc.id.substring(0, 6).toUpperCase();
                 
+                // Formatear Presupuesto (Si no existe, poner "A definir")
+                const monto = data.presupuesto ? `$${data.presupuesto}` : "A DEFINIR";
+                // Formatear Fecha Entrega
+                const entrega = data.fechaEntrega ? data.fechaEntrega : "PENDIENTE";
+
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td style="font-size: 0.7rem;">${fecha}</td>
-                    <td><span class="client-name">${data.nombre.toUpperCase()}</span></td>
                     <td>
-                        <span style="display:block;">${data.email}</span>
-                        <span style="font-size:0.7rem; color:#444;">${data.telefono || ''}</span>
+                        <span class="ot-badge">#${otId}</span>
+                        <div style="font-size: 0.65rem; color: #444; margin-top: 8px;">${data.fechaRegistro}</div>
                     </td>
                     <td>
-                        <span style="color:#bbb;">${data.tipo.toUpperCase()}</span><br>
-                        <span style="font-size:0.65rem;">${data.subtipo || ''}</span>
+                        <span class="client-name">${data.nombre.toUpperCase()}</span>
+                        <div style="font-size: 0.75rem; color: var(--text-dim);">${data.email}</div>
                     </td>
-                    <td class="registrado-por">${data.registradoPor.split('@')[0]}</td>
+                    <td>
+                        <div style="font-weight: 600;">${data.tipo}</div>
+                        <div style="font-size: 0.7rem; color: #555;">${data.subtipo}</div>
+                        <div style="font-size: 0.65rem; color: #444; margin-top: 4px;">ENTREGA: ${entrega}</div>
+                    </td>
+                    <td>
+                        <span class="price-tag">${monto}</span>
+                    </td>
+                    <td>
+                        <span class="status-pill" style="background: ${data.estadoLead === 'URGENTE' ? '#fff' : '#111'}; color: ${data.estadoLead === 'URGENTE' ? '#000' : '#888'}; border: 1px solid #222;">
+                            ${data.estadoLead || 'RECIBIDA'}
+                        </span>
+                    </td>
                 `;
                 cuerpo.appendChild(tr);
             });
 
             loader.style.display = "none";
             tabla.style.display = "table";
+        }, (error) => {
+            if(error.code === 'permission-denied') {
+                document.getElementById('loader').innerHTML = "<i class='fas fa-lock'></i> ACCESO RESTRINGIDO: SOLO ADMINISTRADORES.";
+            }
         });
     </script>
 </body>
