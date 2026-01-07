@@ -3,110 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuevos Clientes - Cuarzo Empresarial</title>
+    <title>Nuevos Clientes | Cuarzo Cristal</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Mantenemos tus estilos originales que están perfectos */
-        body { background-color: #000000; color: #FFFFFF; font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; display: flex; min-height: 100vh; }
-        .sidebar { width: 250px; background-color: #0d0d0d; padding: 20px; box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; }
-        .sidebar-header { text-align: center; margin-bottom: 40px; color: #E0E0E0; }
-        .sidebar-header h2 { font-size: 1.5em; font-weight: 800; margin: 5px 0 0; color: #FFFFFF; }
-        .sidebar nav a { display: block; color: #CCCCCC; text-decoration: none; padding: 15px 10px; margin-bottom: 10px; border-radius: 5px; transition: 0.3s; font-weight: 600; }
-        .sidebar nav a:hover, .sidebar nav a.active { background-color: #1a1a1a; color: #00FFFF; }
-        .sidebar nav a i { margin-right: 10px; width: 20px; text-align: center; }
-        .main-content { flex-grow: 1; padding: 40px; background-color: #000000; }
-        .main-content h1 { color: #FFFFFF; font-weight: 800; border-bottom: 2px solid #333333; padding-bottom: 15px; margin-bottom: 30px; }
-        .form-container { max-width: 800px; background-color: #0d0d0d; padding: 30px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #CCCCCC; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #333333; border-radius: 5px; background-color: #1a1a1a; color: #FFFFFF; font-size: 1em; box-sizing: border-box; }
-        .form-group input:focus { border-color: #00FFFF; outline: none; }
+        :root { 
+            --bg: #000000;
+            --sidebar: #080808;
+            --card: #0c0c0c;
+            --accent: #FFFFFF;
+            --border: #1a1a1a;
+            --text-main: #FFFFFF;
+            --text-dim: #666666;
+            --input-focus: #151515;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* SIDEBAR PROFESIONAL */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar);
+            padding: 30px 20px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 15px;
+        }
+
+        .sidebar nav a {
+            display: flex;
+            align-items: center;
+            color: var(--text-dim);
+            text-decoration: none;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .sidebar nav a i { margin-right: 12px; width: 20px; text-align: center; }
+
+        .sidebar nav a:hover, .sidebar nav a.active {
+            background-color: #111;
+            color: var(--accent);
+        }
+
+        /* CONTENIDO PRINCIPAL AJUSTADO POR SIDEBAR FIXED */
+        .main-content {
+            margin-left: 290px;
+            padding: 60px 40px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        h1 { font-weight: 800; font-size: 1.8rem; margin: 0; }
+        .breadcrumb { color: var(--text-dim); font-size: 0.75rem; margin-top: 10px; letter-spacing: 1px; }
+
+        /* FORMULARIO */
+        .form-container {
+            background-color: var(--card);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-top: 40px;
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text-dim);
+            margin: 35px 0 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        .section-title::after { content: ""; flex: 1; height: 1px; background: var(--border); margin-left: 15px; }
+
+        .form-group { margin-bottom: 25px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #ccc;
+            letter-spacing: 1px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            background-color: #050505;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #444;
+            background-color: var(--input-focus);
+        }
+
         .hidden { display: none; }
-        .submit-btn { padding: 12px 25px; background-color: #00FFFF; color: #000000; border: none; border-radius: 5px; font-weight: 800; cursor: pointer; width: 100%; transition: 0.3s; }
-        .submit-btn:hover { background-color: #00B3B3; }
-        .submit-btn:disabled { background-color: #444; cursor: not-allowed; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background-color: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: #ddd;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background-color: #222;
+            color: #555;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
         <div class="sidebar-header">
-            <i class="fas fa-gem" style="font-size: 2.5em; color: #00FFFF;"></i>
-            <h2>Cuarzo Empresarial</h2>
+            <i class="fas fa-gem" style="font-size: 1.8em; color: #fff;"></i>
+            <h2>CUARZO</h2>
         </div>
         <nav>
-            <a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
-            <a href="coordinacion.html"><i class="fas fa-video"></i> Sala de Jitsi</a>
-            <a href="nuevos-clientes.html" class="active"><i class="fas fa-handshake"></i> Nuevos Clientes</a> 
-            <a href="login.html" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+            <a href="dashboard.html"><i class="fas fa-th-large"></i> DASHBOARD</a>
+            <a href="nuevos-clientes.html" class="active"><i class="fas fa-user-plus"></i> NUEVOS CLIENTES</a> 
+            <a href="reportes.html"><i class="fas fa-file-invoice"></i> REPORTES</a>
+            <a href="contrato-legal.html"><i class="fas fa-gavel"></i> CONTRATOS</a>
+            <a href="login.html" style="margin-top: auto;"><i class="fas fa-power-off"></i> CERRAR SESIÓN</a>
         </nav>
     </div>
 
     <div class="main-content">
-        <h1><i class="fas fa-handshake"></i> Ingreso de Nuevo Cliente</h1>
+        <h1>Registro de Clientes</h1>
+        <p class="breadcrumb">CLIENTES / INGRESO DE LEADS</p>
         
         <div class="form-container">
             <form id="nuevoClienteForm">
-                <h3 style="color: #FFFFFF;"><i class="fas fa-user-tag"></i> Datos del Contacto</h3>
-                <div class="form-group">
-                    <label>Nombre Completo / Empresa:</label>
-                    <input type="text" id="nombreCliente" required>
-                </div>
-                <div class="form-group">
-                    <label>Correo Electrónico:</label>
-                    <input type="email" id="emailCliente" required>
-                </div>
-                <div class="form-group">
-                    <label>Teléfono/WhatsApp:</label>
-                    <input type="text" id="telefonoCliente">
-                </div>
                 
-                <h3 style="color: #FFFFFF; margin-top: 40px;"><i class="fas fa-project-diagram"></i> Detalles del Proyecto</h3>
-                <div class="form-group">
-                    <label>Origen del Contacto:</label>
-                    <select id="origenContacto" required>
-                        <option value="">-- Seleccionar Origen --</option>
-                        <option value="web-cuarzo">Página Web Cuarzo</option>
-                        <option value="whatsapp">WhatsApp</option>
-                        <option value="referido">Referido</option>
-                        <option value="otro">Otro</option>
-                    </select>
-                </div>
+                <div class="section-title">Información de Contacto</div>
                 
                 <div class="form-group">
-                    <label>Tipo de Proyecto:</label>
+                    <label>NOMBRE COMPLETO O EMPRESA</label>
+                    <input type="text" id="nombreCliente" placeholder="Nombre de la entidad" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label>EMAIL PRINCIPAL</label>
+                        <input type="email" id="emailCliente" placeholder="ejemplo@correo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>TELÉFONO / WHATSAPP</label>
+                        <input type="text" id="telefonoCliente" placeholder="+54 ...">
+                    </div>
+                </div>
+                
+                <div class="section-title">Detalles del Proyecto</div>
+                
+                <div class="form-group">
+                    <label>CATEGORÍA DE PROYECTO</label>
                     <select id="tipoProyecto" required onchange="updateSubprojectOptions()">
-                        <option value="">-- Seleccionar Tipo --</option>
-                        <option value="web">Desarrollo Web</option>
-                        <option value="marketing">Marketing Digital</option>
-                        <option value="consultoria">Consultoría</option>
+                        <option value="">-- SELECCIONAR CATEGORÍA --</option>
+                        <option value="WEB">DESARROLLO WEB / E-COMMERCE</option>
+                        <option value="MARKETING">MARKETING DIGITAL & ADS</option>
+                        <option value="CONSULTORIA">CONSULTORÍA ESTRATÉGICA</option>
+                        <option value="DISENO">BRANDING & DISEÑO GRÁFICO</option>
                     </select>
                 </div>
 
                 <div class="form-group hidden" id="subProyectoGroup">
-                    <label>Sub-especialidad:</label>
+                    <label>TIPO ESPECÍFICO</label>
                     <select id="subProyecto"></select>
                 </div>
 
                 <div class="form-group">
-                    <label>Notas Adicionales:</label>
-                    <textarea id="descripcionProyecto" required placeholder="Detalles de la necesidad..."></textarea>
+                    <label>REQUERIMIENTOS Y NOTAS</label>
+                    <textarea id="descripcionProyecto" rows="4" placeholder="Describa la necesidad del cliente..." required></textarea>
                 </div>
 
-                <button type="submit" id="btnGuardar" class="submit-btn">
-                    <i class="fas fa-save"></i> GUARDAR CLIENTE EN SISTEMA
-                </button>
+                <button type="submit" id="btnGuardar" class="submit-btn">Sincronizar con Base de Datos</button>
             </form>
         </div>
     </div>
-    
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Tu misma configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
             authDomain: "cuarzocristalempresarialsist.firebaseapp.com",
@@ -118,64 +247,60 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app);
 
-        let userEmail = "";
+        const form = document.getElementById('nuevoClienteForm');
+        const btn = document.getElementById('btnGuardar');
 
-        // Proteger la página
-        onAuthStateChanged(auth, (user) => {
-            if (!user) window.location.href = "login.html";
-            else userEmail = user.email;
-        });
-
-        // Función para guardar en Firebase
-        document.getElementById('nuevoClienteForm').addEventListener('submit', async (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btnGuardar');
             btn.disabled = true;
-            btn.innerText = "Guardando...";
+            btn.innerText = "SINCRONIZANDO...";
+
+            const datos = {
+                nombre: document.getElementById('nombreCliente').value,
+                email: document.getElementById('emailCliente').value,
+                telefono: document.getElementById('telefonoCliente').value,
+                tipo: document.getElementById('tipoProyecto').value,
+                subtipo: document.getElementById('subProyecto').value || "GENERAL",
+                descripcion: document.getElementById('descripcionProyecto').value,
+                fechaRegistro: new Date().toLocaleString('es-AR'),
+                estadoLead: "PENDIENTE"
+            };
 
             try {
-                await addDoc(collection(db, "clientes"), {
-                    nombre: document.getElementById('nombreCliente').value,
-                    email: document.getElementById('emailCliente').value,
-                    telefono: document.getElementById('telefonoCliente').value,
-                    origen: document.getElementById('origenContacto').value,
-                    tipo: document.getElementById('tipoProyecto').value,
-                    subtipo: document.getElementById('subProyecto').value,
-                    descripcion: document.getElementById('descripcionProyecto').value,
-                    registradoPor: userEmail,
-                    fecha: serverTimestamp()
-                });
-
-                alert("¡Cliente registrado exitosamente en la base de datos!");
-                document.getElementById('nuevoClienteForm').reset();
+                // GUARDAR EN FIRESTORE (Colección: leads_clientes)
+                await addDoc(collection(db, "leads_clientes"), datos);
+                
+                alert("ÉXITO: Cliente registrado en la base de datos central.");
+                form.reset();
                 document.getElementById('subProyectoGroup').classList.add('hidden');
             } catch (error) {
-                console.error("Error al guardar:", error);
-                alert("Hubo un error al guardar.");
+                console.error(error);
+                alert("ERROR DE CONEXIÓN: " + error.message);
             } finally {
                 btn.disabled = false;
-                btn.innerText = "GUARDAR CLIENTE EN SISTEMA";
+                btn.innerText = "Sincronizar con Base de Datos";
             }
         });
+    </script>
 
-        // Tu lógica de sub-opciones (mantenida igual)
+    <script>
+        const subOptions = {
+            'WEB': ['LANDING PAGE', 'E-COMMERCE', 'SISTEMA WEB', 'WEB CORPORATIVA'],
+            'MARKETING': ['GESTIÓN RRSS', 'ADS (FB/IG/GOOGLE)', 'SEO', 'EMAIL MARKETING'],
+            'CONSULTORIA': ['OPTIMIZACIÓN PROCESOS', 'EXPANSIÓN COMERCIAL', 'AUDITORÍA'],
+            'DISENO': ['LOGOTIPO / MARCA', 'DISEÑO UX/UI', 'MATERIAL PROMOCIONAL']
+        };
+
         window.updateSubprojectOptions = function() {
             const tipo = document.getElementById('tipoProyecto').value;
             const subGroup = document.getElementById('subProyectoGroup');
             const subSelect = document.getElementById('subProyecto');
-            
-            const opciones = {
-                'web': ['Landing Page', 'E-commerce', 'Web Corporativa'],
-                'marketing': ['SEO/SEM', 'Social Media', 'Email Marketing'],
-                'consultoria': ['Expansión', 'Procesos', 'Financiera']
-            };
 
             subSelect.innerHTML = '';
-            if (opciones[tipo]) {
+            if (tipo && subOptions[tipo]) {
                 subGroup.classList.remove('hidden');
-                opciones[tipo].forEach(opt => {
+                subOptions[tipo].forEach(opt => {
                     let o = document.createElement('option');
                     o.value = opt; o.text = opt;
                     subSelect.appendChild(o);
