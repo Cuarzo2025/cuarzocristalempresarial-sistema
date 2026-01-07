@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Cuarzo Cristal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Cuarzo Cristal | Executive Live</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap" rel="stylesheet">
     <style>
         :root { 
+            --bg: #000000; 
+            --card: #0A0A0A; 
             --primary: #FFFFFF; 
-            --bg: #0A0A0A; 
-            --card: #141414; 
-            --text-dim: #A0A0A0; 
-            --accent: #4CAF50; 
-            --border: #333; 
-            --live: #ff4444;
+            --secondary: #1A1A1A;
+            --text-dim: #666666; 
+            --border: #222222;
         }
 
         body { 
-            background: var(--bg); 
+            background-color: var(--bg); 
             color: var(--primary); 
             font-family: 'Montserrat', sans-serif; 
             display: flex; 
@@ -27,173 +26,100 @@
             margin: 0; 
         }
 
-        .container { 
+        .glass-container { 
             background: var(--card); 
-            padding: 40px; 
-            border-radius: 16px; 
-            width: 100%; 
-            max-width: 350px; 
+            padding: 60px 40px; 
+            border-radius: 2px; 
+            width: 90%; 
+            max-width: 420px; 
             border: 1px solid var(--border); 
-            text-align: center; 
+            text-align: center;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.9);
         }
 
-        h1 { 
-            font-weight: 800; 
-            margin: 0; 
-            letter-spacing: -1px; 
-            text-transform: uppercase;
-        }
+        h1 { font-weight: 800; margin: 0 0 10px 0; letter-spacing: 6px; text-transform: uppercase; font-size: 1.2rem; }
+        .subtitle { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 40px; display: block; }
 
-        .subtitle { 
-            color: var(--text-dim); 
-            font-size: 0.9rem; 
-            margin-bottom: 30px; 
-            margin-top: 10px;
-        }
+        .user-info { margin-bottom: 40px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; }
+        .user-label { font-size: 0.55rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; display: block; }
+        .user-name { font-weight: 400; font-size: 0.95rem; letter-spacing: 1px; }
 
-        input { 
-            width: 100%; 
-            padding: 14px; 
-            margin-bottom: 15px; 
-            background: #1e1e1e; 
-            border: 1px solid var(--border); 
-            border-radius: 8px; 
-            color: white; 
-            box-sizing: border-box; 
-            font-family: inherit;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
+        /* BOTÓN PRINCIPAL CON ANIMACIÓN PULSANTE */
         .btn-main { 
             width: 100%; 
-            padding: 16px; 
+            padding: 20px; 
             background: var(--primary); 
-            color: black; 
+            color: var(--bg); 
             border: none; 
-            border-radius: 8px; 
             font-weight: 700; 
             cursor: pointer; 
             text-transform: uppercase; 
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-main:hover { 
-            opacity: 0.8; 
-            transform: translateY(-2px); 
-        }
-
-        /* --- ESTILO DE REUNIÓN EN VIVO --- */
-        .meeting-box {
-            margin-top: 25px;
-            padding: 20px;
-            background: #000;
-            border: 1px solid #333;
-            border-radius: 12px;
-            text-align: left;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            transition: all 0.4s ease;
+            margin-bottom: 15px;
             position: relative;
         }
 
-        .live-indicator {
-            font-size: 0.6rem;
-            color: var(--live);
-            font-weight: 800;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-bottom: 8px;
+        /* Animación de titileo suave (Glow Pulse) */
+        .btn-main:not(:disabled) {
+            animation: pulse-white 2.5s infinite;
         }
 
-        .live-indicator::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--live);
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
+        @keyframes pulse-white {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+            50% { box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.1); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
         }
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
+        .btn-main:hover:not(:disabled) { 
+            background: #e0e0e0;
+            letter-spacing: 3px;
+            transform: scale(1.01);
         }
 
-        .btn-meeting {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            background: transparent;
-            color: white;
-            border: 1px solid white;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            transition: 0.3s;
+        .btn-main:disabled { background: #111; color: #333; cursor: not-allowed; animation: none; }
+
+        .btn-record { 
+            width: 100%; 
+            padding: 15px; 
+            background: transparent; 
+            color: var(--primary); 
+            border: 1px solid var(--border); 
+            font-weight: 400; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            font-size: 0.65rem;
+            letter-spacing: 2px;
         }
 
-        .btn-meeting:hover {
-            background: white;
-            color: black;
-        }
-
-        /* --- LOADER --- */
-        .loader {
-            display: none;
-            margin: 10px auto;
-            border: 3px solid #333;
-            border-top: 3px solid var(--accent);
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        a { 
-            color: var(--text-dim); 
-            text-decoration: none; 
-            font-size: 0.85rem; 
-            display: block;
-            margin-top: 20px;
-        }
+        .footer { margin-top: 40px; font-size: 0.5rem; color: #333; letter-spacing: 2px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>CUARZO</h1>
-        <p class="subtitle">Portal de Colaboradores</p>
-        
-        <form id="login-form">
-            <input type="email" id="login-email" placeholder="Correo electrónico" required>
-            <input type="password" id="login-pass" placeholder="Contraseña" required>
-            <div id="loader" class="loader"></div>
-            <button type="submit" id="btn-text" class="btn-main">Entrar</button>
-        </form>
+    <div class="glass-container">
+        <h1>CUARZO CRISTAL</h1>
+        <span class="subtitle">Management System</span>
 
-        <div class="meeting-box">
-            <div class="live-indicator">EN VIVO - 20:00</div>
-            <p style="margin: 0; font-size: 0.8rem; font-weight: 600;">Capacitación de Personal</p>
-            <button type="button" class="btn-meeting" onclick="window.open('https://cuarzo2026.daily.co/reunion-capacitacion', '_blank')">
-                Unirse a la Sesión
-            </button>
+        <div class="user-info">
+            <span class="user-label">Authenticated Profile</span>
+            <div id="user-display" class="user-name">Sincronizando...</div>
         </div>
 
-        <a href="index.html">¿No tienes cuenta? Regístrate aquí</a>
+        <div class="actions">
+            <button id="join-btn" class="btn-main" onclick="joinMeeting()" disabled>Enter Conference</button>
+            <button id="record-btn" class="btn-record" onclick="handleRecording()">Record Session</button>
+        </div>
+
+        <div class="footer">
+            Encrypted Session &bull; 2026 Official Archive
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
@@ -206,30 +132,56 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        let finalUserName = "";
+        let mediaRecorder;
+        let recordedChunks = [];
 
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-pass').value;
-            const btn = document.getElementById('btn-text');
-            const loader = document.getElementById('loader');
-            
-            btn.style.display = 'none';
-            loader.style.display = 'block';
-
-            try {
-                const userCred = await signInWithEmailAndPassword(auth, email, pass);
-                window.location.href = "dashboard.html";
-            } catch (error) { 
-                console.error(error.code);
-                let mensaje = "Error al ingresar. Verifica tus datos.";
-                if(error.code === 'auth/invalid-credential') mensaje = "Correo o contraseña incorrectos.";
-                
-                alert(mensaje);
-                btn.style.display = 'block';
-                loader.style.display = 'none';
+        onAuthStateChanged(auth, (user) => {
+            const display = document.getElementById('user-display');
+            const btn = document.getElementById('join-btn');
+            if (user) {
+                finalUserName = user.displayName || user.email.split('@')[0].toUpperCase();
+                display.innerText = finalUserName;
+                btn.disabled = false;
+            } else {
+                window.location.href = "login.html";
             }
         });
+
+        window.joinMeeting = function() {
+            const roomName = "Capacitacion_CuarzoCristal_Oficial";
+            const config = `#config.prejoinPageEnabled=false&userInfo.displayName="${encodeURIComponent(finalUserName)}"`;
+            window.open(`https://meet.jit.si/${roomName}${config}`, '_blank');
+        }
+
+        window.handleRecording = async function() {
+            const btn = document.getElementById('record-btn');
+            if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                alert("iPhone Detectado: Use la función nativa de iOS.");
+                return;
+            }
+            if (!mediaRecorder || mediaRecorder.state === "inactive") {
+                try {
+                    const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    recordedChunks = [];
+                    mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
+                    mediaRecorder.onstop = () => {
+                        const blob = new Blob(recordedChunks, { type: "video/webm" });
+                        const a = document.createElement("a");
+                        a.href = URL.createObjectURL(blob);
+                        a.download = `CUARZO_RECORDING_${Date.now()}.webm`;
+                        a.click();
+                        btn.innerText = "Record Session";
+                    };
+                    mediaRecorder.start();
+                    btn.innerText = "Stop & Save";
+                } catch (err) { alert("No compatible."); }
+            } else {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(t => t.stop());
+            }
+        }
     </script>
 </body>
 </html>
