@@ -3,31 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuarzo Cristal | Workspace Executive</title>
+    <title>Cuarzo Cristal | Workspace</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --bg: #000000; 
-            --card: #0A0A0A; 
-            --primary: #FFFFFF; 
-            --text-dim: #666666; 
-            --border: #222222;
-        }
-
-        body { 
-            background-color: var(--bg); 
-            color: var(--primary); 
-            font-family: 'Montserrat', sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-        }
-
-        .glass-container { 
+        :root { --bg: #000; --card: #0A0A0A; --primary: #FFF; --text-dim: #666; --border: #222; }
+        body { background: var(--bg); color: var(--primary); font-family: 'Montserrat', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        
+        .container { 
             background: var(--card); 
-            padding: 60px 40px; 
+            padding: 50px 40px; 
             border-radius: 2px; 
             width: 90%; 
             max-width: 420px; 
@@ -36,77 +20,70 @@
             box-shadow: 0 40px 100px rgba(0,0,0,0.9);
         }
 
-        h1 { font-weight: 800; margin: 0 0 10px 0; letter-spacing: 6px; text-transform: uppercase; font-size: 1.2rem; }
-        .subtitle { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 40px; display: block; }
+        h1 { font-weight: 800; letter-spacing: 6px; text-transform: uppercase; font-size: 1.1rem; margin-bottom: 5px; }
+        .brand-sub { font-size: 0.55rem; color: var(--text-dim); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; display: block; }
 
-        /* Información del Usuario Sincronizado */
-        .user-info { margin-bottom: 40px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; }
-        .user-label { font-size: 0.55rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; display: block; }
-        .user-name { font-weight: 400; font-size: 0.95rem; letter-spacing: 1px; color: var(--primary); }
+        .profile-box { margin-bottom: 30px; padding: 15px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .user-name { font-weight: 400; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* Estado de la Sala */
-        .room-status { margin-bottom: 30px; font-size: 0.65rem; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; background: #333; }
-        .dot.online { background: #FFF; box-shadow: 0 0 10px #FFF; animation: blink 2s infinite; }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        /* Botón de Ingreso con Animación Pulsante */
-        .btn-main { 
-            width: 100%; 
-            padding: 20px; 
-            background: var(--primary); 
-            color: var(--bg); 
-            border: none; 
-            font-weight: 700; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            transition: all 0.4s ease;
-            display: none; /* Se muestra solo si hay sala */
-        }
-
-        .btn-main:hover { background: #e0e0e0; transform: scale(1.02); letter-spacing: 3px; }
+        /* Lista de Salas */
+        .room-list-container { text-align: left; margin-top: 20px; }
+        .list-title { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; display: block; text-align: center; }
         
-        .pulse-animation { animation: pulse-bg 2.5s infinite; }
-        @keyframes pulse-bg {
-            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
-            50% { box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.1); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+        .room-item { 
+            background: #050505; 
+            border: 1px solid var(--border); 
+            padding: 20px; 
+            margin-bottom: 10px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px;
         }
 
-        .footer { margin-top: 40px; font-size: 0.5rem; color: #222; letter-spacing: 2px; text-transform: uppercase; }
+        .room-info { display: flex; align-items: center; gap: 10px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; }
+        .dot-live { width: 8px; height: 8px; background: #FFF; border-radius: 50%; animation: blink 2s infinite; }
+
+        /* Botones */
+        .btn { width: 100%; padding: 16px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px; transition: 0.4s; }
+        .btn-primary { background: var(--primary); color: #000; }
+        .btn-outline { background: transparent; color: var(--primary); border: 1px solid var(--border); }
+        .btn-outline:hover { border-color: var(--primary); }
+        .btn-danger { background: transparent; color: #ff4444; border: 1px solid #331111; margin-top: 5px; font-size: 0.6rem; }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+        .empty-state { font-size: 0.65rem; color: #333; text-align: center; padding: 20px; border: 1px dashed #111; }
+        .footer { margin-top: 40px; font-size: 0.5rem; color: #222; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="glass-container">
+    <div class="container">
         <h1>CUARZO CRISTAL</h1>
-        <span class="subtitle">Management System</span>
+        <span class="brand-sub">Executive Workspace</span>
 
-        <div class="user-info">
-            <span class="user-label">Perfil Identificado</span>
+        <div class="profile-box">
             <div id="user-display" class="user-name">Sincronizando...</div>
         </div>
 
-        <div class="room-status">
-            <span id="status-dot" class="dot"></span>
-            <span id="status-text">Buscando sesión...</span>
+        <div class="room-list-container">
+            <span class="list-title">Sesiones Disponibles</span>
+            <div id="rooms-area">
+                <div class="empty-state">Buscando sesiones activas...</div>
+            </div>
         </div>
 
-        <div id="action-area">
-            <button id="join-btn" class="btn-main pulse-animation" onclick="joinMeeting()">Conectar a Sala</button>
-            <p id="wait-msg" style="font-size: 0.7rem; color: #444;">Esperando al Administrador...</p>
+        <div id="admin-controls" style="display: none; margin-top: 30px;">
+            <span class="list-title" style="margin-bottom: 10px;">Panel de Control</span>
+            <button class="btn btn-outline" onclick="toggleRoom(true)">Crear Nueva Sesión</button>
         </div>
 
-        <div class="footer">Workspace Privado &bull; 2026</div>
+        <div class="footer">PROTECTED BY FIREBASE &bull; 2026</div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+        import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
@@ -121,65 +98,73 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
+        
         let finalUserName = "";
+        let isAdmin = false;
 
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // LIMPIEZA DE NOMBRE (Sin mail, sin puntos, sin números)
-                if (user.displayName) {
-                    finalUserName = user.displayName.toUpperCase();
-                } else {
-                    let rawName = user.email.split('@')[0];
-                    finalUserName = rawName.replace(/[0-9.]/g, ' ').trim().toUpperCase();
-                }
+                // Nombre limpio para Jitsi
+                finalUserName = user.displayName ? user.displayName.toUpperCase() : user.email.split('@')[0].replace(/[0-9.]/g, ' ').trim().toUpperCase();
                 document.getElementById('user-display').innerText = finalUserName;
 
-                // DETECCIÓN DE ADMIN (Si el mail contiene admin o ceo activa la sala en la DB)
-                if (user.email.includes("admin") || user.email.includes("ceo")) {
-                    set(ref(db, 'sala_activa'), { status: "online", host: finalUserName });
+                // Comprobar si el email está en la lista de administradores
+                const adminsRef = ref(db, 'admins');
+                const snapshot = await get(adminsRef);
+                const adminsList = snapshot.val() || {};
+                isAdmin = Object.values(adminsList).some(email => email.toLowerCase() === user.email.toLowerCase());
+
+                if (isAdmin) {
+                    document.getElementById('admin-controls').style.display = "block";
                 }
+
+                listenToRooms();
             } else {
                 window.location.href = "login.html";
             }
         });
 
-        // ESCUCHA EN TIEMPO REAL DE FIREBASE PARA MOSTRAR LA SALA
-        onValue(ref(db, 'sala_activa'), (snapshot) => {
-            const data = snapshot.val();
-            const btn = document.getElementById('join-btn');
-            const waitMsg = document.getElementById('wait-msg');
-            const dot = document.getElementById('status-dot');
-            const statusText = document.getElementById('status-text');
+        function listenToRooms() {
+            onValue(ref(db, 'sala_activa'), (snapshot) => {
+                const data = snapshot.val();
+                const area = document.getElementById('rooms-area');
+                area.innerHTML = "";
 
-            if (data && data.status === "online") {
-                btn.style.display = "block";
-                waitMsg.style.display = "none";
-                dot.className = "dot online";
-                statusText.innerText = "SALA ACTIVA";
-            } else {
-                btn.style.display = "none";
-                waitMsg.style.display = "block";
-                dot.className = "dot";
-                statusText.innerText = "SESIÓN FINALIZADA";
-            }
-        });
+                if (data && data.status === "online") {
+                    area.innerHTML = `
+                        <div class="room-item">
+                            <div class="room-info">
+                                <div class="dot-live"></div>
+                                CAPACITACIÓN OFICIAL
+                            </div>
+                            <button class="btn btn-primary" onclick="joinMeeting()">Unirse Ahora</button>
+                            ${isAdmin ? '<button class="btn btn-danger" onclick="toggleRoom(false)">Cerrar Sesión para Todos</button>' : ''}
+                        </div>
+                    `;
+                } else {
+                    area.innerHTML = `<div class="empty-state">No hay sesiones activas en este momento.</div>`;
+                }
+            });
+        }
+
+        window.toggleRoom = function(activate) {
+            set(ref(db, 'sala_activa'), {
+                status: activate ? "online" : "offline",
+                host: finalUserName,
+                timestamp: Date.now()
+            }).then(() => {
+                if(activate) joinMeeting();
+            });
+        }
 
         window.joinMeeting = function() {
             const roomName = "Capacitacion_Cuarzo_Oficial";
-            
-            // CONFIGURACIÓN JITSI: Navegador forzado, Pre-sala activa, Sin publicidad al salir
-            const jitsiParams = [
-                'config.prejoinPageEnabled=true',  // Pide cámara/micro antes de entrar
-                'config.disableDeepLinking=true',  // Evita que pida bajar la App en móviles
-                'interfaceConfig.SHOW_JITSI_WATERMARK=false',
-                'config.enableClosePage=false',    // Ayuda a evitar la página de salida de Jitsi
+            const config = [
+                'config.prejoinPageEnabled=true',
+                'config.disableDeepLinking=true',
                 `userInfo.displayName="${encodeURIComponent(finalUserName)}"`
-            ];
-
-            const url = `https://meet.jit.si/${roomName}#${jitsiParams.join('&')}`;
-            
-            // Redirige en la misma pestaña para que al colgar vuelvan al Workspace
-            window.location.href = url;
+            ].join('&');
+            window.location.href = `https://meet.jit.si/${roomName}#${config}`;
         }
     </script>
 </body>
