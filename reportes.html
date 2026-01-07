@@ -28,7 +28,7 @@
         .header-section { border-bottom: 1px solid var(--border); padding-bottom: 30px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
         h1 { font-weight: 800; font-size: 2rem; letter-spacing: -1px; margin: 0; }
         
-        /* Tabla Profesional */
+        /* Tabla */
         .table-wrapper { background: #050505; border: 1px solid var(--border); border-radius: 12px; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; min-width: 1000px; }
         th { padding: 20px; background: #0a0a0a; color: var(--text-dim); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; }
@@ -38,18 +38,19 @@
         .client-info b { display: block; font-size: 0.9rem; margin-bottom: 4px; }
         .price-tag { font-weight: 800; color: #fff; }
         
-        /* Select de Estado Custom */
-        .status-select {
-            background: #000; color: #fff; border: 1px solid #333; padding: 6px; border-radius: 4px; font-size: 0.7rem; font-family: 'Montserrat'; font-weight: 600; cursor: pointer; outline: none;
-        }
-        .status-select:hover { border-color: #666; }
-
-        .btn-pdf {
-            background: #fff; color: #000; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 800; font-size: 0.65rem; cursor: pointer; transition: 0.3s;
-        }
-        .btn-pdf:hover { background: #ccc; transform: translateY(-2px); }
+        .status-select { background: #000; color: #fff; border: 1px solid #333; padding: 6px; border-radius: 4px; font-size: 0.7rem; font-family: 'Montserrat'; font-weight: 600; cursor: pointer; }
+        .btn-pdf { background: #fff; color: #000; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 800; font-size: 0.65rem; cursor: pointer; transition: 0.3s; }
+        .btn-pdf:hover { background: #ccc; }
 
         .loading { text-align: center; padding: 100px; color: var(--text-dim); letter-spacing: 4px; font-size: 0.7rem; }
+
+        /* ESTILOS PARA LA PLANTILLA PDF (OCULTA EN WEB) */
+        #plantilla-pdf { padding: 50px; background: white; color: black; font-family: 'Montserrat', sans-serif; display: none; }
+        .pdf-header { text-align: center; border-bottom: 3px solid black; padding-bottom: 20px; margin-bottom: 30px; }
+        .pdf-grid { display: flex; justify-content: space-between; margin-bottom: 40px; }
+        .pdf-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .pdf-table th { background: #f0f0f0; color: black; border: 1px solid #ddd; padding: 12px; font-size: 0.7rem; }
+        .pdf-table td { border: 1px solid #ddd; padding: 15px; font-size: 0.9rem; color: #333; }
     </style>
 </head>
 <body>
@@ -68,12 +69,12 @@
         <div class="header-section">
             <div>
                 <h1>Órdenes de Trabajo</h1>
-                <p style="color:var(--text-dim); font-size: 0.7rem; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">Panel de Control CEO & RRHH</p>
+                <p style="color:var(--text-dim); font-size: 0.7rem; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">Gestión de Comprobantes</p>
             </div>
         </div>
 
         <div class="table-wrapper">
-            <div id="loader" class="loading">SINCRO FIREBASE ACTIVADA...</div>
+            <div id="loader" class="loading">SINCRONIZANDO CON CUARZO CLOUD...</div>
             <table id="tablaReportes" style="display: none;">
                 <thead>
                     <tr>
@@ -87,6 +88,54 @@
                 </thead>
                 <tbody id="listaCuerpo"></tbody>
             </table>
+        </div>
+    </div>
+
+    <div id="render-pdf-area" style="position: absolute; left: -9999px;">
+        <div id="plantilla-pdf">
+            <div class="pdf-header">
+                <h1 style="letter-spacing: 10px; margin: 0;">CUARZO</h1>
+                <p style="font-size: 0.7rem; font-weight: 600; margin-top: 5px;">COMPROBANTE OFICIAL DE ORDEN DE TRABAJO</p>
+            </div>
+            
+            <div class="pdf-grid">
+                <div>
+                    <h4 style="margin: 0; font-size: 0.7rem; color: #666;">CLIENTE</h4>
+                    <p id="pdf-nombre" style="font-size: 1.2rem; font-weight: 800; margin: 5px 0;"></p>
+                    <p id="pdf-email" style="margin: 0; font-size: 0.9rem;"></p>
+                </div>
+                <div style="text-align: right;">
+                    <p style="margin: 0; font-size: 0.8rem;"><b>N° ORDEN:</b> <span id="pdf-id"></span></p>
+                    <p style="margin: 0; font-size: 0.8rem;"><b>FECHA:</b> <span id="pdf-fecha"></span></p>
+                </div>
+            </div>
+
+            <table class="pdf-table">
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">DESCRIPCIÓN DEL SERVICIO</th>
+                        <th style="text-align: right;">MONTO TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="height: 150px; vertical-align: top;">
+                            <strong id="pdf-tipo"></strong><br>
+                            <p style="font-size: 0.8rem; color: #555; margin-top: 10px;">Proyecto asignado para desarrollo y gestión integral por el equipo de Cuarzo Cristal.</p>
+                        </td>
+                        <td style="text-align: right; font-size: 1.5rem; font-weight: 800;">
+                            $<span id="pdf-precio"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #eee;">
+                <p style="font-size: 0.7rem; color: #888; line-height: 1.5;">
+                    Este documento certifica la recepción de la orden. Los tiempos de entrega están sujetos a la categoría del proyecto. 
+                    Estado actual de la orden: <strong id="pdf-estado"></strong>
+                </p>
+            </div>
         </div>
     </div>
 
@@ -108,47 +157,60 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // Seguridad
         onAuthStateChanged(auth, (user) => {
             if (!user) window.location.href = "login.html";
         });
 
-        // Función Global para cambiar estado
         window.cambiarEstado = async (id, nuevoEstado) => {
-            const docRef = doc(db, "leads_clientes", id);
-            try {
-                await updateDoc(docRef, { estadoLead: nuevoEstado });
-                console.log("Estado actualizado a:", nuevoEstado);
-            } catch (error) {
-                alert("Error al actualizar estado.");
-            }
+            await updateDoc(doc(db, "leads_clientes", id), { estadoLead: nuevoEstado });
         };
 
-        // Función Global para PDF
+        // FUNCIÓN DE PDF CORREGIDA
         window.generarPDF = (id) => {
             const fila = document.getElementById(`row-${id}`);
+            
+            // Extraer datos de la fila de la tabla
+            const nombre = fila.querySelector('.client-info b').innerText;
+            const email = fila.querySelector('.client-info span').innerText;
+            const tipo = fila.querySelector('td:nth-child(3) div').innerText;
+            const precio = fila.querySelector('.price-tag').innerText.replace('$', '');
+            const fecha = fila.querySelector('td:nth-child(1) div').innerText;
+            const estado = fila.querySelector('.status-select').value;
+
+            // Inyectar datos en la plantilla oculta
+            document.getElementById('pdf-nombre').innerText = nombre;
+            document.getElementById('pdf-email').innerText = email;
+            document.getElementById('pdf-tipo').innerText = tipo;
+            document.getElementById('pdf-precio').innerText = precio;
+            document.getElementById('pdf-fecha').innerText = fecha;
+            document.getElementById('pdf-id').innerText = id.substring(0, 8).toUpperCase();
+            document.getElementById('pdf-estado').innerText = estado;
+
+            // Configurar y generar el PDF
+            const elemento = document.getElementById('plantilla-pdf');
+            elemento.style.display = "block"; // Mostrar para la captura
+
             const opt = {
-                margin: 1,
-                filename: `Orden_Cuarzo_${id.substring(0,5)}.pdf`,
+                margin: 0.5,
+                filename: `Orden_${nombre}_Cuarzo.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, backgroundColor: '#000' },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+                html2canvas: { scale: 3, useCORS: true },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
-            html2pdf().from(fila).set(opt).save();
+
+            html2pdf().from(elemento).set(opt).save().then(() => {
+                elemento.style.display = "none"; // Volver a ocultar
+            });
         };
 
         const q = query(collection(db, "leads_clientes"), orderBy("fechaRegistro", "desc"));
 
         onSnapshot(q, (snapshot) => {
             const cuerpo = document.getElementById('listaCuerpo');
-            const tabla = document.getElementById('tablaReportes');
-            const loader = document.getElementById('loader');
-            
             cuerpo.innerHTML = "";
             snapshot.forEach((snapshotDoc) => {
                 const data = snapshotDoc.data();
                 const id = snapshotDoc.id;
-                
                 const tr = document.createElement('tr');
                 tr.id = `row-${id}`;
                 tr.innerHTML = `
@@ -169,9 +231,8 @@
                         <select class="status-select" onchange="cambiarEstado('${id}', this.value)">
                             <option value="RECIBIDA" ${data.estadoLead === 'RECIBIDA' ? 'selected' : ''}>RECIBIDA</option>
                             <option value="EN PROCESO" ${data.estadoLead === 'EN PROCESO' ? 'selected' : ''}>EN PROCESO</option>
-                            <option value="REVISIÓN RRHH" ${data.estadoLead === 'REVISIÓN RRHH' ? 'selected' : ''}>REVISIÓN RRHH</option>
+                            <option value="REVISIÓN" ${data.estadoLead === 'REVISIÓN' ? 'selected' : ''}>REVISIÓN</option>
                             <option value="FINALIZADO" ${data.estadoLead === 'FINALIZADO' ? 'selected' : ''}>FINALIZADO</option>
-                            <option value="URGENTE" ${data.estadoLead === 'URGENTE' ? 'selected' : ''}>URGENTE</option>
                         </select>
                     </td>
                     <td>
@@ -180,9 +241,8 @@
                 `;
                 cuerpo.appendChild(tr);
             });
-
-            loader.style.display = "none";
-            tabla.style.display = "table";
+            document.getElementById('loader').style.display = "none";
+            document.getElementById('tablaReportes').style.display = "table";
         });
     </script>
 </body>
