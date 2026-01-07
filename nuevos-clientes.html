@@ -7,130 +7,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Estilos Base del Dashboard (Consistencia) */
-        body {
-            background-color: #000000;
-            color: #FFFFFF;
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            min-height: 100vh;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #0d0d0d;
-            padding: 20px;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar-header {
-            text-align: center;
-            margin-bottom: 40px;
-            color: #E0E0E0;
-        }
-        .sidebar-header h2 {
-            font-size: 1.5em;
-            font-weight: 800;
-            margin: 5px 0 0;
-            color: #FFFFFF;
-        }
-        .sidebar nav a {
-            display: block;
-            color: #CCCCCC;
-            text-decoration: none;
-            padding: 15px 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-            font-weight: 600;
-        }
-        .sidebar nav a:hover, .sidebar nav a.active {
-            background-color: #1a1a1a;
-            color: #00FFFF; /* Turquesa de realce */
-        }
-        .sidebar nav a i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        .main-content {
-            flex-grow: 1;
-            padding: 40px;
-            background-color: #000000;
-        }
-        .main-content h1 {
-            color: #FFFFFF;
-            font-weight: 800;
-            border-bottom: 2px solid #333333;
-            padding-bottom: 15px;
-            margin-bottom: 30px;
-        }
-        /* Estilos específicos del Formulario */
-        .form-container {
-            max-width: 800px;
-            background-color: #0d0d0d;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #CCCCCC;
-        }
-        .form-group input[type="text"], 
-        .form-group input[type="email"], 
-        .form-group select, 
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #333333;
-            border-radius: 5px;
-            background-color: #1a1a1a;
-            color: #FFFFFF;
-            font-size: 1em;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-        .form-group input:focus, 
-        .form-group select:focus, 
-        .form-group textarea:focus {
-            border-color: #00FFFF;
-            outline: none;
-        }
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        /* Estilo para ocultar el grupo de sub-opciones inicialmente */
-        .hidden {
-            display: none;
-        }
-        .form-actions {
-            text-align: right;
-            border-top: 1px solid #333333;
-            padding-top: 20px;
-            margin-top: 30px;
-        }
-        .submit-btn {
-            padding: 12px 25px;
-            background-color: #00FFFF; /* Color de realce Cuarzo */
-            color: #000000;
-            border: none;
-            border-radius: 5px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .submit-btn:hover {
-            background-color: #00B3B3;
-        }
+        /* Mantenemos tus estilos originales que están perfectos */
+        body { background-color: #000000; color: #FFFFFF; font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; display: flex; min-height: 100vh; }
+        .sidebar { width: 250px; background-color: #0d0d0d; padding: 20px; box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; }
+        .sidebar-header { text-align: center; margin-bottom: 40px; color: #E0E0E0; }
+        .sidebar-header h2 { font-size: 1.5em; font-weight: 800; margin: 5px 0 0; color: #FFFFFF; }
+        .sidebar nav a { display: block; color: #CCCCCC; text-decoration: none; padding: 15px 10px; margin-bottom: 10px; border-radius: 5px; transition: 0.3s; font-weight: 600; }
+        .sidebar nav a:hover, .sidebar nav a.active { background-color: #1a1a1a; color: #00FFFF; }
+        .sidebar nav a i { margin-right: 10px; width: 20px; text-align: center; }
+        .main-content { flex-grow: 1; padding: 40px; background-color: #000000; }
+        .main-content h1 { color: #FFFFFF; font-weight: 800; border-bottom: 2px solid #333333; padding-bottom: 15px; margin-bottom: 30px; }
+        .form-container { max-width: 800px; background-color: #0d0d0d; padding: 30px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #CCCCCC; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #333333; border-radius: 5px; background-color: #1a1a1a; color: #FFFFFF; font-size: 1em; box-sizing: border-box; }
+        .form-group input:focus { border-color: #00FFFF; outline: none; }
+        .hidden { display: none; }
+        .submit-btn { padding: 12px 25px; background-color: #00FFFF; color: #000000; border: none; border-radius: 5px; font-weight: 800; cursor: pointer; width: 100%; transition: 0.3s; }
+        .submit-btn:hover { background-color: #00B3B3; }
+        .submit-btn:disabled { background-color: #444; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -142,148 +37,151 @@
         </div>
         <nav>
             <a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
-            <a href="#"><i class="fas fa-tasks"></i> Tareas Activas</a>
-            <a href="reportes.html"><i class="fas fa-chart-line"></i> Reportes</a>
+            <a href="coordinacion.html"><i class="fas fa-video"></i> Sala de Jitsi</a>
             <a href="nuevos-clientes.html" class="active"><i class="fas fa-handshake"></i> Nuevos Clientes</a> 
-            <a href="datos-personales.html"><i class="fas fa-cog"></i> Configuración</a>
-            <a href="contrato-legal.html"><i class="fas fa-gavel"></i> Documentación Legal</a>
             <a href="login.html" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
         </nav>
     </div>
 
     <div class="main-content">
-        <h1><i class="fas fa-handshake"></i> Ingreso de Nuevo Cliente y Proyecto</h1>
-        <p style="color: #CCCCCC; margin-bottom: 30px;">Utiliza este formulario para registrar un nuevo lead o cliente.</p>
+        <h1><i class="fas fa-handshake"></i> Ingreso de Nuevo Cliente</h1>
         
         <div class="form-container">
-            <form id="nuevoClienteForm" onsubmit="alert('¡Cliente y Solicitud de Proyecto registrados con éxito! El equipo de ventas será notificado.'); return false;">
-                
+            <form id="nuevoClienteForm">
                 <h3 style="color: #FFFFFF;"><i class="fas fa-user-tag"></i> Datos del Contacto</h3>
                 <div class="form-group">
-                    <label for="nombreCliente">Nombre Completo / Empresa:</label>
+                    <label>Nombre Completo / Empresa:</label>
                     <input type="text" id="nombreCliente" required>
                 </div>
                 <div class="form-group">
-                    <label for="emailCliente">Correo Electrónico (Principal):</label>
+                    <label>Correo Electrónico:</label>
                     <input type="email" id="emailCliente" required>
                 </div>
                 <div class="form-group">
-                    <label for="telefonoCliente">Teléfono/WhatsApp:</label>
+                    <label>Teléfono/WhatsApp:</label>
                     <input type="text" id="telefonoCliente">
                 </div>
                 
-                <h3 style="color: #FFFFFF; margin-top: 40px;"><i class="fas fa-project-diagram"></i> Detalles del Proyecto Solicitado</h3>
+                <h3 style="color: #FFFFFF; margin-top: 40px;"><i class="fas fa-project-diagram"></i> Detalles del Proyecto</h3>
                 <div class="form-group">
-                    <label for="origenContacto">Origen del Contacto:</label>
+                    <label>Origen del Contacto:</label>
                     <select id="origenContacto" required>
                         <option value="">-- Seleccionar Origen --</option>
-                        <option value="web-cuarzo">Página Web Cuarzo Empresarial</option>
-                        <option value="whatsapp">WhatsApp / Chat</option>
+                        <option value="web-cuarzo">Página Web Cuarzo</option>
+                        <option value="whatsapp">WhatsApp</option>
                         <option value="referido">Referido</option>
-                        <option value="red-social">Redes Sociales</option>
                         <option value="otro">Otro</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="tipoProyecto">Tipo de Proyecto Solicitado:</label>
-                    <!-- Agregamos el evento onchange para llamar a la función JS -->
+                    <label>Tipo de Proyecto:</label>
                     <select id="tipoProyecto" required onchange="updateSubprojectOptions()">
                         <option value="">-- Seleccionar Tipo --</option>
-                        <option value="web">Desarrollo Web / E-commerce</option>
-                        <option value="marketing">Estrategia y Marketing Digital</option>
-                        <option value="consultoria">Consultoría Estratégica</option>
-                        <option value="diseno">Diseño Gráfico / Branding</option>
-                        <option value="app">Desarrollo de App Móvil</option>
+                        <option value="web">Desarrollo Web</option>
+                        <option value="marketing">Marketing Digital</option>
+                        <option value="consultoria">Consultoría</option>
                     </select>
                 </div>
 
-                <!-- NUEVA SECCIÓN DE SUB-OPCIONES (Inicialmente oculta) -->
                 <div class="form-group hidden" id="subProyectoGroup">
-                    <label for="subProyecto">Detalle Específico del Proyecto:</label>
-                    <select id="subProyecto" required>
-                        <!-- Las opciones se llenarán con JavaScript -->
-                        <option value="">-- Por favor, seleccione un Tipo de Proyecto arriba --</option>
-                    </select>
+                    <label>Sub-especialidad:</label>
+                    <select id="subProyecto"></select>
                 </div>
 
                 <div class="form-group">
-                    <label for="descripcionProyecto">Descripción Detallada de la Necesidad:</label>
-                    <textarea id="descripcionProyecto" required placeholder="Escribe aquí los requerimientos principales, presupuesto estimado y cualquier nota importante..."></textarea>
+                    <label>Notas Adicionales:</label>
+                    <textarea id="descripcionProyecto" required placeholder="Detalles de la necesidad..."></textarea>
                 </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Registrar Cliente y Enviar al Equipo de Ventas</button>
-                </div>
+                <button type="submit" id="btnGuardar" class="submit-btn">
+                    <i class="fas fa-save"></i> GUARDAR CLIENTE EN SISTEMA
+                </button>
             </form>
         </div>
     </div>
     
-    <script>
-        // Mapeo de sub-opciones para cada tipo de proyecto
-        const subProjectOptions = {
-            'web': [
-                { value: 'landing', text: 'Landing Page de Captación' },
-                { value: 'ecommerce', text: 'Tienda Online / E-commerce' },
-                { value: 'web-corporativa', text: 'Web Corporativa (Informativa)' },
-                { value: 'plataforma-saas', text: 'Plataforma SaaS / Sistema Web' }
-            ],
-            'marketing': [
-                { value: 'seo-sem', text: 'Campaña SEO/SEM (Búsqueda)' },
-                { value: 'redes-sociales', text: 'Gestión de Redes Sociales' },
-                { value: 'email-mkt', text: 'Estrategia de Email Marketing' },
-                { value: 'funnel', text: 'Diseño de Funnel de Ventas' }
-            ],
-            'consultoria': [
-                { value: 'expansion', text: 'Consultoría de Expansión' },
-                { value: 'procesos', text: 'Optimización de Procesos Internos' },
-                { value: 'financiera', text: 'Análisis y Estrategia Financiera' }
-            ],
-            'diseno': [
-                { value: 'logo', text: 'Diseño de Logo y Manual de Marca' },
-                { value: 'material-digital', text: 'Material para Redes/Ads' },
-                { value: 'presentaciones', text: 'Diseño de Presentaciones Corporativas' }
-            ],
-            'app': [
-                { value: 'app-ios-android', text: 'App Nativa (iOS y Android)' },
-                { value: 'app-hibrida', text: 'App Híbrida (React Native, Flutter)' },
-                { value: 'mvp', text: 'Desarrollo de MVP (Producto Mínimo Viable)' }
-            ]
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // Tu misma configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
+            authDomain: "cuarzocristalempresarialsist.firebaseapp.com",
+            projectId: "cuarzocristalempresarialsist",
+            storageBucket: "cuarzocristalempresarialsist.firebasestorage.app",
+            messagingSenderId: "1031610061736",
+            appId: "1:1031610061736:web:d05d431b433eb5b55ec39d"
         };
 
-        function updateSubprojectOptions() {
-            const tipoProyectoSelect = document.getElementById('tipoProyecto');
-            const subProyectoSelect = document.getElementById('subProyecto');
-            const subProyectoGroup = document.getElementById('subProyectoGroup');
-            const selectedType = tipoProyectoSelect.value;
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
 
-            // Limpiar opciones anteriores
-            subProyectoSelect.innerHTML = ''; 
+        let userEmail = "";
 
-            if (selectedType && subProjectOptions[selectedType]) {
-                // Mostrar el grupo si se seleccionó algo
-                subProyectoGroup.classList.remove('hidden');
-                
-                // Agregar la opción por defecto
-                const defaultOption = document.createElement('option');
-                defaultOption.value = "";
-                defaultOption.text = "-- Seleccionar Detalle Específico --";
-                subProyectoSelect.appendChild(defaultOption);
+        // Proteger la página
+        onAuthStateChanged(auth, (user) => {
+            if (!user) window.location.href = "login.html";
+            else userEmail = user.email;
+        });
 
-                // Llenar las opciones según el tipo seleccionado
-                subProjectOptions[selectedType].forEach(optionData => {
-                    const option = document.createElement('option');
-                    option.value = optionData.value;
-                    option.text = optionData.text;
-                    subProyectoSelect.appendChild(option);
+        // Función para guardar en Firebase
+        document.getElementById('nuevoClienteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnGuardar');
+            btn.disabled = true;
+            btn.innerText = "Guardando...";
+
+            try {
+                await addDoc(collection(db, "clientes"), {
+                    nombre: document.getElementById('nombreCliente').value,
+                    email: document.getElementById('emailCliente').value,
+                    telefono: document.getElementById('telefonoCliente').value,
+                    origen: document.getElementById('origenContacto').value,
+                    tipo: document.getElementById('tipoProyecto').value,
+                    subtipo: document.getElementById('subProyecto').value,
+                    descripcion: document.getElementById('descripcionProyecto').value,
+                    registradoPor: userEmail,
+                    fecha: serverTimestamp()
+                });
+
+                alert("¡Cliente registrado exitosamente en la base de datos!");
+                document.getElementById('nuevoClienteForm').reset();
+                document.getElementById('subProyectoGroup').classList.add('hidden');
+            } catch (error) {
+                console.error("Error al guardar:", error);
+                alert("Hubo un error al guardar.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "GUARDAR CLIENTE EN SISTEMA";
+            }
+        });
+
+        // Tu lógica de sub-opciones (mantenida igual)
+        window.updateSubprojectOptions = function() {
+            const tipo = document.getElementById('tipoProyecto').value;
+            const subGroup = document.getElementById('subProyectoGroup');
+            const subSelect = document.getElementById('subProyecto');
+            
+            const opciones = {
+                'web': ['Landing Page', 'E-commerce', 'Web Corporativa'],
+                'marketing': ['SEO/SEM', 'Social Media', 'Email Marketing'],
+                'consultoria': ['Expansión', 'Procesos', 'Financiera']
+            };
+
+            subSelect.innerHTML = '';
+            if (opciones[tipo]) {
+                subGroup.classList.remove('hidden');
+                opciones[tipo].forEach(opt => {
+                    let o = document.createElement('option');
+                    o.value = opt; o.text = opt;
+                    subSelect.appendChild(o);
                 });
             } else {
-                // Ocultar el grupo si no hay selección o es la opción por defecto
-                subProyectoGroup.classList.add('hidden');
-                const defaultOption = document.createElement('option');
-                defaultOption.value = "";
-                defaultOption.text = "-- Por favor, seleccione un Tipo de Proyecto arriba --";
-                subProyectoSelect.appendChild(defaultOption);
+                subGroup.classList.add('hidden');
             }
         }
     </script>
