@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuarzo Cristal | Executive Live</title>
+    <title>Cuarzo Cristal | Workspace Executive</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap" rel="stylesheet">
     <style>
         :root { 
             --bg: #000000; 
             --card: #0A0A0A; 
             --primary: #FFFFFF; 
-            --secondary: #1A1A1A;
             --text-dim: #666666; 
             --border: #222222;
         }
@@ -40,11 +39,19 @@
         h1 { font-weight: 800; margin: 0 0 10px 0; letter-spacing: 6px; text-transform: uppercase; font-size: 1.2rem; }
         .subtitle { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 40px; display: block; }
 
+        /* Información del Usuario Sincronizado */
         .user-info { margin-bottom: 40px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; }
         .user-label { font-size: 0.55rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; display: block; }
-        .user-name { font-weight: 400; font-size: 0.95rem; letter-spacing: 1px; }
+        .user-name { font-weight: 400; font-size: 0.95rem; letter-spacing: 1px; color: var(--primary); }
 
-        /* BOTÓN PRINCIPAL CON ANIMACIÓN PULSANTE */
+        /* Estado de la Sala */
+        .room-status { margin-bottom: 30px; font-size: 0.65rem; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; background: #333; }
+        .dot.online { background: #FFF; box-shadow: 0 0 10px #FFF; animation: blink 2s infinite; }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* Botón de Ingreso con Animación Pulsante */
         .btn-main { 
             width: 100%; 
             padding: 20px; 
@@ -57,43 +64,19 @@
             font-size: 0.75rem;
             letter-spacing: 2px;
             transition: all 0.4s ease;
-            margin-bottom: 15px;
-            position: relative;
+            display: none; /* Se muestra solo si hay sala */
         }
 
-        /* Animación de titileo suave (Glow Pulse) */
-        .btn-main:not(:disabled) {
-            animation: pulse-white 2.5s infinite;
-        }
-
-        @keyframes pulse-white {
+        .btn-main:hover { background: #e0e0e0; transform: scale(1.02); letter-spacing: 3px; }
+        
+        .pulse-animation { animation: pulse-bg 2.5s infinite; }
+        @keyframes pulse-bg {
             0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
             50% { box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.1); }
             100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
         }
 
-        .btn-main:hover:not(:disabled) { 
-            background: #e0e0e0;
-            letter-spacing: 3px;
-            transform: scale(1.01);
-        }
-
-        .btn-main:disabled { background: #111; color: #333; cursor: not-allowed; animation: none; }
-
-        .btn-record { 
-            width: 100%; 
-            padding: 15px; 
-            background: transparent; 
-            color: var(--primary); 
-            border: 1px solid var(--border); 
-            font-weight: 400; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-        }
-
-        .footer { margin-top: 40px; font-size: 0.5rem; color: #333; letter-spacing: 2px; text-transform: uppercase; }
+        .footer { margin-top: 40px; font-size: 0.5rem; color: #222; letter-spacing: 2px; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -103,23 +86,27 @@
         <span class="subtitle">Management System</span>
 
         <div class="user-info">
-            <span class="user-label">Authenticated Profile</span>
+            <span class="user-label">Perfil Identificado</span>
             <div id="user-display" class="user-name">Sincronizando...</div>
         </div>
 
-        <div class="actions">
-            <button id="join-btn" class="btn-main" onclick="joinMeeting()" disabled>Enter Conference</button>
-            <button id="record-btn" class="btn-record" onclick="handleRecording()">Record Session</button>
+        <div class="room-status">
+            <span id="status-dot" class="dot"></span>
+            <span id="status-text">Buscando sesión...</span>
         </div>
 
-        <div class="footer">
-            Encrypted Session &bull; 2026 Official Archive
+        <div id="action-area">
+            <button id="join-btn" class="btn-main pulse-animation" onclick="joinMeeting()">Conectar a Sala</button>
+            <p id="wait-msg" style="font-size: 0.7rem; color: #444;">Esperando al Administrador...</p>
         </div>
+
+        <div class="footer">Workspace Privado &bull; 2026</div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
@@ -127,60 +114,72 @@
             projectId: "cuarzocristalempresarialsist",
             storageBucket: "cuarzocristalempresarialsist.firebasestorage.app",
             messagingSenderId: "1031610061736",
-            appId: "1:1031610061736:web:d05d431b433eb5b55ec39d"
+            appId: "1:1031610061736:web:d05d431b433eb5b55ec39d",
+            databaseURL: "https://cuarzocristalempresarialsist-default-rtdb.firebaseio.com"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getDatabase(app);
         let finalUserName = "";
-        let mediaRecorder;
-        let recordedChunks = [];
 
         onAuthStateChanged(auth, (user) => {
-            const display = document.getElementById('user-display');
-            const btn = document.getElementById('join-btn');
             if (user) {
-                finalUserName = user.displayName || user.email.split('@')[0].toUpperCase();
-                display.innerText = finalUserName;
-                btn.disabled = false;
+                // LIMPIEZA DE NOMBRE (Sin mail, sin puntos, sin números)
+                if (user.displayName) {
+                    finalUserName = user.displayName.toUpperCase();
+                } else {
+                    let rawName = user.email.split('@')[0];
+                    finalUserName = rawName.replace(/[0-9.]/g, ' ').trim().toUpperCase();
+                }
+                document.getElementById('user-display').innerText = finalUserName;
+
+                // DETECCIÓN DE ADMIN (Si el mail contiene admin o ceo activa la sala en la DB)
+                if (user.email.includes("admin") || user.email.includes("ceo")) {
+                    set(ref(db, 'sala_activa'), { status: "online", host: finalUserName });
+                }
             } else {
                 window.location.href = "login.html";
             }
         });
 
-        window.joinMeeting = function() {
-            const roomName = "Capacitacion_CuarzoCristal_Oficial";
-            const config = `#config.prejoinPageEnabled=false&userInfo.displayName="${encodeURIComponent(finalUserName)}"`;
-            window.open(`https://meet.jit.si/${roomName}${config}`, '_blank');
-        }
+        // ESCUCHA EN TIEMPO REAL DE FIREBASE PARA MOSTRAR LA SALA
+        onValue(ref(db, 'sala_activa'), (snapshot) => {
+            const data = snapshot.val();
+            const btn = document.getElementById('join-btn');
+            const waitMsg = document.getElementById('wait-msg');
+            const dot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
 
-        window.handleRecording = async function() {
-            const btn = document.getElementById('record-btn');
-            if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-                alert("iPhone Detectado: Use la función nativa de iOS.");
-                return;
-            }
-            if (!mediaRecorder || mediaRecorder.state === "inactive") {
-                try {
-                    const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    recordedChunks = [];
-                    mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
-                    mediaRecorder.onstop = () => {
-                        const blob = new Blob(recordedChunks, { type: "video/webm" });
-                        const a = document.createElement("a");
-                        a.href = URL.createObjectURL(blob);
-                        a.download = `CUARZO_RECORDING_${Date.now()}.webm`;
-                        a.click();
-                        btn.innerText = "Record Session";
-                    };
-                    mediaRecorder.start();
-                    btn.innerText = "Stop & Save";
-                } catch (err) { alert("No compatible."); }
+            if (data && data.status === "online") {
+                btn.style.display = "block";
+                waitMsg.style.display = "none";
+                dot.className = "dot online";
+                statusText.innerText = "SALA ACTIVA";
             } else {
-                mediaRecorder.stop();
-                mediaRecorder.stream.getTracks().forEach(t => t.stop());
+                btn.style.display = "none";
+                waitMsg.style.display = "block";
+                dot.className = "dot";
+                statusText.innerText = "SESIÓN FINALIZADA";
             }
+        });
+
+        window.joinMeeting = function() {
+            const roomName = "Capacitacion_Cuarzo_Oficial";
+            
+            // CONFIGURACIÓN JITSI: Navegador forzado, Pre-sala activa, Sin publicidad al salir
+            const jitsiParams = [
+                'config.prejoinPageEnabled=true',  // Pide cámara/micro antes de entrar
+                'config.disableDeepLinking=true',  // Evita que pida bajar la App en móviles
+                'interfaceConfig.SHOW_JITSI_WATERMARK=false',
+                'config.enableClosePage=false',    // Ayuda a evitar la página de salida de Jitsi
+                `userInfo.displayName="${encodeURIComponent(finalUserName)}"`
+            ];
+
+            const url = `https://meet.jit.si/${roomName}#${jitsiParams.join('&')}`;
+            
+            // Redirige en la misma pestaña para que al colgar vuelvan al Workspace
+            window.location.href = url;
         }
     </script>
 </body>
