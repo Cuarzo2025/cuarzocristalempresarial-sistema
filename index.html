@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro | Cuarzo Cristal</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         :root { 
             --primary: #FFFFFF; 
             --bg: #000000; 
-            --card: rgba(10, 10, 10, 0.95); 
-            --text-dim: #888888; 
-            --border: #333; 
+            --card: rgba(10, 10, 10, 0.9); 
+            --text-dim: #A0A0A0; 
+            --border: #444; 
         }
         
         html, body { 
@@ -24,7 +25,6 @@
             font-family: 'Montserrat', sans-serif;
         }
 
-        /* FONDO MATRIX */
         #matrix-canvas {
             position: absolute;
             top: 0;
@@ -48,38 +48,39 @@
         .container { 
             background: var(--card); 
             padding: 40px; 
-            border-radius: 12px; 
+            border-radius: 16px; 
             width: 90%;
             max-width: 380px; 
             border: 1px solid var(--border); 
             text-align: center; 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.05);
         }
 
-        h1 { font-weight: 800; margin: 0; letter-spacing: 2px; color: #fff; }
-        .subtitle { color: var(--text-dim); font-size: 0.75rem; margin-bottom: 30px; letter-spacing: 3px; }
+        h1 { font-weight: 800; margin: 0; letter-spacing: -1px; color: #fff; }
+        .subtitle { color: var(--text-dim); font-size: 0.8rem; margin-bottom: 30px; letter-spacing: 2px; }
         
         input { 
             width: 100%; padding: 14px; margin-bottom: 20px; 
-            background: #111; 
+            background: rgba(255, 255, 255, 0.05); 
             border: 1px solid var(--border); 
-            border-radius: 4px; color: white; 
+            border-radius: 8px; color: white; 
             box-sizing: border-box; font-family: inherit;
         }
-        input:focus { outline: none; border-color: #777; }
+        input:focus { outline: none; border-color: #fff; background: rgba(255, 255, 255, 0.1); }
         
         .btn-main { 
             width: 100%; padding: 16px; 
             background: #FFFFFF; color: #000; 
-            border: none; border-radius: 4px; 
+            border: none; border-radius: 8px; 
             font-weight: 800; cursor: pointer; 
-            text-transform: uppercase; transition: 0.2s;
+            text-transform: uppercase; transition: 0.3s;
         }
-        .btn-main:hover { background: #ccc; }
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(255,255,255,0.4); }
 
-        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); justify-content: center; align-items: center; z-index: 1000; }
-        .modal { background: #000; padding: 40px; border-radius: 8px; text-align: center; max-width: 350px; border: 1px solid #fff; }
-        .temp-pass { display: block; background: #111; padding: 15px; margin: 20px 0; font-family: monospace; font-size: 1.6rem; color: #fff; letter-spacing: 4px; border: 1px solid #333; }
+        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; z-index: 1000; }
+        .modal { background: #000; padding: 40px; border-radius: 16px; text-align: center; max-width: 350px; border: 1px solid #fff; }
+        .temp-pass { display: block; background: #111; padding: 15px; margin: 20px 0; font-family: monospace; font-size: 1.6rem; color: #fff; letter-spacing: 4px; border-radius: 8px; border: 1px solid #333; }
     </style>
 </head>
 <body>
@@ -92,65 +93,49 @@
             <p class="subtitle">SYSTEM REGISTRY</p>
             <form id="registration-form">
                 <input type="text" id="user-name" placeholder="NOMBRE COMPLETO" required>
-                <input type="email" id="user-email" placeholder="EMAIL" required>
-                <button type="submit" id="btn-submit" class="btn-main">CREAR CUENTA</button>
-                <p style="margin-top: 20px;"><a href="login.html" style="color: #666; text-decoration: none; font-size: 0.8rem;">INICIAR SESIÓN</a></p>
+                <input type="email" id="user-email" placeholder="EMAIL DE ACCESO" required>
+                <button type="submit" id="btn-submit" class="btn-main">GENERAR ACCESO</button>
+                <p style="margin-top: 20px;"><a href="login.html" style="color: #fff; text-decoration: none; font-size: 0.8rem; opacity: 0.6;">¿YA TIENES CUENTA? LOGIN</a></p>
             </form>
         </div>
     </div>
 
     <div id="modal-overlay">
         <div class="modal">
-            <h2 style="color: #fff; margin-top: 0; font-size: 1.2rem;">ACCESO GENERADO</h2>
-            <p style="color: #888; font-size: 0.9rem;">Guarda tu clave temporal:</p>
+            <h2 style="color: #fff; margin-top: 0;">¡EXITO!</h2>
+            <p style="color: #ccc;">Clave temporal enviada al correo:</p>
             <span id="display-pass" class="temp-pass">--------</span>
-            <button class="btn-main" onclick="window.location.href='login.html'">CONTINUAR</button>
+            <button class="btn-main" onclick="window.location.href='login.html'">IR AL LOGIN</button>
         </div>
     </div>
 
     <script>
-        // MATRIX SIN DESTELLO (BLANCO SÓLIDO)
+        // SCRIPT MATRIX ORIGINAL
         window.onload = function() {
             const canvas = document.getElementById('matrix-canvas');
             const ctx = canvas.getContext('2d');
-
-            function resize() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            resize();
-            window.onresize = resize;
-
-            const chars = "01010101";
-            const fontSize = 14;
+            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            resize(); window.onresize = resize;
+            const chars = "0101010101010101";
+            const fontSize = 16;
             const columns = Math.floor(canvas.width / fontSize);
             const drops = Array(columns).fill(1);
-
             function draw() {
-                // Fondo con opacidad para el rastro
-                ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+                ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-
                 ctx.font = fontSize + "px monospace";
-                
-                // Quitamos el glow (shadowBlur)
-                ctx.shadowBlur = 0;
-
                 for (let i = 0; i < drops.length; i++) {
                     const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                    
-                    // Solo dos tonos de blanco/gris para profundidad sin brillo
-                    ctx.fillStyle = Math.random() > 0.95 ? "#FFFFFF" : "#444444";
-
+                    const glow = Math.random() > 0.9;
+                    ctx.fillStyle = glow ? "#FFFFFF" : "#333333";
+                    ctx.shadowBlur = glow ? 12 : 0;
+                    ctx.shadowColor = "#ffffff";
                     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
                     drops[i]++;
                 }
             }
-            setInterval(draw, 40);
+            setInterval(draw, 35);
         };
     </script>
 
@@ -172,6 +157,9 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // INICIALIZAR EMAILJS
+        emailjs.init("Hh5cKcCjZpu9toPYN");
+
         document.getElementById('registration-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('user-name').value;
@@ -183,27 +171,38 @@
             btn.innerText = "PROCESANDO...";
 
             try {
+                // 1. Crear usuario en Firebase
                 const userCred = await createUserWithEmailAndPassword(auth, email, tempPass);
+                
+                // 2. Guardar en Firestore
                 await setDoc(doc(db, "colaboradores", userCred.user.uid), {
                     nombre: name,
                     email: email,
                     rol: "colaborador",
                     contratoAceptado: false,
-                    metodoPago: "",
-                    datoPago: "",
-                    requiereCambio: true,
                     claveTemporal: tempPass,
                     fechaRegistro: new Date().toLocaleDateString('es-AR'),
-                    proyectos_activos: 0,
-                    horas_totales: 0,
                     estado: "ACTIVO"
                 });
+
+                // 3. Enviar Email con EmailJS (Variables sincronizadas con tu template)
+                const templateParams = {
+                    user_name: name,
+                    user_email: email,
+                    user_password: tempPass
+                };
+
+                await emailjs.send('service_u1a6rwt', 'template_328obst', templateParams);
+
+                // 4. Mostrar éxito
                 document.getElementById('display-pass').innerText = tempPass;
                 document.getElementById('modal-overlay').style.display = 'flex';
+
             } catch (error) {
-                alert("ERROR: " + error.message);
+                console.error(error);
+                alert("ERROR SISTEMA: " + error.message);
                 btn.disabled = false;
-                btn.innerText = "CREAR CUENTA";
+                btn.innerText = "GENERAR ACCESO";
             }
         });
     </script>
