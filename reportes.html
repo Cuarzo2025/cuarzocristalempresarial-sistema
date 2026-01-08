@@ -10,6 +10,7 @@
         :root { --bg: #000; --sidebar: #080808; --text: #fff; --border: #1a1a1a; --accent: #00e5ff; }
         body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; margin: 0; display: flex; }
         
+        /* Sidebar */
         .sidebar { width: 250px; background: var(--sidebar); padding: 40px 20px; border-right: 1px solid var(--border); height: 100vh; position: fixed; box-sizing: border-box; z-index: 100; }
         .sidebar h2 { font-weight: 800; letter-spacing: 5px; font-size: 1.1rem; text-align: center; margin: 0; }
         .sidebar nav { margin-top: 50px; }
@@ -17,6 +18,7 @@
         .sidebar nav a:hover, .sidebar nav a.active { color: #fff; background: #0c0c0c; border-radius: 8px; }
         .sidebar nav a i { margin-right: 15px; width: 20px; text-align: center; }
 
+        /* Contenido */
         .main-content { flex: 1; margin-left: 250px; padding: 60px 40px; width: calc(100% - 250px); box-sizing: border-box; }
         .table-wrapper { background: #050505; border: 1px solid var(--border); border-radius: 12px; margin-top: 40px; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
@@ -33,9 +35,9 @@
             .sidebar, .btn-pdf, h1 { display: none !important; }
             .main-content { margin-left: 0 !important; width: 100% !important; padding: 0 !important; }
             .table-wrapper { border: none !important; background: white !important; }
-            table { color: black !important; min-width: 100% !important; }
-            th { background: #eee !important; color: black !important; }
-            td { border-bottom: 1px solid #ddd !important; color: black !important; }
+            table { color: black !important; min-width: 100% !important; border: 1px solid #000 !important; }
+            th { background: #eee !important; color: black !important; border: 1px solid #000 !important; }
+            td { border: 1px solid #000 !important; color: black !important; }
             .price { color: black !important; }
         }
     </style>
@@ -55,8 +57,8 @@
         <h1>Órdenes de Trabajo</h1>
         <div class="table-wrapper">
             <div id="loader" class="loading">
-                <i class="fas fa-spinner fa-spin fa-2x"></i><br>
-                VERIFICANDO CREDENCIALES...
+                <i class="fas fa-spinner fa-spin fa-2x"></i><br><br>
+                SINCRONIZANDO CON LA NUBE...
             </div>
             <table id="tablaReportes" style="display: none;">
                 <thead>
@@ -76,7 +78,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -92,21 +94,20 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // --- VERIFICAR AUTENTICACIÓN ANTES DE CARGAR ---
+        // --- GESTIÓN DE CARGA Y PERMISOS ---
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log("Acceso concedido para:", user.email);
-                document.getElementById('loader').innerHTML = '<i class="fas fa-sync fa-spin"></i><br>CARGANDO ÓRDENES...';
-                iniciarEscucha();
+            // Independientemente de si hay usuario o no, intentamos cargar
+            // debido a que pusimos la regla de lectura en 'true'.
+            iniciarEscucha();
+            
+            if (!user) {
+                console.warn("Navegando como invitado o sesión no detectada.");
             } else {
-                document.getElementById('loader').innerHTML = 
-                    '<i class="fas fa-lock fa-2x"></i><br>DEBES INICIAR SESIÓN<br>' +
-                    '<button onclick="window.location.href=\'login.html\'" style="margin-top:20px; padding:10px 20px; cursor:pointer;">IR AL LOGIN</button>';
+                console.log("Sesión activa:", user.email);
             }
         });
 
         function iniciarEscucha() {
-            // Quitamos orderBy temporalmente para evitar problemas de índices
             const colRef = collection(db, "leads_clientes");
 
             onSnapshot(colRef, (snapshot) => {
@@ -114,31 +115,44 @@
                 cuerpo.innerHTML = "";
                 
                 if (snapshot.empty) {
-                    document.getElementById('loader').innerHTML = "NO SE ENCONTRARON ÓRDENES.";
+                    document.getElementById('loader').innerHTML = "NO SE ENCONTRARON ÓRDENES EN LA BASE DE DATOS.";
                     return;
                 }
 
                 snapshot.forEach((doc) => {
                     const data = doc.data();
                     const tr = document.createElement('tr');
+                    
+                    // Formateo de ID y Nombre
+                    const idCorto = doc.id.substring(0,6).toUpperCase();
+                    const nombreUpper = data.nombre ? data.nombre.toUpperCase() : 'SIN NOMBRE';
+                    
                     tr.innerHTML = `
-                        <td><b>#${doc.id.substring(0,6).toUpperCase()}</b><br><small style="color:#444">${data.fechaRegistro || 'S/F'}</small></td>
-                        <td><b>${data.nombre ? data.nombre.toUpperCase() : 'N/A'}</b><br><small style="color:#666">${data.email || ''}</small></td>
+                        <td><b>#${idCorto}</b><br><small style="color:#666">${data.fechaRegistro || 'S/F'}</small></td>
+                        <td><b>${nombreUpper}</b><br><small style="color:#444">${data.email || ''}</small></td>
                         <td>${data.tipo || 'General'}</td>
                         <td class="price">$${data.presupuesto || '0'}</td>
-                        <td><span style="background:#111; border: 1px solid #222; padding:5px 10px; border-radius:4px; font-size:0.7rem;">${data.estadoLead || 'RECIBIDA'}</span></td>
-                        <td><button class="btn-pdf" onclick="window.print()">PDF</button></td>
+                        <td>
+                            <span style="background:#111; border: 1px solid #222; padding:5px 10px; border-radius:4px; font-size:0.7rem; color: #00e5ff; font-weight: bold;">
+                                ${data.estadoLead || 'RECIBIDA'}
+                            </span>
+                        </td>
+                        <td><button class="btn-pdf" onclick="window.print()"><i class="fas fa-print"></i> PDF</button></td>
                     `;
                     cuerpo.appendChild(tr);
                 });
 
                 document.getElementById('loader').style.display = "none";
                 document.getElementById('tablaReportes').style.display = "table";
+
             }, (error) => {
-                console.error(error);
-                document.getElementById('loader').innerHTML = 
-                    '<b style="color:red">ERROR DE PERMISOS</b><br>' + 
-                    'Asegúrate de haber iniciado sesión correctamente.';
+                console.error("Error detallado:", error);
+                document.getElementById('loader').innerHTML = `
+                    <i class="fas fa-exclamation-triangle fa-2x" style="color:red"></i><br><br>
+                    <b>ERROR DE CONEXIÓN</b><br>
+                    ${error.message}<br><br>
+                    <small>Verifica las Reglas de Firestore en la consola.</small>
+                `;
             });
         }
     </script>
