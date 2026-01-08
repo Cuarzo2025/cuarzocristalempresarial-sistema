@@ -11,42 +11,138 @@
         :root { 
             --bg: #000000; --sidebar: #080808; --text-main: #FFFFFF; 
             --text-dim: #666666; --border: #1a1a1a; --hover: #0c0c0c;
+            --accent: #00e5ff;
         }
-        body { background-color: var(--bg); color: var(--text-main); font-family: 'Montserrat', sans-serif; margin: 0; display: flex; min-height: 100vh; }
+
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            font-family: 'Montserrat', sans-serif; 
+            margin: 0; 
+            display: flex; 
+            min-height: 100vh;
+            width: 100%;
+            overflow-x: hidden;
+        }
         
-        .sidebar { width: 250px; background-color: var(--sidebar); padding: 40px 20px; border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100; }
+        /* Sidebar Fija */
+        .sidebar { 
+            width: 250px; 
+            background-color: var(--sidebar); 
+            padding: 40px 20px; 
+            border-right: 1px solid var(--border); 
+            display: flex; 
+            flex-direction: column; 
+            position: fixed; 
+            height: 100vh; 
+            z-index: 100; 
+            box-sizing: border-box;
+        }
         .sidebar-header h2 { font-weight: 800; letter-spacing: 5px; font-size: 1.1rem; margin: 0; text-align: center; }
         .sidebar nav { margin-top: 50px; }
-        .sidebar nav a { display: flex; align-items: center; color: var(--text-dim); text-decoration: none; padding: 15px; border-radius: 8px; transition: 0.3s; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+        .sidebar nav a { 
+            display: flex; 
+            align-items: center; 
+            color: var(--text-dim); 
+            text-decoration: none; 
+            padding: 15px; 
+            border-radius: 8px; 
+            transition: 0.3s; 
+            font-size: 0.75rem; 
+            font-weight: 600; 
+            letter-spacing: 1px; 
+            text-transform: uppercase; 
+            margin-bottom: 5px; 
+        }
         .sidebar nav a:hover, .sidebar nav a.active { background-color: var(--hover); color: #fff; }
         .sidebar nav a i { margin-right: 15px; width: 20px; text-align: center; }
 
-        .main-content { flex-grow: 1; margin-left: 290px; padding: 60px 40px; width: calc(100% - 290px); }
-        h1 { font-weight: 800; font-size: 2rem; letter-spacing: -1px; margin: 0; }
-        
-        .table-wrapper { background: #050505; border: 1px solid var(--border); border-radius: 12px; overflow-x: auto; margin-top: 30px; }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 1000px; }
-        th { padding: 20px; background: #0a0a0a; color: var(--text-dim); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; }
-        td { padding: 20px; border-bottom: 1px solid var(--border); font-size: 0.8rem; vertical-align: middle; }
-        
-        .ot-badge { font-family: monospace; color: #fff; font-weight: 800; font-size: 0.7rem; background: #1a1a1a; padding: 4px 8px; border-radius: 4px; }
-        .price-tag { font-weight: 800; color: #fff; }
-        .status-select { background: #000; color: #fff; border: 1px solid #333; padding: 6px; border-radius: 4px; font-size: 0.7rem; font-family: 'Montserrat'; font-weight: 600; }
-        
-        .btn-pdf { background: #fff; color: #000; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 800; font-size: 0.65rem; cursor: pointer; }
+        /* Contenido Principal con Corrección de Ancho */
+        .main-content { 
+            flex: 1;
+            margin-left: 250px; /* Ancho exacto del sidebar */
+            padding: 60px 40px; 
+            width: calc(100% - 250px); 
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
 
-        /* ESTILOS DE IMPRESIÓN (EL COMPROBANTE) */
+        h1 { font-weight: 800; font-size: 2.2rem; letter-spacing: -1px; margin: 0; }
+        .subtitle { color: var(--text-dim); font-size: 0.7rem; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; }
+        
+        /* Tabla Profesional */
+        .table-wrapper { 
+            background: #050505; 
+            border: 1px solid var(--border); 
+            border-radius: 12px; 
+            overflow-x: auto; 
+            margin-top: 40px;
+            width: 100%;
+        }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 900px; }
+        th { 
+            padding: 20px; 
+            background: #0a0a0a; 
+            color: var(--text-dim); 
+            font-size: 0.65rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+            border-bottom: 1px solid var(--border);
+        }
+        td { padding: 20px; border-bottom: 1px solid var(--border); font-size: 0.85rem; vertical-align: middle; }
+        
+        .ot-badge { font-family: monospace; color: #fff; font-weight: 800; font-size: 0.75rem; background: #1a1a1a; padding: 5px 10px; border-radius: 4px; border: 1px solid #333; }
+        .price-tag { font-weight: 800; color: #fff; font-size: 1rem; }
+        
+        .status-select { 
+            background: #000; 
+            color: #fff; 
+            border: 1px solid #333; 
+            padding: 8px; 
+            border-radius: 6px; 
+            font-size: 0.7rem; 
+            font-family: 'Montserrat'; 
+            font-weight: 600; 
+            cursor: pointer;
+            width: 150px;
+        }
+
+        .btn-print { 
+            background: #fff; 
+            color: #000; 
+            border: none; 
+            padding: 10px 15px; 
+            border-radius: 6px; 
+            font-weight: 800; 
+            font-size: 0.7rem; 
+            cursor: pointer; 
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+        .btn-print:hover { background: var(--accent); }
+
+        .loading { text-align: center; padding: 100px; color: var(--text-dim); letter-spacing: 4px; font-size: 0.8rem; }
+
+        /* DISEÑO DE IMPRESIÓN (COMPROBANTE) */
+        #plantilla-impresion { display: none; }
+
         @media print {
             body * { visibility: hidden; }
             #plantilla-impresion, #plantilla-impresion * { visibility: visible; }
             #plantilla-impresion { 
-                position: absolute; left: 0; top: 0; width: 100%; 
-                background: white !important; color: black !important; padding: 40px;
+                display: block !important;
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                width: 100%; 
+                background: white !important; 
+                color: black !important; 
+                padding: 40px;
+                font-family: Arial, sans-serif;
             }
-            .no-print { display: none; }
+            .no-print { display: none !important; }
         }
-
-        #plantilla-impresion { display: none; background: white; color: black; padding: 40px; font-family: sans-serif; }
     </style>
 </head>
 <body>
@@ -61,14 +157,19 @@
     </div>
 
     <div class="main-content">
-        <h1 class="no-print">Órdenes de Trabajo</h1>
+        <div class="no-print">
+            <h1>Órdenes de Trabajo</h1>
+            <p class="subtitle">Panel de Control General</p>
+        </div>
+
         <div class="table-wrapper no-print">
-            <table id="tablaReportes">
+            <div id="loader" class="loading">SINCRO FIREBASE ACTIVADA...</div>
+            <table id="tablaReportes" style="display: none;">
                 <thead>
                     <tr>
                         <th>ID / Fecha</th>
                         <th>Cliente</th>
-                        <th>Proyecto</th>
+                        <th>Proyecto / Responsable</th>
                         <th>Presupuesto</th>
                         <th>Estado</th>
                         <th>Acción</th>
@@ -81,40 +182,44 @@
 
     <div id="plantilla-impresion">
         <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 20px; margin-bottom: 20px;">
-            <h1 style="letter-spacing: 5px;">CUARZO CRISTAL</h1>
-            <p>COMPROBANTE DE ORDEN DE TRABAJO</p>
+            <h1 style="letter-spacing: 10px; margin: 0;">CUARZO CRISTAL</h1>
+            <p style="font-size: 0.8rem; font-weight: bold;">ORDEN DE TRABAJO - COMPROBANTE OFICIAL</p>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 30px;">
+        
+        <div style="display: flex; justify-content: space-between; margin-bottom: 40px;">
             <div>
-                <p><strong>CLIENTE:</strong> <span id="print-nombre"></span></p>
-                <p><strong>CONTACTO:</strong> <span id="print-email"></span></p>
+                <p style="margin: 5px 0;"><strong>CLIENTE:</strong> <span id="p-nombre"></span></p>
+                <p style="margin: 5px 0;"><strong>CONTACTO:</strong> <span id="p-email"></span></p>
             </div>
             <div style="text-align: right;">
-                <p><strong>FECHA:</strong> <span id="print-fecha"></span></p>
-                <p><strong>OT:</strong> #<span id="print-id"></span></p>
+                <p style="margin: 5px 0;"><strong>FECHA:</strong> <span id="p-fecha"></span></p>
+                <p style="margin: 5px 0;"><strong>N° ORDEN:</strong> #<span id="p-id"></span></p>
             </div>
         </div>
+
         <table style="width: 100%; border-collapse: collapse; border: 1px solid black;">
             <thead>
-                <tr style="background: #f0f0f0;">
-                    <th style="border: 1px solid black; padding: 10px; text-align: left;">DESCRIPCIÓN</th>
-                    <th style="border: 1px solid black; padding: 10px; text-align: right;">TOTAL</th>
+                <tr style="background: #eee;">
+                    <th style="border: 1px solid black; padding: 15px; text-align: left;">DESCRIPCIÓN DEL PROYECTO</th>
+                    <th style="border: 1px solid black; padding: 15px; text-align: right;">INVERSIÓN</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td style="border: 1px solid black; padding: 20px; height: 100px;">
-                        <strong id="print-tipo"></strong>
-                        <p>Estado actual: <span id="print-estado"></span></p>
+                    <td style="border: 1px solid black; padding: 20px; height: 150px; vertical-align: top;">
+                        <h3 id="p-tipo" style="margin: 0 0 10px 0;"></h3>
+                        <p>Estado actual de gestión: <strong id="p-estado"></strong></p>
+                        <p style="font-size: 0.8rem; color: #444; margin-top: 20px;">Este documento certifica que el proyecto ha sido dado de alta en el sistema de Cuarzo Cristal.</p>
                     </td>
-                    <td style="border: 1px solid black; padding: 20px; text-align: right; font-size: 1.5rem; font-weight: bold;">
-                        $<span id="print-precio"></span>
+                    <td style="border: 1px solid black; padding: 20px; text-align: right; font-size: 1.8rem; font-weight: bold;">
+                        $<span id="p-precio"></span>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <div style="margin-top: 50px; font-size: 0.8rem; color: #555;">
-            <p>* Este documento sirve como registro oficial de la solicitud del servicio.</p>
+        
+        <div style="margin-top: 60px; text-align: center; font-size: 0.7rem; color: #666;">
+            <p>Cuarzo Cristal Empresarial - Gestión de Proyectos Digitales</p>
         </div>
     </div>
 
@@ -134,35 +239,40 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // HACER LAS FUNCIONES ACCESIBLES PARA LOS BOTONES
+        // Funciones Globales
         window.cambiarEstado = async (id, nuevoEstado) => {
-            await updateDoc(doc(db, "leads_clientes", id), { estadoLead: nuevoEstado });
+            try {
+                await updateDoc(doc(db, "leads_clientes", id), { estadoLead: nuevoEstado });
+            } catch (e) { alert("Error al actualizar"); }
         };
 
-        window.imprimirOT = (id) => {
+        window.generarComprobante = (id) => {
             const fila = document.getElementById(`row-${id}`);
             
-            // Llenar datos en la plantilla de impresión
-            document.getElementById('print-nombre').innerText = fila.querySelector('.c-nombre').innerText;
-            document.getElementById('print-email').innerText = fila.querySelector('.c-email').innerText;
-            document.getElementById('print-tipo').innerText = fila.querySelector('.c-tipo').innerText;
-            document.getElementById('print-precio').innerText = fila.querySelector('.price-tag').innerText.replace('$', '');
-            document.getElementById('print-fecha').innerText = fila.querySelector('.c-fecha').innerText;
-            document.getElementById('print-estado').innerText = fila.querySelector('.status-select').value;
-            document.getElementById('print-id').innerText = id.substring(0, 8).toUpperCase();
+            // Inyectar datos en la plantilla de impresión
+            document.getElementById('p-nombre').innerText = fila.querySelector('.c-nombre').innerText;
+            document.getElementById('p-email').innerText = fila.querySelector('.c-email').innerText;
+            document.getElementById('p-tipo').innerText = fila.querySelector('.c-tipo').innerText;
+            document.getElementById('p-precio').innerText = fila.querySelector('.price-tag').innerText.replace('$', '');
+            document.getElementById('p-fecha').innerText = fila.querySelector('.c-fecha').innerText;
+            document.getElementById('p-estado').innerText = fila.querySelector('.status-select').value;
+            document.getElementById('p-id').innerText = id.substring(0, 8).toUpperCase();
 
-            // Ejecutar impresión
+            // Abrir ventana de impresión
             window.print();
         };
 
+        // Escuchar cambios en tiempo real
         const q = query(collection(db, "leads_clientes"), orderBy("fechaRegistro", "desc"));
 
         onSnapshot(q, (snapshot) => {
             const cuerpo = document.getElementById('listaCuerpo');
             cuerpo.innerHTML = "";
+            
             snapshot.forEach((snapshotDoc) => {
                 const data = snapshotDoc.data();
                 const id = snapshotDoc.id;
+                
                 const tr = document.createElement('tr');
                 tr.id = `row-${id}`;
                 tr.innerHTML = `
@@ -176,21 +286,26 @@
                     </td>
                     <td>
                         <div class="c-tipo" style="font-weight:600;">${data.tipo}</div>
+                        <div style="font-size:0.65rem; color:#888;">ASIGNADO: ${data.colaboradorAsignado || 'SIN ASIGNAR'}</div>
                     </td>
                     <td><span class="price-tag">$${data.presupuesto || '0'}</span></td>
                     <td>
                         <select class="status-select" onchange="cambiarEstado('${id}', this.value)">
                             <option value="RECIBIDA" ${data.estadoLead === 'RECIBIDA' ? 'selected' : ''}>RECIBIDA</option>
                             <option value="EN PROCESO" ${data.estadoLead === 'EN PROCESO' ? 'selected' : ''}>EN PROCESO</option>
+                            <option value="REVISIÓN" ${data.estadoLead === 'REVISIÓN' ? 'selected' : ''}>REVISIÓN</option>
                             <option value="FINALIZADO" ${data.estadoLead === 'FINALIZADO' ? 'selected' : ''}>FINALIZADO</option>
                         </select>
                     </td>
                     <td>
-                        <button class="btn-pdf" onclick="imprimirOT('${id}')">IMPRIMIR PDF</button>
+                        <button class="btn-print" onclick="generarComprobante('${id}')"><i class="fas fa-print"></i> PDF</button>
                     </td>
                 `;
                 cuerpo.appendChild(tr);
             });
+            
+            document.getElementById('loader').style.display = "none";
+            document.getElementById('tablaReportes').style.display = "table";
         });
     </script>
 </body>
