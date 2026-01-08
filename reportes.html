@@ -4,35 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Órdenes | Cuarzo Cristal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
     <style>
-        :root { --bg: #000; --sidebar: #080808; --text: #fff; --dim: #666; --border: #1a1a1a; }
+        :root { --bg: #000; --sidebar: #080808; --text: #fff; --border: #1a1a1a; }
         body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; margin: 0; display: flex; }
         
+        /* Sidebar */
         .sidebar { width: 250px; background: var(--sidebar); padding: 40px 20px; border-right: 1px solid var(--border); height: 100vh; position: fixed; box-sizing: border-box; }
-        .sidebar-header h2 { font-weight: 800; letter-spacing: 5px; font-size: 1.1rem; text-align: center; }
+        .sidebar h2 { font-weight: 800; letter-spacing: 5px; font-size: 1.1rem; text-align: center; margin: 0; }
         .sidebar nav { margin-top: 50px; }
-        .sidebar nav a { display: flex; align-items: center; color: var(--dim); text-decoration: none; padding: 15px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+        .sidebar nav a { display: flex; align-items: center; color: #666; text-decoration: none; padding: 15px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
         .sidebar nav a.active { color: #fff; background: #0c0c0c; border-radius: 8px; }
 
+        /* Contenido */
         .main-content { flex: 1; margin-left: 250px; padding: 60px 40px; width: calc(100% - 250px); box-sizing: border-box; }
+        .table-wrapper { background: #050505; border: 1px solid var(--border); border-radius: 12px; margin-top: 40px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { padding: 20px; background: #0a0a0a; color: #666; font-size: 0.65rem; text-transform: uppercase; text-align: left; border-bottom: 1px solid var(--border); }
+        td { padding: 20px; border-bottom: 1px solid var(--border); font-size: 0.85rem; color: #eee; }
         
-        .table-wrapper { background: #050505; border: 1px solid var(--border); border-radius: 12px; margin-top: 40px; overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; min-width: 900px; }
-        th { padding: 20px; background: #0a0a0a; color: var(--dim); font-size: 0.65rem; text-transform: uppercase; text-align: left; }
-        td { padding: 20px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
-        
-        .loading { text-align: center; padding: 100px; color: var(--dim); letter-spacing: 4px; font-size: 0.8rem; }
-        .ot-badge { font-family: monospace; background: #1a1a1a; padding: 5px 8px; border-radius: 4px; }
-        .btn-print { background: #fff; color: #000; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 800; cursor: pointer; }
+        .loading { text-align: center; padding: 100px; color: #666; letter-spacing: 2px; font-size: 0.9rem; }
+        .price { font-weight: 800; color: #00e5ff; }
+        .btn-pdf { background: #fff; color: #000; border: none; padding: 8px 15px; border-radius: 4px; font-weight: 800; cursor: pointer; font-size: 0.7rem; }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <div class="sidebar-header"><h2>CUARZO</h2></div>
+        <h2>CUARZO</h2>
         <nav>
             <a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a>
             <a href="nuevos-clientes.html"><i class="fas fa-user-plus"></i> Nuevo Cliente</a> 
@@ -43,16 +43,19 @@
     <div class="main-content">
         <h1>Órdenes de Trabajo</h1>
         <div class="table-wrapper">
-            <div id="loader" class="loading">ESTADO: CONECTANDO CON FIREBASE...</div>
+            <div id="loader" class="loading">
+                <i class="fas fa-spinner fa-spin"></i><br><br>
+                CONECTANDO CON LA NUBE...
+            </div>
             <table id="tablaReportes" style="display: none;">
                 <thead>
                     <tr>
-                        <th>ID / Fecha</th>
-                        <th>Cliente</th>
-                        <th>Proyecto</th>
-                        <th>Presupuesto</th>
-                        <th>Estado</th>
-                        <th>Acción</th>
+                        <th>OT / FECHA</th>
+                        <th>CLIENTE</th>
+                        <th>PROYECTO</th>
+                        <th>PRESUPUESTO</th>
+                        <th>ESTADO</th>
+                        <th>ACCIÓN</th>
                     </tr>
                 </thead>
                 <tbody id="listaCuerpo"></tbody>
@@ -62,9 +65,9 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // Configuración directa
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
             authDomain: "cuarzocristalempresarialsist.firebaseapp.com",
@@ -76,52 +79,39 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app);
 
-        // 1. VERIFICAR SI EL USUARIO ESTÁ LOGUEADO
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                document.getElementById('loader').innerText = "ERROR: ACCESO DENEGADO. REDIRIGIENDO AL LOGIN...";
-                setTimeout(() => window.location.href = "login.html", 2000);
-            } else {
-                cargarDatos();
+        // Carga directa sin filtros para evitar bloqueos
+        const colRef = collection(db, "leads_clientes");
+
+        onSnapshot(colRef, (snapshot) => {
+            const cuerpo = document.getElementById('listaCuerpo');
+            cuerpo.innerHTML = "";
+            
+            if (snapshot.empty) {
+                document.getElementById('loader').innerHTML = "NO SE ENCONTRARON ÓRDENES.";
+                return;
             }
-        });
 
-        function cargarDatos() {
-            // Quitamos el orderBy temporalmente para descartar errores de índices
-            const q = collection(db, "leads_clientes");
-
-            onSnapshot(q, (snapshot) => {
-                const cuerpo = document.getElementById('listaCuerpo');
-                cuerpo.innerHTML = "";
-                
-                if (snapshot.empty) {
-                    document.getElementById('loader').innerText = "SIN DATOS ENCONTRADOS EN LA NUBE.";
-                    return;
-                }
-
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td><span class="ot-badge">#${doc.id.substring(0,6)}</span></td>
-                        <td><b>${data.nombre || 'Sin nombre'}</b></td>
-                        <td>${data.tipo || 'Sin tipo'}</td>
-                        <td>$${data.presupuesto || '0'}</td>
-                        <td>${data.estadoLead || 'RECIBIDA'}</td>
-                        <td><button class="btn-print" onclick="window.print()">PDF</button></td>
-                    `;
-                    cuerpo.appendChild(tr);
-                });
-
-                document.getElementById('loader').style.display = "none";
-                document.getElementById('tablaReportes').style.display = "table";
-            }, (error) => {
-                console.error("Error en Firebase:", error);
-                document.getElementById('loader').innerHTML = "ERROR DE CONEXIÓN: <br>" + error.message;
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><b>#${doc.id.substring(0,6).toUpperCase()}</b><br><small style="color:#444">${data.fechaRegistro || 'S/F'}</small></td>
+                    <td><b>${data.nombre ? data.nombre.toUpperCase() : 'N/A'}</b><br><small style="color:#666">${data.email || ''}</small></td>
+                    <td>${data.tipo || 'General'}</td>
+                    <td class="price">$${data.presupuesto || '0'}</td>
+                    <td><span style="background:#111; padding:5px 10px; border-radius:4px; font-size:0.7rem;">${data.estadoLead || 'RECIBIDA'}</span></td>
+                    <td><button class="btn-pdf" onclick="window.print()">PDF</button></td>
+                `;
+                cuerpo.appendChild(tr);
             });
-        }
+
+            document.getElementById('loader').style.display = "none";
+            document.getElementById('tablaReportes').style.display = "table";
+        }, (error) => {
+            console.error(error);
+            document.getElementById('loader').innerHTML = "ERROR DE FIREBASE: " + error.message;
+        });
     </script>
 </body>
 </html>
