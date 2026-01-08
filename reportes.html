@@ -15,79 +15,54 @@
         }
 
         body { 
-            background-color: var(--bg); 
-            color: var(--text-main); 
-            font-family: 'Montserrat', sans-serif; 
-            margin: 0; 
-            display: flex; 
-            min-height: 100vh;
-            width: 100%;
-            overflow-x: hidden;
+            background-color: var(--bg); color: var(--text-main); 
+            font-family: 'Montserrat', sans-serif; margin: 0; display: flex; 
+            min-height: 100vh; width: 100%; overflow-x: hidden;
         }
         
-        /* Sidebar Fija */
+        /* Sidebar */
         .sidebar { 
-            width: 250px; 
-            background-color: var(--sidebar); 
-            padding: 40px 20px; 
-            border-right: 1px solid var(--border); 
-            display: flex; 
-            flex-direction: column; 
-            position: fixed; 
-            height: 100vh; 
-            z-index: 100; 
-            box-sizing: border-box;
+            width: 250px; background-color: var(--sidebar); padding: 40px 20px; 
+            border-right: 1px solid var(--border); display: flex; flex-direction: column; 
+            position: fixed; height: 100vh; z-index: 100; box-sizing: border-box;
         }
         .sidebar-header h2 { font-weight: 800; letter-spacing: 5px; font-size: 1.1rem; margin: 0; text-align: center; }
         .sidebar nav { margin-top: 50px; }
         .sidebar nav a { 
-            display: flex; 
-            align-items: center; 
-            color: var(--text-dim); 
-            text-decoration: none; 
-            padding: 15px; 
-            border-radius: 8px; 
-            transition: 0.3s; 
-            font-size: 0.75rem; 
-            font-weight: 600; 
-            letter-spacing: 1px; 
-            text-transform: uppercase; 
-            margin-bottom: 5px; 
+            display: flex; align-items: center; color: var(--text-dim); text-decoration: none; 
+            padding: 15px; border-radius: 8px; transition: 0.3s; font-size: 0.75rem; 
+            font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; 
         }
         .sidebar nav a:hover, .sidebar nav a.active { background-color: var(--hover); color: #fff; }
         .sidebar nav a i { margin-right: 15px; width: 20px; text-align: center; }
 
-        /* Contenido Principal con Corrección de Ancho */
+        /* Contenido Principal CORREGIDO */
         .main-content { 
-            flex: 1;
-            margin-left: 250px; /* Ancho exacto del sidebar */
-            padding: 60px 40px; 
-            width: calc(100% - 250px); 
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
+            flex: 1; margin-left: 250px; padding: 60px 40px; 
+            width: calc(100% - 250px); box-sizing: border-box;
         }
 
         h1 { font-weight: 800; font-size: 2.2rem; letter-spacing: -1px; margin: 0; }
         .subtitle { color: var(--text-dim); font-size: 0.7rem; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; }
         
-        /* Tabla Profesional */
+        /* Tabla con espaciado forzado */
         .table-wrapper { 
-            background: #050505; 
-            border: 1px solid var(--border); 
-            border-radius: 12px; 
-            overflow-x: auto; 
-            margin-top: 40px;
-            width: 100%;
+            background: #050505; border: 1px solid var(--border); border-radius: 12px; 
+            overflow-x: auto; margin-top: 40px; width: 100%;
         }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 900px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 1000px; table-layout: fixed; }
+        
+        /* Definición de anchos de columna para evitar que se amontonen */
+        th:nth-child(1), td:nth-child(1) { width: 15%; } /* ID / Fecha */
+        th:nth-child(2), td:nth-child(2) { width: 25%; } /* Cliente */
+        th:nth-child(3), td:nth-child(3) { width: 25%; } /* Proyecto */
+        th:nth-child(4), td:nth-child(4) { width: 12%; } /* Presupuesto */
+        th:nth-child(5), td:nth-child(5) { width: 13%; } /* Estado */
+        th:nth-child(6), td:nth-child(6) { width: 10%; } /* Acción */
+
         th { 
-            padding: 20px; 
-            background: #0a0a0a; 
-            color: var(--text-dim); 
-            font-size: 0.65rem; 
-            text-transform: uppercase; 
-            letter-spacing: 2px;
+            padding: 20px; background: #0a0a0a; color: var(--text-dim); 
+            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px;
             border-bottom: 1px solid var(--border);
         }
         td { padding: 20px; border-bottom: 1px solid var(--border); font-size: 0.85rem; vertical-align: middle; }
@@ -96,51 +71,26 @@
         .price-tag { font-weight: 800; color: #fff; font-size: 1rem; }
         
         .status-select { 
-            background: #000; 
-            color: #fff; 
-            border: 1px solid #333; 
-            padding: 8px; 
-            border-radius: 6px; 
-            font-size: 0.7rem; 
-            font-family: 'Montserrat'; 
-            font-weight: 600; 
-            cursor: pointer;
-            width: 150px;
+            background: #000; color: #fff; border: 1px solid #333; padding: 8px; 
+            border-radius: 6px; font-size: 0.7rem; font-family: 'Montserrat'; 
+            font-weight: 600; cursor: pointer; width: 100%;
         }
 
         .btn-print { 
-            background: #fff; 
-            color: #000; 
-            border: none; 
-            padding: 10px 15px; 
-            border-radius: 6px; 
-            font-weight: 800; 
-            font-size: 0.7rem; 
-            cursor: pointer; 
-            text-transform: uppercase;
-            transition: 0.2s;
+            background: #fff; color: #000; border: none; padding: 10px 15px; 
+            border-radius: 6px; font-weight: 800; font-size: 0.7rem; 
+            cursor: pointer; text-transform: uppercase; width: 100%;
         }
         .btn-print:hover { background: var(--accent); }
 
         .loading { text-align: center; padding: 100px; color: var(--text-dim); letter-spacing: 4px; font-size: 0.8rem; }
 
-        /* DISEÑO DE IMPRESIÓN (COMPROBANTE) */
+        /* Impresión */
         #plantilla-impresion { display: none; }
-
         @media print {
             body * { visibility: hidden; }
             #plantilla-impresion, #plantilla-impresion * { visibility: visible; }
-            #plantilla-impresion { 
-                display: block !important;
-                position: absolute; 
-                left: 0; 
-                top: 0; 
-                width: 100%; 
-                background: white !important; 
-                color: black !important; 
-                padding: 40px;
-                font-family: Arial, sans-serif;
-            }
+            #plantilla-impresion { display: block !important; position: absolute; left: 0; top: 0; width: 100%; background: white !important; color: black !important; padding: 40px; }
             .no-print { display: none !important; }
         }
     </style>
@@ -159,7 +109,7 @@
     <div class="main-content">
         <div class="no-print">
             <h1>Órdenes de Trabajo</h1>
-            <p class="subtitle">Panel de Control General</p>
+            <p class="subtitle">Panel de Gestión CEO</p>
         </div>
 
         <div class="table-wrapper no-print">
@@ -183,44 +133,12 @@
     <div id="plantilla-impresion">
         <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 20px; margin-bottom: 20px;">
             <h1 style="letter-spacing: 10px; margin: 0;">CUARZO CRISTAL</h1>
-            <p style="font-size: 0.8rem; font-weight: bold;">ORDEN DE TRABAJO - COMPROBANTE OFICIAL</p>
+            <p>COMPROBANTE OFICIAL DE ORDEN</p>
         </div>
-        
-        <div style="display: flex; justify-content: space-between; margin-bottom: 40px;">
-            <div>
-                <p style="margin: 5px 0;"><strong>CLIENTE:</strong> <span id="p-nombre"></span></p>
-                <p style="margin: 5px 0;"><strong>CONTACTO:</strong> <span id="p-email"></span></p>
-            </div>
-            <div style="text-align: right;">
-                <p style="margin: 5px 0;"><strong>FECHA:</strong> <span id="p-fecha"></span></p>
-                <p style="margin: 5px 0;"><strong>N° ORDEN:</strong> #<span id="p-id"></span></p>
-            </div>
-        </div>
-
-        <table style="width: 100%; border-collapse: collapse; border: 1px solid black;">
-            <thead>
-                <tr style="background: #eee;">
-                    <th style="border: 1px solid black; padding: 15px; text-align: left;">DESCRIPCIÓN DEL PROYECTO</th>
-                    <th style="border: 1px solid black; padding: 15px; text-align: right;">INVERSIÓN</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="border: 1px solid black; padding: 20px; height: 150px; vertical-align: top;">
-                        <h3 id="p-tipo" style="margin: 0 0 10px 0;"></h3>
-                        <p>Estado actual de gestión: <strong id="p-estado"></strong></p>
-                        <p style="font-size: 0.8rem; color: #444; margin-top: 20px;">Este documento certifica que el proyecto ha sido dado de alta en el sistema de Cuarzo Cristal.</p>
-                    </td>
-                    <td style="border: 1px solid black; padding: 20px; text-align: right; font-size: 1.8rem; font-weight: bold;">
-                        $<span id="p-precio"></span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <div style="margin-top: 60px; text-align: center; font-size: 0.7rem; color: #666;">
-            <p>Cuarzo Cristal Empresarial - Gestión de Proyectos Digitales</p>
-        </div>
+        <p><strong>CLIENTE:</strong> <span id="p-nombre"></span></p>
+        <p><strong>PROYECTO:</strong> <span id="p-tipo"></span></p>
+        <p><strong>MONTO:</strong> $<span id="p-precio"></span></p>
+        <p><strong>FECHA:</strong> <span id="p-fecha"></span></p>
     </div>
 
     <script type="module">
@@ -239,71 +157,48 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Funciones Globales
         window.cambiarEstado = async (id, nuevoEstado) => {
-            try {
-                await updateDoc(doc(db, "leads_clientes", id), { estadoLead: nuevoEstado });
-            } catch (e) { alert("Error al actualizar"); }
+            await updateDoc(doc(db, "leads_clientes", id), { estadoLead: nuevoEstado });
         };
 
         window.generarComprobante = (id) => {
             const fila = document.getElementById(`row-${id}`);
-            
-            // Inyectar datos en la plantilla de impresión
             document.getElementById('p-nombre').innerText = fila.querySelector('.c-nombre').innerText;
-            document.getElementById('p-email').innerText = fila.querySelector('.c-email').innerText;
             document.getElementById('p-tipo').innerText = fila.querySelector('.c-tipo').innerText;
             document.getElementById('p-precio').innerText = fila.querySelector('.price-tag').innerText.replace('$', '');
             document.getElementById('p-fecha').innerText = fila.querySelector('.c-fecha').innerText;
-            document.getElementById('p-estado').innerText = fila.querySelector('.status-select').value;
-            document.getElementById('p-id').innerText = id.substring(0, 8).toUpperCase();
-
-            // Abrir ventana de impresión
             window.print();
         };
 
-        // Escuchar cambios en tiempo real
         const q = query(collection(db, "leads_clientes"), orderBy("fechaRegistro", "desc"));
 
         onSnapshot(q, (snapshot) => {
             const cuerpo = document.getElementById('listaCuerpo');
             cuerpo.innerHTML = "";
             
+            if (snapshot.empty) {
+                cuerpo.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:50px; color:#666;">No hay órdenes registradas aún.</td></tr>';
+            }
+
             snapshot.forEach((snapshotDoc) => {
                 const data = snapshotDoc.data();
                 const id = snapshotDoc.id;
-                
                 const tr = document.createElement('tr');
                 tr.id = `row-${id}`;
                 tr.innerHTML = `
-                    <td>
-                        <span class="ot-badge">#${id.substring(0,6)}</span>
-                        <div class="c-fecha" style="font-size:0.6rem; color:#444; margin-top:5px;">${data.fechaRegistro}</div>
-                    </td>
-                    <td>
-                        <b class="c-nombre">${data.nombre.toUpperCase()}</b><br>
-                        <span class="c-email" style="color:#666; font-size:0.7rem;">${data.email}</span>
-                    </td>
-                    <td>
-                        <div class="c-tipo" style="font-weight:600;">${data.tipo}</div>
-                        <div style="font-size:0.65rem; color:#888;">ASIGNADO: ${data.colaboradorAsignado || 'SIN ASIGNAR'}</div>
-                    </td>
+                    <td><span class="ot-badge">#${id.substring(0,6)}</span><div class="c-fecha" style="font-size:0.6rem; color:#444; margin-top:5px;">${data.fechaRegistro}</div></td>
+                    <td><b class="c-nombre">${data.nombre.toUpperCase()}</b><br><span class="c-email" style="color:#666; font-size:0.7rem;">${data.email}</span></td>
+                    <td><div class="c-tipo" style="font-weight:600;">${data.tipo}</div><div style="font-size:0.65rem; color:#888;">ASIGNADO: ${data.colaboradorAsignado || 'PENDIENTE'}</div></td>
                     <td><span class="price-tag">$${data.presupuesto || '0'}</span></td>
-                    <td>
-                        <select class="status-select" onchange="cambiarEstado('${id}', this.value)">
-                            <option value="RECIBIDA" ${data.estadoLead === 'RECIBIDA' ? 'selected' : ''}>RECIBIDA</option>
-                            <option value="EN PROCESO" ${data.estadoLead === 'EN PROCESO' ? 'selected' : ''}>EN PROCESO</option>
-                            <option value="REVISIÓN" ${data.estadoLead === 'REVISIÓN' ? 'selected' : ''}>REVISIÓN</option>
-                            <option value="FINALIZADO" ${data.estadoLead === 'FINALIZADO' ? 'selected' : ''}>FINALIZADO</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button class="btn-print" onclick="generarComprobante('${id}')"><i class="fas fa-print"></i> PDF</button>
-                    </td>
+                    <td><select class="status-select" onchange="cambiarEstado('${id}', this.value)">
+                        <option value="RECIBIDA" ${data.estadoLead === 'RECIBIDA' ? 'selected' : ''}>RECIBIDA</option>
+                        <option value="EN PROCESO" ${data.estadoLead === 'EN PROCESO' ? 'selected' : ''}>EN PROCESO</option>
+                        <option value="FINALIZADO" ${data.estadoLead === 'FINALIZADO' ? 'selected' : ''}>FINALIZADO</option>
+                    </select></td>
+                    <td><button class="btn-print" onclick="generarComprobante('${id}')">PDF</button></td>
                 `;
                 cuerpo.appendChild(tr);
             });
-            
             document.getElementById('loader').style.display = "none";
             document.getElementById('tablaReportes').style.display = "table";
         });
