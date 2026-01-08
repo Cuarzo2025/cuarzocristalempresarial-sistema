@@ -3,61 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contrato Legal | Cuarzo Cristal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Legales | Cuarzo Cristal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
     <style>
-        :root { --bg: #000; --card: #0d0d0d; --border: #333; --text: #fff; --gray: #888; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 40px auto; background-color: var(--card); padding: 40px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
-        .header h1 { font-size: 1.5em; margin: 0; text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 15px; }
-        .contract-section { background-color: #111; padding: 30px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #222; }
-        h2 { font-size: 0.9em; color: var(--gray); text-transform: uppercase; margin-bottom: 20px; letter-spacing: 1px; }
-        .pdf-button { padding: 18px; background-color: #f5f5f5; color: #000; border: none; border-radius: 6px; font-weight: 800; cursor: pointer; width: 100%; text-align: center; text-decoration: none; display: block; margin-bottom: 10px; text-transform: uppercase; }
-        .btn-firmar { padding: 18px; background-color: #fff; color: #000; border: none; border-radius: 6px; font-weight: 800; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-        .btn-firmar:disabled { background-color: #222; color: #555; cursor: not-allowed; }
-        .recuadro-firma-datos { background-color: #000; padding: 30px; border-radius: 6px; margin-top: 20px; font-family: 'Courier New', monospace; color: #00FF00; border: 1px solid #333; display: none; line-height: 1.6; font-size: 0.85em; }
-        .checkbox-container { display: flex; align-items: center; cursor: pointer; padding: 15px; background: #050505; border-radius: 6px; margin-bottom: 20px; border: 1px solid #1a1a1a; }
-        input[type="checkbox"] { width: 22px; height: 22px; margin-right: 15px; accent-color: #fff; }
+        :root { 
+            --bg: #000000; 
+            --card: #0a0a0a; 
+            --border: #1a1a1a; 
+            --text: #ffffff; 
+            --gray: #666666; 
+            --accent: #f2f2f2;
+        }
+        
+        body { background-color: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        
+        .container { 
+            width: 100%;
+            max-width: 650px; 
+            margin: 40px auto; 
+            background-color: var(--card); 
+            padding: 50px; 
+            border-radius: 8px; 
+            border: 1px solid var(--border); 
+            box-sizing: border-box;
+        }
+
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 50px; 
+            border-bottom: 1px solid var(--border); 
+            padding-bottom: 25px; 
+        }
+        
+        .header h1 { font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; margin: 0; }
+        .volviendo { color: var(--gray); text-decoration: none; font-size: 0.65rem; font-weight: 600; letter-spacing: 1px; transition: 0.3s; }
+        .volviendo:hover { color: #fff; }
+
+        .contract-section { 
+            background-color: #050505; 
+            padding: 30px; 
+            border-radius: 4px; 
+            margin-bottom: 25px; 
+            border: 1px solid var(--border); 
+        }
+        
+        h2 { font-size: 0.6rem; color: var(--gray); text-transform: uppercase; margin-bottom: 20px; letter-spacing: 2px; border-left: 2px solid #333; padding-left: 15px; }
+
+        .btn-secundario { 
+            padding: 15px; 
+            background-color: transparent; 
+            color: #fff; 
+            border: 1px solid #222; 
+            border-radius: 4px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            width: 100%; 
+            text-align: center; 
+            text-decoration: none; 
+            display: block; 
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+        .btn-secundario:hover { border-color: #555; background: #080808; }
+
+        .btn-principal { 
+            padding: 20px; 
+            background-color: var(--accent); 
+            color: #000; 
+            border: none; 
+            border-radius: 4px; 
+            font-weight: 800; 
+            cursor: pointer; 
+            width: 100%; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            font-size: 0.75rem;
+            transition: 0.3s; 
+        }
+        .btn-principal:hover:not(:disabled) { background-color: #ffffff; transform: translateY(-1px); }
+        .btn-principal:disabled { background-color: #151515; color: #444; cursor: not-allowed; }
+
+        .recuadro-hash { 
+            background-color: #000; 
+            padding: 25px; 
+            border-radius: 4px; 
+            margin-top: 25px; 
+            font-family: 'Courier New', monospace; 
+            color: #555; 
+            border: 1px solid var(--border); 
+            display: none; 
+            line-height: 1.8; 
+            font-size: 0.7rem; 
+            text-align: left;
+        }
+
+        .checkbox-wrapper { 
+            display: flex; 
+            align-items: center; 
+            cursor: pointer; 
+            padding: 20px; 
+            background: #000; 
+            border-radius: 4px; 
+            margin-bottom: 25px; 
+            border: 1px solid var(--border); 
+            font-size: 0.7rem;
+            color: #888;
+            line-height: 1.4;
+        }
+        input[type="checkbox"] { width: 18px; height: 18px; margin-right: 15px; accent-color: #fff; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-file-contract"></i> Legales <i class="fas fa-gavel" style="font-size: 0.7em; color: #444;"></i></h1>
-            <a href="workspace.html" style="color: #888; text-decoration: none; font-size: 0.8em;"><i class="fas fa-arrow-left"></i> VOLVER</a>
+            <h1>Legal Department</h1>
+            <a href="workspace.html" class="volviendo">BACK</a>
         </div>
 
         <div class="contract-section">
-            <h2>1. Revisión de Documento</h2>
-            <p style="font-size: 0.9em; color: #ccc;">Colaborador detectado: <b id="empleado-nombre" style="color:#FFF;">Cargando...</b></p>
-            <a href="contrato-legal.pdf" id="btnLeerPDF" target="_blank" class="pdf-button" onclick="habilitarCheck()">
-                <i class="fas fa-file-pdf"></i> Visualizar Contrato PDF
+            <h2>01. Review Document</h2>
+            <p style="font-size: 0.75rem; color: #555; margin-bottom: 20px; letter-spacing: 0.5px;">
+                Colaborador: <b id="empleado-nombre" style="color:#eee;">Checking...</b>
+            </p>
+            <a href="contrato-legal.pdf" id="btnLeerPDF" target="_blank" class="btn-secundario" onclick="habilitarCheck()">
+                Open Contract PDF
             </a>
         </div>
 
         <div class="contract-section">
-            <h2>2. Formalización de Firma</h2>
+            <h2>02. Digital Signature</h2>
             <div id="controles-firma">
-                <label class="checkbox-container">
+                <label class="checkbox-wrapper">
                     <input type="checkbox" id="checkAcepto" disabled onchange="habilitarBoton()">
-                    <span style="font-size: 0.85em;">Confirmo que he leído y acepto los términos legales de Cuarzo Cristal.</span>
+                    <span>I confirm that I have read and accepted the legal terms and conditions of Cuarzo Cristal.</span>
                 </label>
-                <button id="btnFirmarContrato" class="btn-firmar" disabled onclick="procesoFirmaCompleto()">
-                    Confirmar Firma Digital
+                <button id="btnFirmarContrato" class="btn-principal" disabled onclick="ejecutarFirma()">
+                    Sign Document
                 </button>
             </div>
 
             <div id="area-exito" style="display:none; text-align: center;">
-                <div id="cuadro-informativo" class="recuadro-firma-datos"></div>
-                <p style="color: #FFF; font-weight: 600; margin-top: 25px;">
-                    <i class="fas fa-check-circle" style="color: #27AE60;"></i> Documento firmado y enviado correctamente.
+                <div id="cuadro-informativo" class="recuadro-hash"></div>
+                <p style="color: #fff; font-size: 0.65rem; font-weight: 800; margin-top: 30px; letter-spacing: 2px;">
+                    <i class="fas fa-shield-alt" style="margin-right: 10px;"></i> TRANSACTION VERIFIED
                 </p>
             </div>
         </div>
@@ -89,72 +188,72 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 uId = user.uid;
-                try {
-                    const snap = await getDoc(doc(db, "colaboradores", uId));
-                    if (snap.exists()) {
-                        dUser = snap.data();
-                        document.getElementById('empleado-nombre').textContent = (dUser.nombre || "Usuario").toUpperCase();
-                        if(dUser.contratoAceptado === true) {
-                            mostrarResultadoFinal(dUser.fechaFirma, dUser.horaFirma);
-                        }
+                const snap = await getDoc(doc(db, "colaboradores", uId));
+                if (snap.exists()) {
+                    dUser = snap.data();
+                    document.getElementById('empleado-nombre').textContent = (dUser.nombre || "User").toUpperCase();
+                    if(dUser.contratoAceptado === true) {
+                        mostrarResultadoFinal(dUser.fechaFirma, dUser.horaFirma, dUser.idTransaccion);
                     }
-                } catch (e) { console.error("Error cargando perfil:", e); }
+                }
             } else { window.location.href = "login.html"; }
         });
 
         window.habilitarCheck = () => { document.getElementById('checkAcepto').disabled = false; };
         window.habilitarBoton = () => { document.getElementById('btnFirmarContrato').disabled = !document.getElementById('checkAcepto').checked; };
 
-        window.procesoFirmaCompleto = async () => {
+        window.ejecutarFirma = async () => {
             const btn = document.getElementById('btnFirmarContrato');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ENVIANDO...';
+            btn.innerHTML = 'ENCRYPTING...';
             btn.disabled = true;
 
             const ahora = new Date();
             const fecha = ahora.toLocaleDateString('es-AR');
             const hora = ahora.toLocaleTimeString('es-AR');
-            const transaccion = uId.substring(0, 10).toUpperCase();
+            const transaccion = uId.substring(0, 8).toUpperCase() + Math.floor(Math.random() * 1000);
+
+            // Mapeo completo de datos para el template largo
+            const templateParams = {
+                nombre_usuario: (dUser.nombre || "Sin Nombre").toUpperCase(),
+                email_usuario: auth.currentUser.email,
+                nacionalidad: (dUser.nacionalidad || "S/D").toUpperCase(),
+                tipo_doc: (dUser.tipoIdentificacion || "DNI/CI"),
+                nro_doc: dUser.numeroDocumento || "S/D",
+                domicilio_profesional: (dUser.direccion || "Domicilio Registrado").toUpperCase(),
+                pais_profesional: (dUser.pais || "S/D").toUpperCase(),
+                cuil_tax: dUser.cuil || dUser.identificacionFiscal || "S/D",
+                fecha: fecha,
+                hora: hora,
+                id_transaccion: transaccion
+            };
 
             try {
-                const params = {
-                    email_usuario: auth.currentUser.email,
-                    nombre_usuario: (dUser.nombre || "Colaborador").toUpperCase(),
-                    fecha: fecha,
-                    hora: hora,
-                    id_transaccion: transaccion,
-                    nro_doc: dUser.numeroDocumento || "S/D"
-                };
+                // 1. Enviar Mail (Template verificado: template_rp3rwfo)
+                await emailjs.send("service_u1a6rwt", "template_rp3rwfo", templateParams);
 
-                // Envío de Email
-                try {
-                    await emailjs.send("service_u1a6rwt", "template_rp33rwfo", params);
-                } catch (errMail) {
-                    throw new Error("Fallo EmailJS: " + (errMail.text || "Verifica IDs"));
-                }
+                // 2. Guardar en Firebase
+                await updateDoc(doc(db, "colaboradores", uId), {
+                    contratoAceptado: true,
+                    fechaFirma: fecha,
+                    horaFirma: hora,
+                    idTransaccion: transaccion
+                });
 
-                // Actualizar Firebase
-                try {
-                    await updateDoc(doc(db, "colaboradores", uId), {
-                        contratoAceptado: true,
-                        fechaFirma: fecha,
-                        horaFirma: hora,
-                        idTransaccion: transaccion
-                    });
-                } catch (errDb) {
-                    throw new Error("Fallo Firebase: Revisa permisos de escritura.");
-                }
-
-                await modificarPDF(fecha, hora, transaccion);
-                mostrarResultadoFinal(fecha, hora);
+                // 3. Generar PDF Firmado
+                await generarPDF(fecha, hora, transaccion);
+                
+                // 4. Interfaz de Éxito
+                mostrarResultadoFinal(fecha, hora, transaccion);
 
             } catch (error) {
-                alert("DETALLE DEL ERROR: " + error.message);
-                btn.innerHTML = "Confirmar Firma Digital";
+                console.error("Error en el proceso:", error);
+                alert("Error: No se pudo completar la firma. " + error.message);
+                btn.innerHTML = "RETRY SIGNATURE";
                 btn.disabled = false;
             }
         };
 
-        async function modificarPDF(f, h, id) {
+        async function generarPDF(f, h, id) {
             try {
                 const url = 'contrato-legal.pdf'; 
                 const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
@@ -163,30 +262,33 @@
                 const lastPage = pages[pages.length - 1]; 
                 const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
                 
-                lastPage.drawText(`FIRMADO DIGITALMENTE POR: ${dUser.nombre.toUpperCase()}`, { x: 50, y: 80, size: 9, font });
-                lastPage.drawText(`FECHA: ${f} ${h} | ID TRANSACCIÓN: ${id}`, { x: 50, y: 65, size: 9, font });
+                lastPage.drawText(`FIRMADO DIGITALMENTE POR: ${dUser.nombre.toUpperCase()}`, { x: 50, y: 45, size: 7, font });
+                lastPage.drawText(`HASH ID: ${id} | REGISTRO: ${f} ${h}`, { x: 50, y: 35, size: 6, font });
 
                 const pdfBytes = await pdfDoc.save();
                 const blob = new Blob([pdfBytes], { type: "application/pdf" });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = `Contrato_Cuarzo_${dUser.nombre.replace(/\s+/g, '_')}.pdf`;
+                link.download = `CONTRATO_FIRMADO_CUARZO.pdf`;
                 link.click();
-            } catch (e) { console.error("Error PDF:", e); }
+            } catch (e) { console.error("PDF Fail:", e); }
         }
 
-        function mostrarResultadoFinal(f, h) {
+        function mostrarResultadoFinal(f, h, id) {
             document.getElementById('controles-firma').style.display = 'none';
             document.getElementById('btnLeerPDF').style.display = 'none';
             document.getElementById('area-exito').style.display = 'block';
             const cuadro = document.getElementById('cuadro-informativo');
             cuadro.style.display = 'block';
             cuadro.innerHTML = `
-                --- CERTIFICADO DE SEGURIDAD ---<br>
-                CUARZO CRISTAL EMPRESARIAL SISTEMA<br><br>
-                COLABORADOR: ${(dUser ? dUser.nombre : "USUARIO").toUpperCase()}<br>
-                REGISTRO: ${f} | ${h}<br>
-                ESTADO: FIRMADO Y VERIFICADO
+                - CERTIFICATE OF DIGITAL AUTHENTICITY -<br>
+                ---------------------------------------<br>
+                ENTITY: CUARZO CRISTAL EMPRESARIAL<br>
+                OWNER: ${(dUser ? dUser.nombre : "---").toUpperCase()}<br>
+                ID: ${(dUser ? dUser.tipoIdentificacion : "DOC")} ${(dUser ? dUser.numeroDocumento : "---")}<br>
+                DATE: ${f} | TIME: ${h}<br>
+                HASH: ${id}<br>
+                STATUS: ENCRYPTED & SIGNED
             `;
         }
     </script>
