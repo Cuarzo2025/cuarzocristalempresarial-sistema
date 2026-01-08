@@ -4,41 +4,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Órdenes | Cuarzo Cristal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root { --bg: #000; --sidebar: #080808; --text: #fff; --border: #1a1a1a; --accent: #00e5ff; }
-        body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; margin: 0; display: flex; }
-        
-        /* Sidebar */
-        .sidebar { width: 250px; background: var(--sidebar); padding: 40px 20px; border-right: 1px solid var(--border); height: 100vh; position: fixed; box-sizing: border-box; z-index: 100; }
-        .sidebar h2 { font-weight: 800; letter-spacing: 5px; font-size: 1.1rem; text-align: center; margin: 0; }
-        .sidebar nav { margin-top: 50px; }
-        .sidebar nav a { display: flex; align-items: center; color: #666; text-decoration: none; padding: 15px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
-        .sidebar nav a:hover, .sidebar nav a.active { color: #fff; background: #0c0c0c; border-radius: 8px; }
-        .sidebar nav a i { margin-right: 15px; width: 20px; text-align: center; }
+        :root { 
+            --bg: #000000; 
+            --sidebar: #0a0a0a; 
+            --text-main: #ffffff; 
+            --text-dim: #999999; 
+            --border: #1a1a1a; 
+            --accent: #f2f2f2; /* Gris casi blanco para resaltar */
+            --row-hover: #080808;
+        }
 
-        /* Contenido */
-        .main-content { flex: 1; margin-left: 250px; padding: 60px 40px; width: calc(100% - 250px); box-sizing: border-box; }
-        .table-wrapper { background: #050505; border: 1px solid var(--border); border-radius: 12px; margin-top: 40px; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
-        th { padding: 20px; background: #0a0a0a; color: #666; font-size: 0.65rem; text-transform: uppercase; text-align: left; border-bottom: 1px solid var(--border); letter-spacing: 1px; }
-        td { padding: 20px; border-bottom: 1px solid var(--border); font-size: 0.85rem; color: #eee; vertical-align: middle; }
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            font-family: 'Montserrat', sans-serif; 
+            margin: 0; 
+            display: flex; 
+            min-height: 100vh;
+        }
         
-        .loading { text-align: center; padding: 100px; color: #666; letter-spacing: 2px; font-size: 0.9rem; line-height: 2; }
-        .price { font-weight: 800; color: var(--accent); }
-        .btn-pdf { background: #fff; color: #000; border: none; padding: 8px 15px; border-radius: 4px; font-weight: 800; cursor: pointer; font-size: 0.7rem; transition: 0.3s; }
-        .btn-pdf:hover { background: var(--accent); }
+        /* Sidebar Ejecutivo */
+        .sidebar { 
+            width: 250px; 
+            background-color: var(--sidebar); 
+            padding: 40px 20px; 
+            border-right: 1px solid var(--border); 
+            height: 100vh; 
+            position: fixed; 
+            box-sizing: border-box; 
+            z-index: 100; 
+        }
+        .sidebar h2 { 
+            font-weight: 800; 
+            letter-spacing: 4px; 
+            font-size: 1rem; 
+            text-align: center; 
+            margin-bottom: 50px; 
+            color: var(--text-main);
+        }
+        .sidebar nav a { 
+            display: flex; 
+            align-items: center; 
+            color: var(--text-dim); 
+            text-decoration: none; 
+            padding: 15px; 
+            font-size: 0.7rem; 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            transition: 0.3s; 
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+        .sidebar nav a:hover, .sidebar nav a.active { 
+            color: #fff; 
+            background: #151515; 
+        }
+        .sidebar nav a i { margin-right: 15px; width: 18px; text-align: center; font-size: 0.9rem; }
 
-        /* Estilo de impresión */
+        /* Contenido Principal */
+        .main-content { 
+            flex: 1; 
+            margin-left: 250px; 
+            padding: 60px 50px; 
+            width: calc(100% - 250px); 
+            box-sizing: border-box; 
+        }
+        h1 { font-weight: 800; font-size: 1.8rem; letter-spacing: -0.5px; margin: 0; }
+        .subtitle { color: var(--text-dim); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
+
+        /* Tabla Estilo Luxury */
+        .table-wrapper { 
+            background: #000; 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            margin-top: 40px; 
+            overflow: hidden; 
+        }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th { 
+            padding: 20px; 
+            background: #050505; 
+            color: var(--text-dim); 
+            font-size: 0.6rem; 
+            text-transform: uppercase; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            letter-spacing: 2px; 
+        }
+        td { 
+            padding: 20px; 
+            border-bottom: 1px solid var(--border); 
+            font-size: 0.8rem; 
+            color: #ccc; 
+            vertical-align: middle; 
+            transition: 0.2s;
+        }
+        tr:hover td { background-color: var(--row-hover); color: #fff; }
+        
+        .loading { text-align: center; padding: 120px; color: var(--text-dim); letter-spacing: 3px; font-size: 0.75rem; text-transform: uppercase; }
+        .price { font-weight: 600; color: #fff; font-size: 0.9rem; }
+        
+        /* Badges de Estado en Escala de Grises */
+        .status-badge { 
+            background: #111; 
+            border: 1px solid #333; 
+            padding: 6px 12px; 
+            border-radius: 3px; 
+            font-size: 0.65rem; 
+            color: #fff; 
+            font-weight: 600; 
+            text-transform: uppercase;
+        }
+
+        .btn-pdf { 
+            background: #fff; 
+            color: #000; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 2px; 
+            font-weight: 800; 
+            cursor: pointer; 
+            font-size: 0.65rem; 
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .btn-pdf:hover { background: #cccccc; }
+
+        /* Estilo para Impresión */
         @media print {
-            .sidebar, .btn-pdf, h1 { display: none !important; }
+            .sidebar, .btn-pdf, .subtitle, h1 { display: none !important; }
             .main-content { margin-left: 0 !important; width: 100% !important; padding: 0 !important; }
-            .table-wrapper { border: none !important; background: white !important; }
-            table { color: black !important; min-width: 100% !important; border: 1px solid #000 !important; }
-            th { background: #eee !important; color: black !important; border: 1px solid #000 !important; }
-            td { border: 1px solid #000 !important; color: black !important; }
-            .price { color: black !important; }
+            .table-wrapper { border: none !important; }
+            table { color: black !important; width: 100% !important; }
+            th { border-bottom: 2px solid #000 !important; color: black !important; }
+            td { border-bottom: 1px solid #ccc !important; color: black !important; }
+            .status-badge { border: 1px solid black !important; color: black !important; }
         }
     </style>
 </head>
@@ -47,28 +151,30 @@
     <div class="sidebar">
         <h2>CUARZO</h2>
         <nav>
-            <a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a>
-            <a href="nuevos-clientes.html"><i class="fas fa-user-plus"></i> Nuevo Cliente</a> 
-            <a href="reportes.html" class="active"><i class="fas fa-tasks"></i> Órdenes</a>
+            <a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="nuevos-clientes.html"><i class="fas fa-plus"></i> Nuevo Cliente</a> 
+            <a href="reportes.html" class="active"><i class="fas fa-list-ul"></i> Órdenes</a>
         </nav>
     </div>
 
     <div class="main-content">
         <h1>Órdenes de Trabajo</h1>
+        <p class="subtitle">Registro Centralizado de Clientes</p>
+
         <div class="table-wrapper">
             <div id="loader" class="loading">
-                <i class="fas fa-spinner fa-spin fa-2x"></i><br><br>
-                SINCRONIZANDO CON LA NUBE...
+                <i class="fas fa-circle-notch fa-spin"></i><br><br>
+                Sincronizando Base de Datos...
             </div>
             <table id="tablaReportes" style="display: none;">
                 <thead>
                     <tr>
-                        <th>OT / FECHA</th>
-                        <th>CLIENTE</th>
-                        <th>PROYECTO</th>
-                        <th>PRESUPUESTO</th>
-                        <th>ESTADO</th>
-                        <th>ACCIÓN</th>
+                        <th>ID / Registro</th>
+                        <th>Cliente</th>
+                        <th>Proyecto</th>
+                        <th>Presupuesto</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody id="listaCuerpo"></tbody>
@@ -79,7 +185,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
@@ -92,69 +197,41 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app);
 
-        // --- GESTIÓN DE CARGA Y PERMISOS ---
-        onAuthStateChanged(auth, (user) => {
-            // Independientemente de si hay usuario o no, intentamos cargar
-            // debido a que pusimos la regla de lectura en 'true'.
-            iniciarEscucha();
+        const colRef = collection(db, "leads_clientes");
+
+        onSnapshot(colRef, (snapshot) => {
+            const cuerpo = document.getElementById('listaCuerpo');
+            cuerpo.innerHTML = "";
             
-            if (!user) {
-                console.warn("Navegando como invitado o sesión no detectada.");
-            } else {
-                console.log("Sesión activa:", user.email);
+            if (snapshot.empty) {
+                document.getElementById('loader').innerHTML = "No se encontraron registros.";
+                return;
             }
-        });
 
-        function iniciarEscucha() {
-            const colRef = collection(db, "leads_clientes");
-
-            onSnapshot(colRef, (snapshot) => {
-                const cuerpo = document.getElementById('listaCuerpo');
-                cuerpo.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const tr = document.createElement('tr');
                 
-                if (snapshot.empty) {
-                    document.getElementById('loader').innerHTML = "NO SE ENCONTRARON ÓRDENES EN LA BASE DE DATOS.";
-                    return;
-                }
-
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const tr = document.createElement('tr');
-                    
-                    // Formateo de ID y Nombre
-                    const idCorto = doc.id.substring(0,6).toUpperCase();
-                    const nombreUpper = data.nombre ? data.nombre.toUpperCase() : 'SIN NOMBRE';
-                    
-                    tr.innerHTML = `
-                        <td><b>#${idCorto}</b><br><small style="color:#666">${data.fechaRegistro || 'S/F'}</small></td>
-                        <td><b>${nombreUpper}</b><br><small style="color:#444">${data.email || ''}</small></td>
-                        <td>${data.tipo || 'General'}</td>
-                        <td class="price">$${data.presupuesto || '0'}</td>
-                        <td>
-                            <span style="background:#111; border: 1px solid #222; padding:5px 10px; border-radius:4px; font-size:0.7rem; color: #00e5ff; font-weight: bold;">
-                                ${data.estadoLead || 'RECIBIDA'}
-                            </span>
-                        </td>
-                        <td><button class="btn-pdf" onclick="window.print()"><i class="fas fa-print"></i> PDF</button></td>
-                    `;
-                    cuerpo.appendChild(tr);
-                });
-
-                document.getElementById('loader').style.display = "none";
-                document.getElementById('tablaReportes').style.display = "table";
-
-            }, (error) => {
-                console.error("Error detallado:", error);
-                document.getElementById('loader').innerHTML = `
-                    <i class="fas fa-exclamation-triangle fa-2x" style="color:red"></i><br><br>
-                    <b>ERROR DE CONEXIÓN</b><br>
-                    ${error.message}<br><br>
-                    <small>Verifica las Reglas de Firestore en la consola.</small>
+                const idCorto = doc.id.substring(0,6).toUpperCase();
+                
+                tr.innerHTML = `
+                    <td><b style="color:#fff">#${idCorto}</b><br><span style="font-size:0.6rem; color:#555">${data.fechaRegistro || 'N/A'}</span></td>
+                    <td><b style="color:#eee">${data.nombre ? data.nombre.toUpperCase() : '---'}</b><br><span style="font-size:0.7rem; color:#555">${data.email || ''}</span></td>
+                    <td style="font-weight:300;">${data.tipo || 'General'}</td>
+                    <td class="price">$${data.presupuesto || '0'}</td>
+                    <td><span class="status-badge">${data.estadoLead || 'Recibida'}</span></td>
+                    <td><button class="btn-pdf" onclick="window.print()">Exportar</button></td>
                 `;
+                cuerpo.appendChild(tr);
             });
-        }
+
+            document.getElementById('loader').style.display = "none";
+            document.getElementById('tablaReportes').style.display = "table";
+
+        }, (error) => {
+            document.getElementById('loader').innerHTML = "Error de conexión.";
+        });
     </script>
 </body>
 </html>
