@@ -8,96 +8,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
-        :root { 
-            --bg: #000000; --sidebar: #080808; --text-main: #FFFFFF; 
-            --text-dim: #666666; --border: #1a1a1a; --hover: #0c0c0c;
-            --accent: #00e5ff;
-        }
-
-        body { 
-            background-color: var(--bg); color: var(--text-main); 
-            font-family: 'Montserrat', sans-serif; margin: 0; display: flex; 
-            min-height: 100vh; width: 100%; overflow-x: hidden;
-        }
+        :root { --bg: #000; --sidebar: #080808; --text: #fff; --dim: #666; --border: #1a1a1a; }
+        body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; margin: 0; display: flex; }
         
-        /* Sidebar */
-        .sidebar { 
-            width: 250px; background-color: var(--sidebar); padding: 40px 20px; 
-            border-right: 1px solid var(--border); display: flex; flex-direction: column; 
-            position: fixed; height: 100vh; z-index: 100; box-sizing: border-box;
-        }
-        .sidebar-header h2 { font-weight: 800; letter-spacing: 5px; font-size: 1.1rem; margin: 0; text-align: center; }
+        .sidebar { width: 250px; background: var(--sidebar); padding: 40px 20px; border-right: 1px solid var(--border); height: 100vh; position: fixed; box-sizing: border-box; }
+        .sidebar-header h2 { font-weight: 800; letter-spacing: 5px; font-size: 1.1rem; text-align: center; }
         .sidebar nav { margin-top: 50px; }
-        .sidebar nav a { 
-            display: flex; align-items: center; color: var(--text-dim); text-decoration: none; 
-            padding: 15px; border-radius: 8px; transition: 0.3s; font-size: 0.75rem; 
-            font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; 
-        }
-        .sidebar nav a:hover, .sidebar nav a.active { background-color: var(--hover); color: #fff; }
-        .sidebar nav a i { margin-right: 15px; width: 20px; text-align: center; }
+        .sidebar nav a { display: flex; align-items: center; color: var(--dim); text-decoration: none; padding: 15px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+        .sidebar nav a.active { color: #fff; background: #0c0c0c; border-radius: 8px; }
 
-        /* Contenido Principal CORREGIDO */
-        .main-content { 
-            flex: 1; margin-left: 250px; padding: 60px 40px; 
-            width: calc(100% - 250px); box-sizing: border-box;
-        }
-
-        h1 { font-weight: 800; font-size: 2.2rem; letter-spacing: -1px; margin: 0; }
-        .subtitle { color: var(--text-dim); font-size: 0.7rem; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; }
+        .main-content { flex: 1; margin-left: 250px; padding: 60px 40px; width: calc(100% - 250px); box-sizing: border-box; }
         
-        /* Tabla con espaciado forzado */
-        .table-wrapper { 
-            background: #050505; border: 1px solid var(--border); border-radius: 12px; 
-            overflow-x: auto; margin-top: 40px; width: 100%;
-        }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 1000px; table-layout: fixed; }
+        .table-wrapper { background: #050505; border: 1px solid var(--border); border-radius: 12px; margin-top: 40px; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th { padding: 20px; background: #0a0a0a; color: var(--dim); font-size: 0.65rem; text-transform: uppercase; text-align: left; }
+        td { padding: 20px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
         
-        /* Definición de anchos de columna para evitar que se amontonen */
-        th:nth-child(1), td:nth-child(1) { width: 15%; } /* ID / Fecha */
-        th:nth-child(2), td:nth-child(2) { width: 25%; } /* Cliente */
-        th:nth-child(3), td:nth-child(3) { width: 25%; } /* Proyecto */
-        th:nth-child(4), td:nth-child(4) { width: 12%; } /* Presupuesto */
-        th:nth-child(5), td:nth-child(5) { width: 13%; } /* Estado */
-        th:nth-child(6), td:nth-child(6) { width: 10%; } /* Acción */
-
-        th { 
-            padding: 20px; background: #0a0a0a; color: var(--text-dim); 
-            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px;
-            border-bottom: 1px solid var(--border);
-        }
-        td { padding: 20px; border-bottom: 1px solid var(--border); font-size: 0.85rem; vertical-align: middle; }
-        
-        .ot-badge { font-family: monospace; color: #fff; font-weight: 800; font-size: 0.75rem; background: #1a1a1a; padding: 5px 10px; border-radius: 4px; border: 1px solid #333; }
-        .price-tag { font-weight: 800; color: #fff; font-size: 1rem; }
-        
-        .status-select { 
-            background: #000; color: #fff; border: 1px solid #333; padding: 8px; 
-            border-radius: 6px; font-size: 0.7rem; font-family: 'Montserrat'; 
-            font-weight: 600; cursor: pointer; width: 100%;
-        }
-
-        .btn-print { 
-            background: #fff; color: #000; border: none; padding: 10px 15px; 
-            border-radius: 6px; font-weight: 800; font-size: 0.7rem; 
-            cursor: pointer; text-transform: uppercase; width: 100%;
-        }
-        .btn-print:hover { background: var(--accent); }
-
-        .loading { text-align: center; padding: 100px; color: var(--text-dim); letter-spacing: 4px; font-size: 0.8rem; }
-
-        /* Impresión */
-        #plantilla-impresion { display: none; }
-        @media print {
-            body * { visibility: hidden; }
-            #plantilla-impresion, #plantilla-impresion * { visibility: visible; }
-            #plantilla-impresion { display: block !important; position: absolute; left: 0; top: 0; width: 100%; background: white !important; color: black !important; padding: 40px; }
-            .no-print { display: none !important; }
-        }
+        .loading { text-align: center; padding: 100px; color: var(--dim); letter-spacing: 4px; font-size: 0.8rem; }
+        .ot-badge { font-family: monospace; background: #1a1a1a; padding: 5px 8px; border-radius: 4px; }
+        .btn-print { background: #fff; color: #000; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 800; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="sidebar no-print">
+    <div class="sidebar">
         <div class="sidebar-header"><h2>CUARZO</h2></div>
         <nav>
             <a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a>
@@ -107,19 +41,15 @@
     </div>
 
     <div class="main-content">
-        <div class="no-print">
-            <h1>Órdenes de Trabajo</h1>
-            <p class="subtitle">Panel de Gestión CEO</p>
-        </div>
-
-        <div class="table-wrapper no-print">
-            <div id="loader" class="loading">SINCRO FIREBASE ACTIVADA...</div>
+        <h1>Órdenes de Trabajo</h1>
+        <div class="table-wrapper">
+            <div id="loader" class="loading">ESTADO: CONECTANDO CON FIREBASE...</div>
             <table id="tablaReportes" style="display: none;">
                 <thead>
                     <tr>
                         <th>ID / Fecha</th>
                         <th>Cliente</th>
-                        <th>Proyecto / Responsable</th>
+                        <th>Proyecto</th>
                         <th>Presupuesto</th>
                         <th>Estado</th>
                         <th>Acción</th>
@@ -130,20 +60,10 @@
         </div>
     </div>
 
-    <div id="plantilla-impresion">
-        <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 20px; margin-bottom: 20px;">
-            <h1 style="letter-spacing: 10px; margin: 0;">CUARZO CRISTAL</h1>
-            <p>COMPROBANTE OFICIAL DE ORDEN</p>
-        </div>
-        <p><strong>CLIENTE:</strong> <span id="p-nombre"></span></p>
-        <p><strong>PROYECTO:</strong> <span id="p-tipo"></span></p>
-        <p><strong>MONTO:</strong> $<span id="p-precio"></span></p>
-        <p><strong>FECHA:</strong> <span id="p-fecha"></span></p>
-    </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
@@ -156,52 +76,52 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
 
-        window.cambiarEstado = async (id, nuevoEstado) => {
-            await updateDoc(doc(db, "leads_clientes", id), { estadoLead: nuevoEstado });
-        };
-
-        window.generarComprobante = (id) => {
-            const fila = document.getElementById(`row-${id}`);
-            document.getElementById('p-nombre').innerText = fila.querySelector('.c-nombre').innerText;
-            document.getElementById('p-tipo').innerText = fila.querySelector('.c-tipo').innerText;
-            document.getElementById('p-precio').innerText = fila.querySelector('.price-tag').innerText.replace('$', '');
-            document.getElementById('p-fecha').innerText = fila.querySelector('.c-fecha').innerText;
-            window.print();
-        };
-
-        const q = query(collection(db, "leads_clientes"), orderBy("fechaRegistro", "desc"));
-
-        onSnapshot(q, (snapshot) => {
-            const cuerpo = document.getElementById('listaCuerpo');
-            cuerpo.innerHTML = "";
-            
-            if (snapshot.empty) {
-                cuerpo.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:50px; color:#666;">No hay órdenes registradas aún.</td></tr>';
+        // 1. VERIFICAR SI EL USUARIO ESTÁ LOGUEADO
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                document.getElementById('loader').innerText = "ERROR: ACCESO DENEGADO. REDIRIGIENDO AL LOGIN...";
+                setTimeout(() => window.location.href = "login.html", 2000);
+            } else {
+                cargarDatos();
             }
-
-            snapshot.forEach((snapshotDoc) => {
-                const data = snapshotDoc.data();
-                const id = snapshotDoc.id;
-                const tr = document.createElement('tr');
-                tr.id = `row-${id}`;
-                tr.innerHTML = `
-                    <td><span class="ot-badge">#${id.substring(0,6)}</span><div class="c-fecha" style="font-size:0.6rem; color:#444; margin-top:5px;">${data.fechaRegistro}</div></td>
-                    <td><b class="c-nombre">${data.nombre.toUpperCase()}</b><br><span class="c-email" style="color:#666; font-size:0.7rem;">${data.email}</span></td>
-                    <td><div class="c-tipo" style="font-weight:600;">${data.tipo}</div><div style="font-size:0.65rem; color:#888;">ASIGNADO: ${data.colaboradorAsignado || 'PENDIENTE'}</div></td>
-                    <td><span class="price-tag">$${data.presupuesto || '0'}</span></td>
-                    <td><select class="status-select" onchange="cambiarEstado('${id}', this.value)">
-                        <option value="RECIBIDA" ${data.estadoLead === 'RECIBIDA' ? 'selected' : ''}>RECIBIDA</option>
-                        <option value="EN PROCESO" ${data.estadoLead === 'EN PROCESO' ? 'selected' : ''}>EN PROCESO</option>
-                        <option value="FINALIZADO" ${data.estadoLead === 'FINALIZADO' ? 'selected' : ''}>FINALIZADO</option>
-                    </select></td>
-                    <td><button class="btn-print" onclick="generarComprobante('${id}')">PDF</button></td>
-                `;
-                cuerpo.appendChild(tr);
-            });
-            document.getElementById('loader').style.display = "none";
-            document.getElementById('tablaReportes').style.display = "table";
         });
+
+        function cargarDatos() {
+            // Quitamos el orderBy temporalmente para descartar errores de índices
+            const q = collection(db, "leads_clientes");
+
+            onSnapshot(q, (snapshot) => {
+                const cuerpo = document.getElementById('listaCuerpo');
+                cuerpo.innerHTML = "";
+                
+                if (snapshot.empty) {
+                    document.getElementById('loader').innerText = "SIN DATOS ENCONTRADOS EN LA NUBE.";
+                    return;
+                }
+
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><span class="ot-badge">#${doc.id.substring(0,6)}</span></td>
+                        <td><b>${data.nombre || 'Sin nombre'}</b></td>
+                        <td>${data.tipo || 'Sin tipo'}</td>
+                        <td>$${data.presupuesto || '0'}</td>
+                        <td>${data.estadoLead || 'RECIBIDA'}</td>
+                        <td><button class="btn-print" onclick="window.print()">PDF</button></td>
+                    `;
+                    cuerpo.appendChild(tr);
+                });
+
+                document.getElementById('loader').style.display = "none";
+                document.getElementById('tablaReportes').style.display = "table";
+            }, (error) => {
+                console.error("Error en Firebase:", error);
+                document.getElementById('loader').innerHTML = "ERROR DE CONEXIÓN: <br>" + error.message;
+            });
+        }
     </script>
 </body>
 </html>
