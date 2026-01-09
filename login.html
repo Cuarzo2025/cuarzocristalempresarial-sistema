@@ -8,125 +8,169 @@
     <style>
         :root { 
             --primary: #FFFFFF; 
-            --bg: #0A0A0A; 
-            --card: #141414; 
-            --text-dim: #A0A0A0; 
-            --accent: #4CAF50; 
+            --bg: #000000; 
+            --card: rgba(10, 10, 10, 0.95); 
+            --text-dim: #888888; 
             --border: #333; 
         }
-
-        body { 
-            background: var(--bg); 
-            color: var(--primary); 
-            font-family: 'Montserrat', sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
+        
+        html, body { 
             margin: 0; 
+            padding: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            background: #000; 
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* FONDO MATRIX */
+        #matrix-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 0;
+        }
+
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
         }
 
         .container { 
             background: var(--card); 
             padding: 40px; 
-            border-radius: 16px; 
-            width: 100%; 
-            max-width: 350px; 
+            border-radius: 12px; 
+            width: 90%;
+            max-width: 380px; 
             border: 1px solid var(--border); 
             text-align: center; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        h1 { 
-            font-weight: 800; 
-            margin: 0; 
-            letter-spacing: -1px; 
-            text-transform: uppercase;
-        }
-
-        .subtitle { 
-            color: var(--text-dim); 
-            font-size: 0.9rem; 
-            margin-bottom: 30px; 
-            margin-top: 10px;
-        }
-
+        h1 { font-weight: 800; margin: 0; letter-spacing: 2px; color: #fff; text-transform: uppercase; }
+        .subtitle { color: var(--text-dim); font-size: 0.75rem; margin-bottom: 30px; letter-spacing: 3px; text-transform: uppercase; }
+        
         input { 
-            width: 100%; 
-            padding: 14px; 
-            margin-bottom: 15px; 
-            background: #1e1e1e; 
+            width: 100%; padding: 14px; margin-bottom: 20px; 
+            background: #111; 
             border: 1px solid var(--border); 
-            border-radius: 8px; 
-            color: white; 
-            box-sizing: border-box; 
-            font-family: inherit;
+            border-radius: 4px; color: white; 
+            box-sizing: border-box; font-family: inherit;
         }
-
-        input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
+        input:focus { outline: none; border-color: #777; }
+        
         .btn-main { 
-            width: 100%; 
-            padding: 16px; 
-            background: var(--primary); 
-            color: black; 
-            border: none; 
-            border-radius: 8px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            transition: 0.3s;
-            margin-top: 10px;
+            width: 100%; padding: 16px; 
+            background: #FFFFFF; color: #000; 
+            border: none; border-radius: 4px; 
+            font-weight: 800; cursor: pointer; 
+            text-transform: uppercase; transition: 0.2s;
         }
-
-        .btn-main:hover { 
-            opacity: 0.8; 
-            transform: translateY(-2px); 
-        }
+        .btn-main:hover { background: #ccc; }
 
         .loader {
             display: none;
-            margin: 10px auto;
-            border: 3px solid #333;
-            border-top: 3px solid var(--accent);
+            margin: 15px auto;
+            border: 2px solid #222;
+            border-top: 2px solid #fff;
             border-radius: 50%;
             width: 20px;
             height: 20px;
             animation: spin 1s linear infinite;
         }
-
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        a { 
-            color: var(--accent); 
-            text-decoration: none; 
-            font-size: 0.85rem; 
-            display: block;
-            margin-top: 20px;
+        .forgot-pass { 
+            margin: 15px 0 25px 0; 
+            color: #555; 
+            cursor: pointer; 
+            font-size: 0.65rem; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
         }
+        .forgot-pass:hover { color: #fff; }
+
+        a { color: #666; text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
+        a:hover { color: #fff; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>CUARZO</h1>
-        <p class="subtitle">Portal de Colaboradores</p>
-        
-        <form id="login-form">
-            <input type="email" id="login-email" placeholder="Correo electrónico" required>
-            <input type="password" id="login-pass" placeholder="Contraseña" required>
-            <div id="loader" class="loader"></div>
-            <button type="submit" id="btn-text" class="btn-main">Entrar</button>
-        </form>
+    <canvas id="matrix-canvas"></canvas>
 
-        <a href="index.html">¿No tienes cuenta? Regístrate aquí</a>
+    <div class="main-wrapper">
+        <div class="container">
+            <h1>CUARZO</h1>
+            <p class="subtitle">PORTAL ACCESS</p>
+            
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="EMAIL" required>
+                <input type="password" id="login-pass" placeholder="PASSWORD" required>
+                
+                <div id="forgot-password" class="forgot-pass">¿Olvidaste tu contraseña?</div>
+
+                <div id="loader" class="loader"></div>
+                <button type="submit" id="btn-text" class="btn-main">ENTRAR</button>
+            </form>
+
+            <p style="margin-top: 30px;">
+                <a href="index.html">CREAR UNA CUENTA</a>
+            </p>
+        </div>
     </div>
+
+    <script>
+        // MATRIX SIN DESTELLO (IGUAL A REGISTRO)
+        window.onload = function() {
+            const canvas = document.getElementById('matrix-canvas');
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.onresize = resize;
+
+            const chars = "01010101";
+            const fontSize = 14;
+            const columns = Math.floor(canvas.width / fontSize);
+            const drops = Array(columns).fill(1);
+
+            function draw() {
+                ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.font = fontSize + "px monospace";
+                ctx.shadowBlur = 0;
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    ctx.fillStyle = Math.random() > 0.95 ? "#FFFFFF" : "#444444";
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            setInterval(draw, 40);
+        };
+    </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCW3_c7c4wNs6mUgX0EFp40SnjBx-WfLNI",
@@ -140,6 +184,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
+        // Lógica de Login
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
@@ -147,38 +192,34 @@
             const btn = document.getElementById('btn-text');
             const loader = document.getElementById('loader');
             
-            // UI State
             btn.style.display = 'none';
             loader.style.display = 'block';
 
             try {
-                const userCred = await signInWithEmailAndPassword(auth, email, pass);
-                
-                // NOTA: Si quieres obligar a verificar el email antes de entrar, 
-                // descomenta las siguientes líneas. Si no, entrará directo con la clave temporal.
-                
-                /*
-                if (!userCred.user.emailVerified) {
-                    alert("Por favor, verifica tu correo electrónico antes de ingresar.");
-                    btn.style.display = 'block';
-                    loader.style.display = 'none';
-                    return;
-                }
-                */
-
-                // Si llegamos aquí, login exitoso
+                await signInWithEmailAndPassword(auth, email, pass);
                 window.location.href = "dashboard.html";
-
             } catch (error) { 
                 console.error(error.code);
-                let mensaje = "Error al ingresar. Verifica tus datos.";
-                
-                if(error.code === 'auth/invalid-credential') mensaje = "Correo o contraseña incorrectos.";
-                if(error.code === 'auth/user-not-found') mensaje = "El usuario no existe.";
-                
+                let mensaje = "ERROR DE ACCESO";
+                if(error.code === 'auth/invalid-credential') mensaje = "CREDENCIALES INVÁLIDAS";
                 alert(mensaje);
                 btn.style.display = 'block';
                 loader.style.display = 'none';
+            }
+        });
+
+        // Lógica de Recuperar Contraseña (Usa el email escrito en el input)
+        document.getElementById('forgot-password').addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value;
+            if (!email) {
+                alert("INGRESA TU EMAIL PARA RESTABLECER");
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert("CORREO DE RECUPERACIÓN ENVIADO A: " + email);
+            } catch (error) {
+                alert("ERROR AL ENVIAR: " + error.code);
             }
         });
     </script>
