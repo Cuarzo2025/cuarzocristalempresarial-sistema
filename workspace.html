@@ -65,6 +65,14 @@
             width: 32px; height: 32px; border-radius: 50%;
             background: #222; display: flex; align-items: center;
             justify-content: center; color: #FFF; border: 1px solid var(--border);
+            overflow: hidden; /* Para que la imagen no se salga del círculo */
+            background-size: cover;
+            background-position: center;
+        }
+        .photo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* --- SECCIONES --- */
@@ -158,7 +166,9 @@
             </button>
             <div class="user-badge">
                 <span class="user-name-small" id="badge-name">CARGANDO...</span>
-                <div class="photo-circle"><i class="fas fa-user"></i></div>
+                <div class="photo-circle" id="user-photo-container">
+                    <i class="fas fa-user" id="default-icon"></i>
+                </div>
             </div>
         </header>
 
@@ -228,7 +238,6 @@
             "hectormauricioraposso@gmail.com"
         ];
 
-        // FUNCIÓN PARA ACTUALIZAR ESTADO ONLINE (PARA EL PANEL MAESTRO)
         const setOnlineStatus = async (uid, status) => {
             const userRef = doc(db, "colaboradores", uid);
             try {
@@ -244,16 +253,25 @@
                 userId = user.uid;
                 const userRef = doc(db, "colaboradores", userId);
                 
-                // Marcar como Online al entrar
                 setOnlineStatus(userId, true);
 
-                // Escuchar datos en tiempo real (por si el Admin cambia algo)
                 onSnapshot(userRef, (docSnap) => {
                     if (docSnap.exists()) {
                         const d = docSnap.data();
                         const userEmail = user.email.toLowerCase();
                         
-                        // Mostrar Panel Maestro si es Admin
+                        // CARGAR FOTO DE PERFIL EN EL CIRCULO
+                        const photoContainer = document.getElementById('user-photo-container');
+                        const defaultIcon = document.getElementById('default-icon');
+                        
+                        if (d.fotoPerfil) {
+                            photoContainer.style.backgroundImage = `url('${d.fotoPerfil}')`;
+                            if(defaultIcon) defaultIcon.style.display = 'none';
+                        } else {
+                            photoContainer.style.backgroundImage = 'none';
+                            if(defaultIcon) defaultIcon.style.display = 'block';
+                        }
+
                         if (SUPER_ADMINS.includes(userEmail) || d.rol === "admin") {
                             const btnAdmin = document.getElementById('btn-admin-link');
                             if(btnAdmin) btnAdmin.style.display = 'block';
@@ -308,7 +326,6 @@
             }
         };
 
-        // Marcar Offline al cerrar pestaña
         window.addEventListener('beforeunload', () => {
             if (userId) setOnlineStatus(userId, false);
         });
