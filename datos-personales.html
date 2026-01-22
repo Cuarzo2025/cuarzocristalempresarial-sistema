@@ -13,18 +13,37 @@
         .header h1 { font-size: 2em; margin: 0; }
         .card { background-color: #1a1a1a; padding: 25px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #222; }
         .card h2 { margin-top: 0; font-size: 1.5em; border-bottom: 1px solid #333333; padding-bottom: 10px; margin-bottom: 20px; }
+        
+        /* Estilos para la Foto de Perfil */
+        .profile-photo-section { display: flex; flex-direction: column; align-items: center; margin-bottom: 25px; gap: 15px; }
+        .photo-preview-container { width: 150px; height: 150px; border-radius: 50%; border: 3px solid #FFFFFF; overflow: hidden; background-color: #333; display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer; transition: transform 0.2s; }
+        .photo-preview-container:hover { transform: scale(1.03); }
+        .photo-preview-container img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-preview-container i { font-size: 4em; color: #666; }
+        
+        .upload-btn { background-color: transparent; border: 1px solid #FFFFFF; color: #FFFFFF; padding: 8px 20px; border-radius: 20px; font-size: 0.9em; cursor: pointer; transition: 0.3s; font-weight: 600; }
+        .upload-btn:hover { background-color: #FFFFFF; color: #000000; }
+        .upload-hint { font-size: 0.8em; color: #aaa; text-align: center; margin-top: -5px; }
+        #file-input { display: none; }
+
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .input-group { margin-bottom: 10px; }
         .input-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #cccccc; }
         .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #333; border-radius: 4px; background-color: #2a2a2a; color: #FFFFFF; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         .date-age-group { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
-        .doc-group { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
         .form-button { padding: 15px 30px; background-color: #FFFFFF; color: #000000; border: none; border-radius: 5px; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 20px; width: 100%; text-transform: uppercase; }
         .form-button:hover { background-color: #cccccc; }
         .back-link { text-decoration: none; color: #CCCCCC; }
+        
+        #loading-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
 <body>
+
+    <div id="loading-overlay">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p style="margin-top: 15px;">Guardando cambios...</p>
+    </div>
 
     <div class="container">
         <div class="header">
@@ -34,6 +53,22 @@
 
         <form id="profile-form">
             
+            <!-- SECCIÓN DE FOTO DE PERFIL -->
+            <div class="card">
+                <h2>Foto de Perfil</h2>
+                <div class="profile-photo-section">
+                    <div class="photo-preview-container" onclick="document.getElementById('file-input').click()">
+                        <img id="photo-preview" src="" style="display:none;">
+                        <i id="photo-placeholder" class="fas fa-camera"></i>
+                    </div>
+                    <input type="file" id="file-input" accept="image/*">
+                    <button type="button" class="upload-btn" onclick="document.getElementById('file-input').click()">
+                        <i class="fas fa-search"></i> Examinar Archivos
+                    </button>
+                    <p class="upload-hint">Formatos: JPG o PNG. Tamaño máximo recomendado: 2MB.</p>
+                </div>
+            </div>
+
             <div class="card">
                 <h2>Información General y Contacto</h2>
                 <div class="form-grid">
@@ -160,16 +195,15 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         let userId;
+        let fotoBase64 = "";
 
         const paisesMundo = ["Afganistán", "Albania", "Alemania", "Andorra", "Angola", "Antigua y Barbuda", "Arabia Saudita", "Argelia", "Argentina", "Armenia", "Australia", "Austria", "Azerbaiyán", "Bahamas", "Bangladés", "Barbados", "Baréin", "Bélgica", "Belice", "Benín", "Bielorrusia", "Bolivia", "Bosnia y Herzegovina", "Botsuana", "Brasil", "Brunéi", "Bulgaria", "Burkina Faso", "Burundi", "Bután", "Cabo Verde", "Camboya", "Camerún", "Canadá", "Catar", "Chad", "Chile", "China", "Chipre", "Colombia", "Comoras", "Corea del Norte", "Corea del Sur", "Costa de Marfil", "Costa Rica", "Croacia", "Cuba", "Dinamarca", "Dominica", "Ecuador", "Egipto", "El Salvador", "Emiratos Árabes Unidos", "Eritrea", "Eslovaquia", "Eslovenia", "España", "Estados Unidos", "Estonia", "Etiopía", "Filipinas", "Finlandia", "Fiyi", "Francia", "Gabón", "Gambia", "Georgia", "Ghana", "Granada", "Grecia", "Guatemala", "Guyana", "Guinea", "Haití", "Honduras", "Hungría", "India", "Indonesia", "Irak", "Irán", "Irlanda", "Islandia", "Islas Marshall", "Islas Salomón", "Israel", "Italia", "Jamaica", "Japón", "Jordania", "Kazajistán", "Kenia", "Kiribati", "Kuwait", "Laos", "Lesoto", "Letonia", "Líbano", "Liberia", "Libia", "Liechtenstein", "Lituania", "Luxemburgo", "Macedonia del Norte", "Madagascar", "Malasia", "Malaui", "Maldivas", "Malí", "Malta", "Marruecos", "Mauricio", "Mauritania", "México", "Micronesia", "Moldavia", "Mónaco", "Mongolia", "Montenegro", "Mozambique", "Namibia", "Nauru", "Nepal", "Nicaragua", "Níger", "Nigeria", "Noruega", "Nueva Zelanda", "Omán", "Países Bajos", "Pakistán", "Palaos", "Panamá", "Papúa Nueva Guinea", "Paraguay", "Perú", "Polonia", "Portugal", "Reino Unido", "República Centroafricana", "República Checa", "República Dominicana", "Ruanda", "Rumania", "Rusia", "Samoa", "San Marino", "Senegal", "Serbia", "Seychelles", "Sierra Leona", "Singapur", "Siria", "Somalia", "Sri Lanka", "Sudáfrica", "Sudán", "Suecia", "Suiza", "Surinam", "Tailandia", "Tanzania", "Tayikistán", "Togo", "Trinidad y Tobago", "Túnez", "Turquía", "Ucrania", "Uganda", "Uruguay", "Uzbekistán", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabue"];
-        
         const nacionalidades = ["Afgana", "Albanesa", "Alemana", "Americana", "Andorrana", "Angoleña", "Argentina", "Australiana", "Austriaca", "Belga", "Boliviana", "Brasileña", "Canadiense", "Chilena", "China", "Colombiana", "Coreana", "Costarricense", "Cubana", "Danesa", "Ecuatoriana", "Egipcia", "Española", "Finlandesa", "Francesa", "Griega", "Guatemalteca", "Hondureña", "Húngara", "India", "Indonesa", "Iraní", "Irlandesa", "Israelí", "Italiana", "Japonesa", "Mexicana", "Noruega", "Panameña", "Paraguaya", "Peruana", "Polaca", "Portuguesa", "Rusa", "Salvadoreña", "Sueca", "Suiza", "Uruguaya", "Venezolana"];
 
         window.onload = () => {
             const selP = document.getElementById('pais');
             const selF = document.getElementById('paisFiscal');
             const selN = document.getElementById('nacionalidad');
-            
             paisesMundo.sort().forEach(p => {
                 selP.add(new Option(p, p));
                 selF.add(new Option(p, p));
@@ -177,12 +211,39 @@
             nacionalidades.sort().forEach(n => selN.add(new Option(n, n)));
         };
 
+        // Procesar archivo de imagen
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert("La imagen excede los 2MB. Por favor, elige una más pequeña.");
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    fotoBase64 = event.target.result;
+                    document.getElementById('photo-preview').src = fotoBase64;
+                    document.getElementById('photo-preview').style.display = 'block';
+                    document.getElementById('photo-placeholder').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 userId = user.uid;
                 const snap = await getDoc(doc(db, "colaboradores", userId));
                 if (snap.exists()) {
                     const d = snap.data();
+                    
+                    if (d.fotoPerfil) {
+                        fotoBase64 = d.fotoPerfil;
+                        document.getElementById('photo-preview').src = fotoBase64;
+                        document.getElementById('photo-preview').style.display = 'block';
+                        document.getElementById('photo-placeholder').style.display = 'none';
+                    }
+
                     document.getElementById('nombre').value = d.nombre || "";
                     document.getElementById('emailContacto').value = d.emailContacto || user.email;
                     document.getElementById('telefono').value = d.telefono || "";
@@ -215,10 +276,12 @@
 
         document.getElementById('profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            document.getElementById('loading-overlay').style.display = 'flex';
             const btn = document.getElementById('btn-submit');
             btn.disabled = true;
 
             const datosParaGuardar = {
+                fotoPerfil: fotoBase64,
                 nombre: document.getElementById('nombre').value,
                 emailContacto: document.getElementById('emailContacto').value,
                 telefono: document.getElementById('telefono').value,
@@ -239,11 +302,12 @@
 
             try {
                 await updateDoc(doc(db, "colaboradores", userId), datosParaGuardar);
-                alert("Base de Datos actualizada con éxito.");
+                alert("Datos guardados con éxito.");
                 window.location.href = "workspace.html";
             } catch (err) {
                 alert("Error al guardar: " + err.message);
                 btn.disabled = false;
+                document.getElementById('loading-overlay').style.display = 'none';
             }
         });
     </script>
