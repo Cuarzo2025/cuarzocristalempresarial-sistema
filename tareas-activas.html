@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Estilos Base del Dashboard */
         body {
             background-color: #000000;
             color: #FFFFFF;
@@ -18,6 +17,7 @@
             min-height: 100vh;
         }
 
+        /* --- SIDEBAR ACTUALIZADO CON LOGO --- */
         .sidebar {
             width: 260px;
             background-color: #0d0d0d;
@@ -33,20 +33,22 @@
             margin-bottom: 40px;
         }
 
-        /* Estilo del Logo de la Empresa */
+        /* Ajuste de la imagen del logo */
         .company-logo {
-            width: 130px;
+            width: 150px; /* Tamaño optimizado para el menú */
             height: auto;
             margin-bottom: 15px;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.1));
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .sidebar-header h2 {
-            font-size: 1rem;
+            font-size: 0.9em;
             font-weight: 800;
             margin: 0;
             color: #FFFFFF;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             text-transform: uppercase;
         }
 
@@ -74,6 +76,7 @@
             text-align: center;
         }
 
+        /* --- CONTENIDO PRINCIPAL --- */
         .main-content {
             flex-grow: 1;
             padding: 50px;
@@ -86,15 +89,15 @@
             font-size: 2.2em;
             border-left: 5px solid #FFFFFF;
             padding-left: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             text-transform: uppercase;
         }
 
-        /* --- Estilos de Tareas Activas --- */
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 30px;
+            margin-top: 40px;
         }
 
         .tool-card {
@@ -122,10 +125,7 @@
             align-items: center;
         }
 
-        .tool-card h2 i {
-            margin-right: 12px;
-            color: #FFFFFF;
-        }
+        .tool-card h2 i { margin-right: 12px; }
 
         .tool-card p {
             color: #888;
@@ -150,10 +150,7 @@
         }
 
         .btn-primary { background-color: #FFFFFF; color: #000000; }
-        .btn-primary:hover { background-color: #cccccc; }
-
         .btn-secondary { background-color: #1a1a1a; color: #FFFFFF; border: 1px solid #333; }
-        .btn-secondary:hover { background-color: #333; }
 
         .notification-badge {
             background-color: #ff4d4d;
@@ -164,7 +161,6 @@
             margin-left: 10px;
         }
 
-        /* Capacitaciones */
         .training-list {
             margin: 20px 0;
             background-color: #050505;
@@ -180,6 +176,8 @@
             border-bottom: 1px solid #111;
         }
 
+        .training-item:last-child { border-bottom: none; }
+
         .training-info strong { display: block; color: #FFFFFF; margin-bottom: 4px; }
         .training-info span { font-size: 0.8em; color: #555; }
 
@@ -193,94 +191,69 @@
 
         .status-upcoming { background: #1a1a1a; color: #aaa; border: 1px solid #333; }
         .status-pending { background: #FFFFFF; color: #000; }
-        .status-completed { background: #2ecc71; color: #fff; }
-
     </style>
 </head>
 <body>
 
     <div class="sidebar">
         <div class="sidebar-header">
-            <img src="logocuarzo.jpg" alt="Cuarzo Logo" class="company-logo">
-            <h2>Cuarzo</h2>
+            <img src="logocuarzo.jpg" alt="Logo Cuarzo" class="company-logo">
+            <h2>Cuarzo Empresarial</h2>
         </div>
         <nav>
             <a href="workspace.html"><i class="fas fa-home"></i> INICIO</a>
             <a href="tareas-activas.html" class="active"><i class="fas fa-tasks"></i> TAREAS ACTIVAS</a>
             <a href="reportes.html"><i class="fas fa-chart-line"></i> REPORTES</a>
-            <a href="nuevos-clientes.html"><i class="fas fa-handshake"></i> NUEVOS CLIENTES</a> 
+            <a href="nuevos-clientes.html"><i class="fas fa-handshake"></i> CLIENTES</a> 
             <a href="datos-personales.html"><i class="fas fa-user-cog"></i> MI PERFIL</a>
             <a href="contrato-legal.html"><i class="fas fa-file-contract"></i> LEGALES</a>
             <a href="login.html" style="margin-top: auto; border-top: 1px solid #222; padding-top: 20px;">
-                <i class="fas fa-sign-out-alt"></i> SALIR
+                <i class="fas fa-sign-out-alt"></i> CERRAR SESIÓN
             </a>
         </nav>
     </div>
 
     <div class="main-content">
-        <h1>MIS TAREAS Y HERRAMIENTAS</h1>
-        <p style="color: #666; margin-bottom: 40px; font-size: 1.1em;">Gestión operativa y recursos de desarrollo profesional.</p>
+        <h1>TAREAS Y RECURSOS</h1>
+        <p style="color: #666; font-size: 1.1em;">Panel operativo para la gestión diaria de Cuarzo Empresarial.</p>
 
         <div class="tools-grid">
-
             <div class="tool-card">
                 <div>
-                    <h2><i class="fas fa-calendar-check"></i> Reuniones Clientes</h2>
-                    <p>Calendario de disponibilidad para leads y clientes. Las reservas se sincronizan con tu agenda automáticamente.</p>
+                    <h2><i class="fas fa-calendar-alt"></i> Reuniones Clientes</h2>
+                    <p>Gestiona y comparte tu enlace de disponibilidad para coordinar llamadas con nuevos prospectos.</p>
                 </div>
-                <a href="reservas.html" class="action-button btn-primary">
-                    <i class="fas fa-link"></i> Enlace de Reserva
-                </a>
+                <a href="reservas.html" class="action-button btn-primary">Ver Calendario</a>
             </div>
 
             <div class="tool-card">
                 <div>
-                    <h2><i class="fas fa-users"></i> Equipo Interno 
-                        <span class="notification-badge">2 Pendientes</span>
-                    </h2>
-                    <p>Coordinación con otros departamentos para resolución de bloqueos y planificación de objetivos mensuales.</p>
+                    <h2><i class="fas fa-comments"></i> Equipo Interno <span class="notification-badge">2</span></h2>
+                    <p>Canal de comunicación para coordinación entre departamentos y resolución de incidencias.</p>
                 </div>
-                <a href="coordinacion.html" class="action-button btn-secondary">
-                    <i class="fas fa-comments"></i> Iniciar Chat
-                </a>
-            </div>
-
-            <div class="tool-card">
-                <div>
-                    <h2><i class="fas fa-plane-departure"></i> Gestión de Ausencias</h2>
-                    <p>Solicitud de vacaciones, días por estudio o permisos especiales directamente con el área de RRHH.</p>
-                </div>
-                <a href="rrhh.html" class="action-button btn-secondary">
-                    <i class="fas fa-file-alt"></i> Nueva Solicitud
-                </a>
+                <a href="coordinacion.html" class="action-button btn-secondary">Abrir Chat</a>
             </div>
 
             <div class="tool-card" style="grid-column: 1 / -1;">
-                <h2><i class="fas fa-graduation-cap"></i> Capacitaciones y Evolución</h2>
-                <p>Cursos internos obligatorios y trayectos de formación recomendados por Cuarzo Empresarial.</p>
-                
+                <h2><i class="fas fa-graduation-cap"></i> Capacitaciones del Mes</h2>
                 <div class="training-list">
                     <div class="training-item">
                         <div class="training-info">
-                            <strong>Fundamentos de la Plataforma Cuarzo v3.0</strong>
-                            <span>Vence: 15 de Noviembre</span>
+                            <strong>Protocolos de Seguridad v3.0</strong>
+                            <span>Obligatorio - Finaliza en 5 días</span>
                         </div>
                         <span class="training-status status-pending">Pendiente</span>
                     </div>
                     <div class="training-item">
                         <div class="training-info">
-                            <strong>Taller Avanzado de Ciberseguridad</strong>
-                            <span>20 de Noviembre, 14:00h</span>
+                            <strong>Atención al Cliente Premium</strong>
+                            <span>Recomendado</span>
                         </div>
                         <span class="training-status status-upcoming">Próxima</span>
                     </div>
                 </div>
-
-                <a href="capacitacion-evolucion.html" class="action-button btn-primary" style="align-self: flex-start;">
-                    <i class="fas fa-book-open"></i> Ver Catálogo
-                </a>
+                <a href="capacitacion-evolucion.html" class="action-button btn-primary" style="align-self: flex-start;">Catálogo Completo</a>
             </div>
-
         </div>
     </div>
     
