@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toolbox Master | Cuarzo Cristal Empresarial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        :root { 
+            --bg: #000; --sidebar: #080808; --card: #0c0c0c;
+            --accent: #FFF; --border: #1a1a1a; --text-dim: #666;
+            --gold: #d4af37;
+        }
+        body { background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; display: flex; min-height: 100vh; overflow-x: hidden; }
+        
+        /* SIDEBAR SISTEMA */
+        .sidebar { width: 260px; background: var(--sidebar); padding: 40px 20px; border-right: 1px solid var(--border); position: fixed; height: 100vh; display: flex; flex-direction: column; z-index: 100; box-sizing: border-box; }
+        .sidebar-header h2 { font-size: 1rem; letter-spacing: 5px; text-transform: uppercase; font-weight: 800; text-align: center; color: var(--accent); margin-bottom: 50px; }
+        .sidebar nav a { display: flex; align-items: center; color: var(--text-dim); text-decoration: none; padding: 15px 20px; margin-bottom: 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; transition: all 0.3s ease; border: 1px solid transparent; }
+        .sidebar nav a:hover { color: #fff; background: #111; border-color: #222; }
+        .sidebar nav a.active { background: #fff; color: #000; }
+        .sidebar nav i { margin-right: 15px; font-size: 1rem; }
+
+        /* CONTENIDO PRINCIPAL */
+        .main-content { margin-left: 260px; padding: 80px 60px; width: calc(100% - 260px); box-sizing: border-box; }
+        .header-main h1 { font-weight: 800; font-size: 2.8rem; margin: 0; letter-spacing: -1px; }
+        .tagline { color: var(--text-dim); font-size: 0.75rem; margin-top: 15px; letter-spacing: 4px; text-transform: uppercase; display: block; }
+
+        /* SECCIONES Y GRIDS */
+        .tools-section { margin-top: 60px; animation: fadeIn 0.8s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .section-label { font-size: 0.7rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 30px; display: flex; align-items: center; }
+        .section-label::after { content: ""; height: 1px; background: var(--border); flex-grow: 1; margin-left: 20px; }
+        
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; margin-bottom: 50px; }
+        .tool-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 35px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
+        .tool-card:hover { border-color: #555; transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .tool-card i { font-size: 2rem; margin-bottom: 20px; display: block; color: var(--accent); }
+        .tool-card h3 { font-size: 1rem; margin-bottom: 10px; font-weight: 700; }
+        .tool-card p { font-size: 0.8rem; color: #666; line-height: 1.6; margin-bottom: 25px; height: 45px; }
+        
+        .tool-btn { background: #fff; color: #000; border: none; padding: 14px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; cursor: pointer; width: 100%; transition: 0.3s; letter-spacing: 1px; }
+        .tool-btn:hover { background: #ccc; transform: scale(1.02); }
+
+        /* MODALES MAESTROS */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
+        .modal-content { background: #080808; padding: 45px; border: 1px solid #1a1a1a; border-radius: 24px; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 100px rgba(255,255,255,0.05); }
+        .modal-content h3 { font-size: 1.2rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 30px; text-align: center; }
+        
+        .form-group { margin-bottom: 20px; }
+        .modal-content label { font-size: 0.65rem; color: #555; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
+        .modal-content input, .modal-content select, .modal-content textarea { width: 100%; background: #000; border: 1px solid #222; color: #fff; padding: 15px; border-radius: 10px; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; box-sizing: border-box; transition: 0.3s; }
+        .modal-content input:focus { border-color: #fff; outline: none; }
+        
+        .price-display { background: #0c0c0c; padding: 25px; border-radius: 15px; margin: 20px 0; text-align: center; border: 1px solid #1a1a1a; }
+        .price-display h2 { font-size: 2rem; margin: 0; font-weight: 800; }
+        
+        .close-btn { background: transparent; color: #444; border: none; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 20px; width: 100%; letter-spacing: 2px; }
+        .close-btn:hover { color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header"><h2>CUARZO</h2></div>
+        <nav>
+            <a href="#" class="active"><i class="fas fa-layer-group"></i> DASHBOARD</a>
+            <a href="#" onclick="openModal('modalRemito')"><i class="fas fa-truck"></i> LOGÍSTICA</a>
+            <a href="#" onclick="openModal('modalCotizador')"><i class="fas fa-file-invoice-dollar"></i> COMERCIAL</a>
+            <a href="#" onclick="openModal('modalLegal')"><i class="fas fa-balance-scale"></i> LEGAL PRO</a>
+            <a href="#" onclick="openModal('modalManuales')"><i class="fas fa-university"></i> ACADEMIA</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="header-main">
+            <h1>Operational Toolbox</h1>
+            <span class="tagline">Cuarzo Cristal Empresarial &bull; Business Intelligence 2026</span>
+        </div>
+
+        <div class="tools-section">
+            <span class="section-label">Logística y Operaciones de Campo</span>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <i class="fas fa-clipboard-check"></i>
+                    <h3>Generador de Remitos</h3>
+                    <p>Documentación técnica de respaldo para la entrega de activos y licencias físicas.</p>
+                    <button class="tool-btn" onclick="openModal('modalRemito')">Crear Nuevo Remito</button>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-satellite"></i>
+                    <h3>Rutas y GPS</h3>
+                    <p>Optimización de traslados logísticos con visualización de mapas satelitales.</p>
+                    <a href="https://www.google.com/maps" target="_blank" class="tool-btn" style="text-decoration:none; display:block; text-align:center;">Abrir Terminal GPS</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="tools-section">
+            <span class="section-label">Finanzas y Proyecciones Comerciales</span>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <i class="fas fa-coins"></i>
+                    <h3>Cotizador Multidivisa</h3>
+                    <p>Cálculo instantáneo de servicios en GBP, CHF, USD y EUR con exportación formal.</p>
+                    <button class="tool-btn" onclick="openModal('modalCotizador')">Iniciar Cotización</button>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Simulador de ROI</h3>
+                    <p>Análisis de rentabilidad para prospectos de alto valor y franquiciados.</p>
+                    <button class="tool-btn" onclick="openModal('modalROI')">Calcular Retorno</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tools-section">
+            <span class="section-label">Capacitación y Respaldo Legal</span>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <i class="fas fa-file-signature"></i>
+                    <h3>Centro Legal Avanzado</h3>
+                    <p>Generación de acuerdos NDA y contratos de franquicia con cláusulas extensas.</p>
+                    <button class="tool-btn" onclick="openModal('modalLegal')">Generar Contrato</button>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Biblioteca de Manuales</h3>
+                    <p>Acceso a los manuales de ventas, técnicos y de ética profesional de la empresa.</p>
+                    <button class="tool-btn" onclick="openModal('modalManuales')">Descargar Manuales</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalRemito" class="modal">
+        <div class="modal-content">
+            <h3>NUEVO REMITO OFICIAL</h3>
+            <div class="form-group">
+                <label>RECEPTOR / CLIENTE</label>
+                <input type="text" id="remNom" placeholder="Ej: Juan Pérez o Empresa S.A.">
+            </div>
+            <div class="form-group">
+                <label>DETALLE DE MERCADERÍA Y ACTIVOS</label>
+                <textarea id="remDet" rows="5" placeholder="Detalle los activos entregados, números de serie o licencias..."></textarea>
+            </div>
+            <button onclick="generarRemitoPDF()" class="tool-btn">Generar Remito PDF</button>
+            <button onclick="closeModal('modalRemito')" class="close-btn">Cancelar Operación</button>
+        </div>
+    </div>
+
+    <div id="modalCotizador" class="modal">
+        <div class="modal-content">
+            <h3>ESTRUCTURA DE COSTOS</h3>
+            <div class="form-group">
+                <label>CLIENTE</label>
+                <input type="text" id="cotNom">
+            </div>
+            <div class="form-group">
+                <label>SELECCIONAR DIVISA</label>
+                <select id="cotDiv" onchange="actualizarCotizacion()">
+                    <option value="USD">Dólar Estadounidense (USD)</option>
+                    <option value="EUR">Euro (EUR)</option>
+                    <option value="GBP">Libra Esterlina (GBP)</option>
+                    <option value="CHF">Franco Suizo (CHF)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>SERVICIO / PAQUETE</label>
+                <select id="cotSer" onchange="actualizarCotizacion()">
+                    <option value="2500">Desarrollo Web Pro - Elite</option>
+                    <option value="7000">E-commerce Enterprise System</option>
+                    <option value="12000">Licencia Franquicia Cuarzo Bronze</option>
+                    <option value="25000">Licencia Franquicia Cuarzo Gold</option>
+                </select>
+            </div>
+            <div class="price-display">
+                <label>TOTAL A FACTURAR</label>
+                <h2 id="cotTotalDisplay">$ 0.00</h2>
+            </div>
+            <button onclick="generarCotizacionPDF()" class="tool-btn">Exportar Cotización</button>
+            <button onclick="closeModal('modalCotizador')" class="close-btn">Cerrar</button>
+        </div>
+    </div>
+
+    <div id="modalROI" class="modal">
+        <div class="modal-content">
+            <h3>SIMULACIÓN DE RENTABILIDAD</h3>
+            <div class="form-group">
+                <label>INVERSIÓN INICIAL (USD)</label>
+                <input type="number" id="roiInv" value="12000" oninput="calcularROI()">
+            </div>
+            <div class="form-group">
+                <label>UTILIDAD MENSUAL PROYECTADA (USD)</label>
+                <input type="number" id="roiGan" value="1500" oninput="calcularROI()">
+            </div>
+            <div class="price-display">
+                <label>PUNTO DE EQUILIBRIO EN</label>
+                <h2 id="roiResultado">8.0 Meses</h2>
+            </div>
+            <button onclick="generarROIPDF()" class="tool-btn">Exportar Análisis ROI</button>
+            <button onclick="closeModal('modalROI')" class="close-btn">Cerrar</button>
+        </div>
+    </div>
+
+    <div id="modalLegal" class="modal">
+        <div class="modal-content">
+            <h3>CENTRO DE CONTRATOS</h3>
+            <div class="form-group">
+                <label>TIPO DE INSTRUMENTO</label>
+                <select id="legTipo">
+                    <option value="NDA">NDA - Acuerdo de Confidencialidad</option>
+                    <option value="FRANQUICIA">Contrato de Franquicia</option>
+                    <option value="SERVICIOS">Contrato de Servicios Profesionales</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>NOMBRE COMPLETO / RAZÓN SOCIAL</label>
+                <input type="text" id="legNom">
+            </div>
+            <div class="form-group">
+                <label>TIPO DE IDENTIFICACIÓN</label>
+                <select id="legTid">
+                    <option value="DNI">DNI (Documento Nacional)</option>
+                    <option value="CI">Cédula de Identidad (CI)</option>
+                    <option value="PASAPORTE">Pasaporte Internacional</option>
+                    <option value="CERT. MIGRATORIO">Certificado Migratorio</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>NÚMERO DE DOCUMENTO / ID</label>
+                <input type="text" id="legNid">
+            </div>
+            <button onclick="generarContratoPDF()" class="tool-btn">Generar Contrato Pro</button>
+            <button onclick="closeModal('modalLegal')" class="close-btn">Cerrar</button>
+        </div>
+    </div>
+
+    <div id="modalManuales" class="modal">
+        <div class="modal-content">
+            <h3>BIBLIOTECA DE CAPACITACIÓN</h3>
+            <div class="form-group">
+                <label>MANUAL MAESTRO</label>
+                <select id="selManual">
+                    <option value="TECNICO">Manual de Operaciones Técnicas y Sistemas</option>
+                    <option value="VENTAS">Manual Maestro de Ventas de Élite</option>
+                    <option value="ETICA">Código de Ética y Confidencialidad</option>
+                    <option value="BRANDING">Manual de Identidad y Marca</option>
+                </select>
+            </div>
+            <button onclick="generarManualPDF()" class="tool-btn">Descargar Manual Extenso</button>
+            <button onclick="closeModal('modalManuales')" class="close-btn">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        // --- SISTEMA DE ENCABEZADO CORPORATIVO ---
+        function aplicarHeaderPDF(doc, titulo) {
+            doc.setFillColor(0, 0, 0);
+            doc.rect(0, 0, 210, 40, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.setFont("helvetica", "bold");
+            doc.text("CUARZO CRISTAL", 20, 20);
+            doc.setFontSize(8);
+            doc.setFont("helvetica", "normal");
+            doc.text("DIVISIÓN EMPRESARIAL | GESTIÓN OPERATIVA 2026", 20, 28);
+            doc.setFontSize(11);
+            doc.text(titulo.toUpperCase(), 190, 22, { align: 'right' });
+            // Marca de agua
+            doc.setTextColor(245, 245, 245);
+            doc.setFontSize(50);
+            doc.text("CONFIDENCIAL", 105, 150, { align: 'center', angle: 45, opacity: 0.1 });
+        }
+
+        function aplicarFirmasPDF(doc, y, nombre) {
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.line(30, y, 85, y);
+            doc.text("FIRMA AUTORIZADA", 35, y + 5);
+            doc.text("CUARZO CRISTAL", 35, y + 10);
+            doc.line(125, y, 180, y);
+            doc.text(nombre.toUpperCase(), 130, y + 5);
+            doc.text("FIRMA RECEPTOR", 130, y + 10);
+        }
+
+        // --- LÓGICA DE MANUALES (TEXTOS EXTENSOS) ---
+        function generarManualPDF() {
+            const doc = new jsPDF();
+            const tipo = document.getElementById('selManual').value;
+            aplicarHeaderPDF(doc, `Manual: ${tipo}`);
+            doc.setTextColor(0); doc.setFontSize(10); doc.setFont("helvetica", "normal");
+            
+            let txt = "";
+            if(tipo === "TECNICO") {
+                txt = "MANUAL DE OPERACIONES TÉCNICAS Y SISTEMAS\n\n" +
+                      "MODULO 1: INFRAESTRUCTURA DE ALTA DISPONIBILIDAD\n" +
+                      "Toda implementación realizada por Cuarzo Cristal debe seguir el protocolo de 'Zero Downtime'. Los servidores deben contar con redundancia geográfica.\n\n" +
+                      "MODULO 2: PROTOCOLOS DE SEGURIDAD (CYBER-SHIELD)\n" +
+                      "1. Encriptación: Todos los datos en tránsito y en reposo deben usar AES-256.\n" +
+                      "2. Credenciales: Uso obligatorio de gestores de contraseñas y 2FA.\n\n" +
+                      "MODULO 3: SOPORTE Y MANTENIMIENTO\n" +
+                      "El Soporte Técnico de Nivel 3 debe resolver fallas críticas en menos de 120 minutos. Las auditorías de sistemas se realizan de forma quincenal sin excepción.\n\n" +
+                      "MODULO 4: DESPLIEGUE DE SOFTWARE\n" +
+                      "Antes de pasar a producción, cada módulo de la Toolbox debe ser testeado en el entorno de Staging. Se requiere la firma técnica en el remito digital antes de la entrega final.";
+            } else if(tipo === "VENTAS") {
+                txt = "MANUAL MAESTRO DE VENTAS DE ÉLITE\n\n" +
+                      "MODULO 1: PSICOLOGÍA DEL CIERRE\n" +
+                      "En Cuarzo Cristal no vendemos productos, vendemos libertad operativa y estatus tecnológico. El colaborador debe proyectar autoridad absoluta.\n\n" +
+                      "MODULO 2: MANEJO DE OBJECIONES (EL MÉTODO CUARZO)\n" +
+                      "Cuando un cliente cuestiona el costo, la respuesta siempre debe ser basada en el ROI. 'Usted no está gastando, está asegurando que su operación sea autónoma'.\n\n" +
+                      "MODULO 3: EL SCRIPT DE ALTO VALOR\n" +
+                      "- Apertura: Conexión emocional con la visión del cliente.\n" +
+                      "- Demostración: La Toolbox como solución definitiva.\n" +
+                      "- Cierre: Urgencia basada en exclusividad de zona.";
+            } else if(tipo === "ETICA") {
+                txt = "CÓDIGO DE ÉTICA Y CONFIDENCIALIDAD\n\n" +
+                      "MODULO 1: PROTECCIÓN DEL 'KNOW-HOW'\n" +
+                      "El acceso a esta Toolbox es un privilegio limitado. Cualquier filtración de procesos operativos resultará en acciones legales penales.\n\n" +
+                      "MODULO 2: TRANSPARENCIA Y HONESTIDAD\n" +
+                      "Queda prohibido ofrecer descuentos no autorizados por el sistema. La integridad de los precios es lo que mantiene el valor de la marca.\n\n" +
+                      "MODULO 3: CONFLICTO DE INTERESES\n" +
+                      "Ningún colaborador puede prestar servicios similares a la competencia utilizando las herramientas desarrolladas por Cuarzo Cristal.";
+            } else {
+                txt = "MANUAL DE IDENTIDAD Y MARCA (BRANDING)\n\n" +
+                      "1. COLORES: Negro Puro (#000), Blanco (#FFF) y Oro para detalles especiales.\n" +
+                      "2. TIPOGRAFÍA: Uso exclusivo de la familia Montserrat.\n" +
+                      "3. COMUNICACIÓN: El tono de voz debe ser elegante, minimalista y directo.";
+            }
+            
+            doc.text(doc.splitTextToSize(txt, 175), 20, 55);
+            doc.save(`Manual_Cuarzo_${tipo}.pdf`);
+        }
+
+        // --- LÓGICA LEGAL (CONTRATOS EXTENSOS) ---
+        function generarContratoPDF() {
+            const doc = new jsPDF();
+            const n = document.getElementById('legNom').value || "EL CLIENTE";
+            const t = document.getElementById('legTipo').value;
+            aplicarHeaderPDF(doc, `Contrato de ${t}`);
+            doc.setTextColor(0); doc.setFontSize(9);
+            
+            let leg = `ACUERDO DE ${t} ENTRE CUARZO CRISTAL Y ${n.toUpperCase()}.\n\n` +
+                      `IDENTIFICACIÓN: ${document.getElementById('legTid').value} No. ${document.getElementById('legNid').value}\n\n` +
+                      "CLÁUSULA 1. OBJETO: El presente contrato establece los términos y condiciones bajo los cuales se prestarán los servicios de la marca Cuarzo Cristal.\n\n" +
+                      "CLÁUSULA 2. CONFIDENCIALIDAD: La Contraparte se obliga a guardar secreto absoluto sobre toda la información, procesos, códigos y estrategias comerciales a las que tenga acceso. Esta obligación persiste por 10 años tras la finalización del contrato.\n\n" +
+                      "CLÁUSULA 3. PROPIEDAD INTELECTUAL: La Toolbox, sus manuales y toda creación intelectual son propiedad exclusiva de Cuarzo Cristal. No se otorga derecho de reventa ni de modificación de código.\n\n" +
+                      "CLÁUSULA 4. INCUMPLIMIENTO: Cualquier violación a la confidencialidad activará una cláusula penal de resarcimiento económico inmediata.\n\n" +
+                      "CLÁUSULA 5. JURISDICCIÓN: Ante cualquier controversia, las partes aceptan la jurisdicción de los tribunales comerciales centrales.";
+            
+            doc.text(doc.splitTextToSize(leg, 175), 20, 55);
+            aplicarFirmasPDF(doc, 250, n);
+            doc.save(`Contrato_${t}_${n}.pdf`);
+        }
+
+        // --- COMERCIAL Y LOGÍSTICA ---
+        function actualizarCotizacion() {
+            const val = document.getElementById('cotSer').value;
+            const div = document.getElementById('cotDiv').value;
+            document.getElementById('cotTotalDisplay').innerText = `${div} ${parseFloat(val).toLocaleString()}`;
+        }
+
+        function generarCotizacionPDF() {
+            const doc = new jsPDF(); const n = document.getElementById('cotNom').value || "CLIENTE";
+            aplicarHeaderPDF(doc, "Presupuesto Comercial");
+            doc.setTextColor(0); doc.setFontSize(12);
+            doc.text(`PARA: ${n}`, 20, 60);
+            doc.text(`SERVICIO: ${document.getElementById('cotSer').options[document.getElementById('cotSer').selectedIndex].text}`, 20, 75);
+            doc.setFont("helvetica", "bold");
+            doc.text(`TOTAL: ${document.getElementById('cotTotalDisplay').innerText}`, 20, 95);
+            doc.setFont("helvetica", "normal"); doc.setFontSize(8);
+            doc.text("Este presupuesto tiene validez legal por 15 días hábiles.", 20, 110);
+            aplicarFirmasPDF(doc, 250, n);
+            doc.save(`Cotizacion_${n}.pdf`);
+        }
+
+        function generarRemitoPDF() {
+            const doc = new jsPDF(); const n = document.getElementById('remNom').value || "RECEPTOR";
+            aplicarHeaderPDF(doc, "Remito de Entrega de Activos");
+            doc.setTextColor(0); doc.text(`RECEPTOR: ${n}`, 20, 60);
+            doc.text("DETALLE DE CARGA:", 20, 80);
+            doc.text(doc.splitTextToSize(document.getElementById('remDet').value, 170), 20, 90);
+            aplicarFirmasPDF(doc, 250, n);
+            doc.save(`Remito_${n}.pdf`);
+        }
+
+        function calcularROI() {
+            const i = document.getElementById('roiInv').value;
+            const g = document.getElementById('roiGan').value;
+            document.getElementById('roiResultado').innerText = g > 0 ? (i/g).toFixed(1) + " Meses" : "---";
+        }
+
+        function generarROIPDF() {
+            const doc = new jsPDF(); aplicarHeaderPDF(doc, "Estudio de Rentabilidad");
+            doc.setTextColor(0); doc.text(`INVERSIÓN: $${document.getElementById('roiInv').value}`, 20, 60);
+            doc.text(`RETORNO ESTIMADO: ${document.getElementById('roiResultado').innerText}`, 20, 75);
+            doc.save("Analisis_ROI_Cuarzo.pdf");
+        }
+    </script>
+</body>
+</html>
